@@ -10,6 +10,9 @@ refine_map_resolution: 0.1
 refine_max_iteration: 10
 refine_score_thresh: 0.1
 
+# 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
+gravity_align_to_global_map: true
+
 t_carbody_imu: [ 0., 0., 0. ]
 r_carbody_imu: [ 1., 0., 0.,
                    0., 1., 0.,

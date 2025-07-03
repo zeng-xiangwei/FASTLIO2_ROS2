@@ -2,7 +2,7 @@ imu_topic: /livox/imu
 lidar_topic: /livox/lidar
 body_frame: body
 world_frame: world
-print_time_cost: false
+print_time_cost: true
 
 lidar_filter_num: 6
 lidar_min_range: 0.5

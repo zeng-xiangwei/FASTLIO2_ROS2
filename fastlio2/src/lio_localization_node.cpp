@@ -13,7 +13,7 @@ void LIOLocalizationNode::initRos() {
   m_global_map_pub =
       this->create_publisher<sensor_msgs::msg::PointCloud2>("/global_map", rclcpp::QoS(1).transient_local());
 
-  LOG(INFO) << "rough map points size: " << m_icp_localizer->refineMap()->size();
+  LOG(INFO) << "refine map points size: " << m_icp_localizer->refineMap()->size();
   publishGlobalMap(m_icp_localizer->refineMap());
 
   m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
@@ -53,6 +53,8 @@ void LIOLocalizationNode::loadParameters() {
   m_localization_config.icp_config.refine_map_resolution = config["refine_map_resolution"].as<double>();
   m_localization_config.icp_config.refine_max_iteration = config["refine_max_iteration"].as<int>();
   m_localization_config.icp_config.refine_score_thresh = config["refine_score_thresh"].as<double>();
+
+  m_builder_config.gravity_align_to_global_map = config["gravity_align_to_global_map"].as<bool>();
 
   std::vector<double> t_bi_vec = config["t_carbody_imu"].as<std::vector<double>>();
   std::vector<double> r_bi_vec = config["r_carbody_imu"].as<std::vector<double>>();
