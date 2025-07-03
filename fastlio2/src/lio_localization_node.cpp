@@ -17,6 +17,12 @@ void LIOLocalizationNode::initRos() {
   publishGlobalMap(m_icp_localizer->refineMap());
 
   m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
+
+#ifdef VLN_MSG_FOUND
+  m_custom_odom_pub = this->create_publisher<vln_msg::msg::LocalizationMsg>("localization_lidar_frec", 10000);
+  m_custom_imu_frec_odom_pub =
+      this->create_publisher<vln_msg::msg::LocalizationMsg>("localization_imu_frec", 10000);
+#endif
 }
 
 bool LIOLocalizationNode::ready() {
@@ -162,3 +168,41 @@ void LIOLocalizationNode::transformToCarbody(const State& input, V3D& trans, M3D
   trans = input.r_wi * m_localization_config.t_imu_carbody + input.t_wi;
   vel = rot.transpose() * input.v;
 }
+
+void LIOLocalizationNode::publishCustomOdometryMsg(std::string frame_id, const double& time, const V3D& trans,
+                                                   const M3D& rot) {
+#ifdef VLN_MSG_FOUND
+  vln_msg::msg::LocalizationMsg msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
+  m_custom_odom_pub->publish(msg);
+#endif
+}
+void LIOLocalizationNode::publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time, const V3D& trans,
+                                                          const M3D& rot) {
+#ifdef VLN_MSG_FOUND
+  vln_msg::msg::LocalizationMsg msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
+  m_custom_imu_frec_odom_pub->publish(msg);
+#endif
+}
+
+#ifdef VLN_MSG_FOUND
+vln_msg::msg::LocalizationMsg LIOLocalizationNode::wrapCustomLocalizationMsg(std::string frame_id,
+                                                                                       const double& time,
+                                                                                       const V3D& trans,
+                                                                                       const M3D& rot) {
+  vln_msg::msg::LocalizationMsg msg;
+  msg.header.frame_id = frame_id;
+  msg.header.stamp = Utils::getTime(time);
+  msg.pose.position.x = trans.x();
+  msg.pose.position.y = trans.y();
+  msg.pose.position.z = trans.z();
+  Eigen::Quaterniond q(rot);
+  msg.pose.orientation.x = q.x();
+  msg.pose.orientation.y = q.y();
+  msg.pose.orientation.z = q.z();
+  msg.pose.orientation.w = q.w();
+
+  msg.confidence = 1.0;
+  msg.valid_flag = 1;
+  return msg;
+}
+#endif

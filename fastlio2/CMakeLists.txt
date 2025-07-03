@@ -31,12 +31,23 @@ find_package(livox_ros_driver2 REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
+find_package(vln_msg QUIET)
+
 find_package(OpenMP QUIET)
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Sophus REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(glog REQUIRED)
+
+set(DEPENDENCIES_COMBINE)
+if (vln_msg_FOUND)
+    message(STATUS "Found vln_msg package")
+    list(APPEND DEPENDENCIES_COMBINE vln_msg)
+    add_definitions(-DVLN_MSG_FOUND)
+else()
+    message(STATUS "vln_msg package not found")
+endif()
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -55,7 +66,8 @@ set(SRC_LIST src/map_builder/commons.cpp
              src/icp_localizer.cpp)
        
 add_executable(lio_node src/lio_main.cpp ${SRC_LIST})
-ament_target_dependencies(lio_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 pcl_conversions geometry_msgs)
+ament_target_dependencies(lio_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
+pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
 target_link_libraries(lio_node
   yaml-cpp
   ${PCL_LIBRARIES}
@@ -63,7 +75,8 @@ target_link_libraries(lio_node
 )
 
 add_executable(localization_node src/lio_localization_main.cpp ${SRC_LIST})
-ament_target_dependencies(localization_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 pcl_conversions geometry_msgs)
+ament_target_dependencies(localization_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
+pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
 target_link_libraries(localization_node
   yaml-cpp
   ${PCL_LIBRARIES}

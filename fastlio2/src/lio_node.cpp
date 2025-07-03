@@ -154,6 +154,7 @@ void LIONode::publishLiOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::Shar
   M3D rot;
   transformToCarbody(m_kf->x(), trans, rot, vel);
   publishOdometry(odom_pub, frame_id, child_frame, time, trans, rot, vel);
+  publishCustomOdometryMsg(frame_id, time, trans, rot);
 }
 
 void LIONode::publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub, std::string frame_id,
@@ -228,9 +229,7 @@ void LIONode::loopThread() {
   while (true) {
     {
       std::unique_lock<std::mutex> lock(m_mutex);
-      m_condition.wait(lock, [this]() -> bool {
-        return m_state_data.has_new_data || m_finished;
-      });
+      m_condition.wait(lock, [this]() -> bool { return m_state_data.has_new_data || m_finished; });
     }
 
     if (m_finished) {
@@ -297,6 +296,8 @@ void LIONode::imuFreqCB() {
   transformToCarbody(state.state, trans, rot, vel);
   publishOdometry(m_imu_frec_odom_pub, m_node_config.world_frame, m_node_config.body_frame, state.timestamp, trans, rot,
                   vel);
+
+  publishCustomOdometryMsgImuFrec(m_node_config.world_frame, state.timestamp, trans, rot);
 }
 
 bool LIONode::ready() { return true; }
@@ -305,3 +306,8 @@ void LIONode::transformToCarbody(const State& input, V3D& trans, M3D& rot, V3D& 
   rot = input.r_wi;
   vel = input.r_wi.transpose() * input.v;
 }
+
+void LIONode::publishCustomOdometryMsg(std::string frame_id, const double& time,
+                                       const V3D& trans, const M3D& rot) {}
+void LIONode::publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time,
+                                              const V3D& trans, const M3D& rot) {}
