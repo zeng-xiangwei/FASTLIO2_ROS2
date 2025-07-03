@@ -41,7 +41,6 @@ void ImuPosePredictor::setLioState(const StateWithTime& lio_state) {
 
     predict_duration += dt;
   }
-  LOG(INFO) << "after set lio state, predict duration: " << predict_duration << " s";
 }
 
 void ImuPosePredictor::propogate(State& state, double dt, const V3D& acc_avr, const V3D& angvel_avr) {
