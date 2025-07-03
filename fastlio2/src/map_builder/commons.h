@@ -17,6 +17,7 @@ using M2F = Eigen::Matrix2f;
 using V2F = Eigen::Vector2f;
 using M4D = Eigen::Matrix4d;
 using V4D = Eigen::Vector4d;
+using M4F = Eigen::Matrix4f;
 
 
 template <typename T>

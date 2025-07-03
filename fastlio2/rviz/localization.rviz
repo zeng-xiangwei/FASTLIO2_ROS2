@@ -8,11 +8,8 @@ Panels:
         - /Status1
         - /PointCloud21
         - /PointCloud22
-        - /Axes1
-        - /Axes2
-        - /Path1
-        - /PointCloud23
-        - /PointCloud23/Status1
+        - /Axes1/Status1
+        - /Path1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 719
   - Class: rviz_common/Selection
@@ -127,14 +124,14 @@ Visualization Manager:
       Length: 1
       Name: Axes
       Radius: 0.10000000149011612
-      Reference Frame: lidar
+      Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz_default_plugins/Axes
       Enabled: true
       Length: 0.5
       Name: Axes
       Radius: 0.05000000074505806
-      Reference Frame: body
+      Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 1
       Buffer Length: 1
@@ -174,23 +171,23 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz_default_plugins/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 4096
+      Max Intensity: 0
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: ""
+      Name: GlobalMap
+      Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Points
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
@@ -201,7 +198,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: lidar
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -244,25 +241,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 14.341611862182617
+      Distance: 17.9901180267334
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: -1.5852134227752686
+        Y: 0.45826300978660583
+        Z: -0.0031065333168953657
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8947967290878296
+      Pitch: 1.1897969245910645
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.220390319824219
+      Yaw: 4.520389556884766
     Saved: ~
 Window Geometry:
   Displays:

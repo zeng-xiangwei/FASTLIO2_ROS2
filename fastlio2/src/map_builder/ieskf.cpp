@@ -1,4 +1,5 @@
 #include "ieskf.h"
+#include <glog/logging.h>
 
 double State::gravity = 9.81;
 

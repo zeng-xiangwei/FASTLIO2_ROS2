@@ -36,6 +36,7 @@ find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(Sophus REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(glog REQUIRED)
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -47,17 +48,30 @@ set(SRC_LIST src/map_builder/commons.cpp
              src/map_builder/ikd_Tree.cpp
              src/map_builder/lidar_processor.cpp
              src/map_builder/map_builder.cpp
-             src/utils.cpp)
-
-add_executable(lio_node src/lio_node.cpp ${SRC_LIST})
+             src/map_builder/imu_pose_predictor.cpp
+             src/utils.cpp
+             src/lio_node.cpp
+             src/lio_localization_node.cpp
+             src/icp_localizer.cpp)
+       
+add_executable(lio_node src/lio_main.cpp ${SRC_LIST})
 ament_target_dependencies(lio_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 pcl_conversions geometry_msgs)
 target_link_libraries(lio_node
   yaml-cpp
   ${PCL_LIBRARIES}
+  glog
+)
+
+add_executable(localization_node src/lio_localization_main.cpp ${SRC_LIST})
+ament_target_dependencies(localization_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 pcl_conversions geometry_msgs)
+target_link_libraries(localization_node
+  yaml-cpp
+  ${PCL_LIBRARIES}
+  glog
 )
 
 
-install(TARGETS lio_node DESTINATION lib/${PROJECT_NAME})
+install(TARGETS lio_node localization_node DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})

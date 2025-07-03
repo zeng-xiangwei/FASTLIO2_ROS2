@@ -54,6 +54,12 @@ struct State
     friend std::ostream &operator<<(std::ostream &os, const State &state);
 };
 
+struct StateWithTime
+{
+    State state;
+    double timestamp;
+};
+
 using loss_func = std::function<void(State &, SharedState &)>;
 using stop_func = std::function<bool(const V21D &)>;
 
