@@ -20,13 +20,28 @@ void ImuPosePredictor::setLioState(const StateWithTime& lio_state) {
   while ((!imu_data_queue_.empty() && imu_data_queue_.front().time < latest_lio_time)) {
     imu_data_queue_.pop_front();
   }
+
+  if (latest_imu_data_ == nullptr) {
+    latest_imu_data_ = std::make_shared<IMUData>();
+  }
+  *latest_imu_data_ = imu_data_queue_.front();
+
+  double predict_duration = 0;
   for (size_t i = 0; i < imu_data_queue_.size(); i++) {
     IMUData& imu_data = imu_data_queue_[i];
     double dt = imu_data.time - latest_imu_state_.timestamp;
     LOG_IF(WARNING, dt > 0.011) << "IMU delta time is larger than 0.011s(100hz)";
-    propogate(latest_imu_state_.state, dt, imu_data.acc, imu_data.gyro);
+
+    V3D acc = (imu_data.acc + latest_imu_data_->acc) * 0.5;
+    V3D gyro = (imu_data.gyro + latest_imu_data_->gyro) * 0.5;
+
+    propogate(latest_imu_state_.state, dt, acc, gyro);
     latest_imu_state_.timestamp = imu_data.time;
+    *latest_imu_data_ = imu_data;
+
+    predict_duration += dt;
   }
+  LOG(INFO) << "after set lio state, predict duration: " << predict_duration << " s";
 }
 
 void ImuPosePredictor::propogate(State& state, double dt, const V3D& acc_avr, const V3D& angvel_avr) {
@@ -53,10 +68,19 @@ void ImuPosePredictor::addImuData(const IMUData& imu_data) {
     return;
   }
 
+  if (latest_imu_data_ == nullptr) {
+    latest_imu_data_ = std::make_shared<IMUData>(imu_data);
+  }
+
   double dt = imu_data.time - latest_imu_state_.timestamp;
   LOG_IF(WARNING, dt > 0.011) << "IMU delta time is larger than 0.011s(100hz)";
-  propogate(latest_imu_state_.state, dt, imu_data.acc, imu_data.gyro);
+  LOG_IF(WARNING, dt < 0.0) << "IMU delta time is smaller than 0.0s";
+
+  V3D acc = (imu_data.acc + latest_imu_data_->acc) * 0.5;
+  V3D gyro = (imu_data.gyro + latest_imu_data_->gyro) * 0.5;
+  propogate(latest_imu_state_.state, dt, acc, gyro);
   latest_imu_state_.timestamp = imu_data.time;
+  *latest_imu_data_ = imu_data;
 }
 
 bool ImuPosePredictor::validToPropogate() const {

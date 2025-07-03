@@ -31,8 +31,10 @@ private:
     StateWithTime latest_lio_state_;
     std::deque<IMUData> imu_data_queue_;
     double last_imu_predict_timestamp_ = -1;
-
+    
+    // 状态 与 数据需要绑定到一起，数据用于计算中值积分，latest_imu_data_中时间不使用
     StateWithTime latest_imu_state_;
+    std::shared_ptr<IMUData> latest_imu_data_;
 };
 
 #endif // IMU_POSE_PREDICTOR_H_
