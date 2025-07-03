@@ -35,8 +35,6 @@ void LIONode::initRos() {
   m_builder = std::make_shared<MapBuilder>(m_builder_config, m_kf);
   m_imu_pose_predictor = std::make_shared<ImuPosePredictor>();
   m_imu_freq_timer = this->create_wall_timer(10ms, std::bind(&LIONode::imuFreqCB, this));
-  m_last_imu_frec_state = std::make_shared<StateWithTime>();
-  m_last_imu_frec_state->timestamp = -1.0;
 }
 
 void LIONode::loadParameters() {
@@ -58,6 +56,7 @@ void LIONode::loadParameters() {
   m_node_config.body_frame = config["body_frame"].as<std::string>();
   m_node_config.world_frame = config["world_frame"].as<std::string>();
   m_node_config.print_time_cost = config["print_time_cost"].as<bool>();
+  m_node_config.ros_spin_thread = config["ros_spin_thread"].as<int>();
 
   m_builder_config.lidar_filter_num = config["lidar_filter_num"].as<int>();
   m_builder_config.lidar_min_range = config["lidar_min_range"].as<double>();
@@ -183,13 +182,18 @@ void LIONode::publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::Shared
 void LIONode::publishPath(rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub, std::string frame_id,
                           const double& time) {
   if (path_pub->get_subscription_count() <= 0) return;
+
+  V3D trans, vel;
+  M3D rot;
+  transformToCarbody(m_kf->x(), trans, rot, vel);
+
   geometry_msgs::msg::PoseStamped pose;
   pose.header.frame_id = frame_id;
   pose.header.stamp = Utils::getTime(time);
-  pose.pose.position.x = m_kf->x().t_wi.x();
-  pose.pose.position.y = m_kf->x().t_wi.y();
-  pose.pose.position.z = m_kf->x().t_wi.z();
-  Eigen::Quaterniond q(m_kf->x().r_wi);
+  pose.pose.position.x = trans.x();
+  pose.pose.position.y = trans.y();
+  pose.pose.position.z = trans.z();
+  Eigen::Quaterniond q(rot);
   pose.pose.orientation.x = q.x();
   pose.pose.orientation.y = q.y();
   pose.pose.orientation.z = q.z();
@@ -279,7 +283,12 @@ void LIONode::imuFreqCB() {
   if (!m_imu_pose_predictor->getPredictedState(state)) {
     return;
   }
-  if (m_last_imu_frec_state->timestamp < 0 || m_last_imu_frec_state->timestamp >= state.timestamp) {
+
+  if (m_last_imu_frec_state == nullptr) {
+    m_last_imu_frec_state = std::make_shared<StateWithTime>(state);
+  }
+
+  if (m_last_imu_frec_state->timestamp >= state.timestamp) {
     return;
   }
   *m_last_imu_frec_state = state;

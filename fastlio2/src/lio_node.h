@@ -1,11 +1,11 @@
 #pragma once
 #include <chrono>
+#include <condition_variable>
 #include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <vector>
-#include <condition_variable>
 // #include <filesystem>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
@@ -30,6 +30,7 @@ struct NodeConfig {
   std::string body_frame = "body";
   std::string world_frame = "lidar";
   bool print_time_cost = false;
+  int ros_spin_thread = 1;
 };
 struct StateData {
   bool lidar_pushed = false;
@@ -80,6 +81,8 @@ class LIONode : public rclcpp::Node {
   // 发布imu频率的位姿
   void imuFreqCB();
   void loopThread();
+
+  const NodeConfig& getNodeConfig() const { return m_node_config; }
 
  protected:
   rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_lidar_sub;
