@@ -274,7 +274,7 @@ class PGONode : public rclcpp::Node {
 
     // 将 3d 点云转成 2d 栅格
     utils::PointCloud3DTo2DGrid point_cloud_to_grid;
-    point_cloud_to_grid.convert(ret, map_path.parent_path().string(), "map", m_grid_map_config.grid_2d_z_min,
+    point_cloud_to_grid.convert(ret, map_path.parent_path().string(), "map_2d", m_grid_map_config.grid_2d_z_min,
                                 m_grid_map_config.grid_2d_z_max, m_grid_map_config.grid_2d_resolution);
     response->success = true;
     response->message = "SAVE SUCCESS!";
