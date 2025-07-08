@@ -20,7 +20,7 @@
 #include "interface/srv/save_maps.hpp"
 #include "pgos/commons.h"
 #include "pgos/simple_pgo.h"
-#include "utils/point_cloud_3d_to_2d_grid.h"
+#include "utils/occupancy_map.h"
 
 using namespace std::chrono_literals;
 
@@ -35,6 +35,7 @@ struct GridMapConfig {
   float grid_2d_z_min = -0.2;
   float grid_2d_z_max = 1.0;
   float grid_2d_resolution = 0.05;
+  int occupancy_weight = 30;
 };
 
 struct NodeState {
@@ -92,6 +93,7 @@ class PGONode : public rclcpp::Node {
     m_grid_map_config.grid_2d_z_min = config["grid_2d_z_min"].as<float>();
     m_grid_map_config.grid_2d_z_max = config["grid_2d_z_max"].as<float>();
     m_grid_map_config.grid_2d_resolution = config["grid_2d_resolution"].as<float>();
+    m_grid_map_config.occupancy_weight = config["occupancy_weight"].as<int>();
   }
   void syncCB(const sensor_msgs::msg::PointCloud2::ConstSharedPtr& cloud_msg,
               const nav_msgs::msg::Odometry::ConstSharedPtr& odom_msg) {
@@ -253,6 +255,13 @@ class PGONode : public rclcpp::Node {
     std::ofstream txt_file(poses_txt_path);
 
     CloudType::Ptr ret(new CloudType);
+
+    utils::OccupancyMap::Config config;
+    config.resolution = m_grid_map_config.grid_2d_resolution;
+    config.min_z = m_grid_map_config.grid_2d_z_min;
+    config.max_z = m_grid_map_config.grid_2d_z_max;
+    config.occupancy_weight = m_grid_map_config.occupancy_weight;
+    utils::OccupancyMap occupancy_map(config);
     for (size_t i = 0; i < m_pgo->keyPoses().size(); i++) {
       CloudType::Ptr body_cloud = m_pgo->keyPoses()[i].body_cloud;
       if (request->save_patches) {
@@ -268,14 +277,19 @@ class PGONode : public rclcpp::Node {
       pcl::transformPointCloud(*body_cloud, *world_cloud, m_pgo->keyPoses()[i].t_global,
                                Eigen::Quaterniond(m_pgo->keyPoses()[i].r_global));
       *ret += *world_cloud;
+
+      RCLCPP_INFO(this->get_logger(), "add cloud %ld to occupancy map", i);
+      occupancy_map.AddLidarFrame(body_cloud, m_pgo->keyPoses()[i].t_global,
+          Eigen::Quaterniond(m_pgo->keyPoses()[i].r_global));
+      std::string map_prefix = "map_2d_" + std::to_string(i);
+      occupancy_map.Save(map_path.parent_path().string(), map_prefix);
     }
     txt_file.close();
     pcl::io::savePCDFileBinary(map_path.string(), *ret);
 
-    // 将 3d 点云转成 2d 栅格
-    utils::PointCloud3DTo2DGrid point_cloud_to_grid;
-    point_cloud_to_grid.convert(ret, map_path.parent_path().string(), "map_2d", m_grid_map_config.grid_2d_z_min,
-                                m_grid_map_config.grid_2d_z_max, m_grid_map_config.grid_2d_resolution);
+    // 保存2d栅格地图
+    occupancy_map.Save(map_path.parent_path().string(), "map_2d");
+
     response->success = true;
     response->message = "SAVE SUCCESS!";
   }

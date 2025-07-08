@@ -32,6 +32,7 @@ def generate_launch_description():
                 executable="pgo_node",
                 name="pgo_node",
                 output="screen",
+                # prefix=['xterm -e gdb -ex run --args'],
                 parameters=[{"config_path": pgo_config_path.perform(launch.LaunchContext())}]
             ),
             launch_ros.actions.Node(
