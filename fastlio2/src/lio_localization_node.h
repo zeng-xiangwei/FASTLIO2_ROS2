@@ -4,8 +4,8 @@
 #include "icp_localizer.h"
 #include "lio_node.h"
 
-#ifdef VLN_MSG_FOUND
-#include <vln_msg/msg/localization.hpp>
+#ifdef VLN_MSGS_FOUND
+#include <vln_msgs/msg/localization.hpp>
 #endif
 
 struct LocalizationConfig {
@@ -45,11 +45,11 @@ class LIOLocalizationNode : public LIONode {
   rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr m_relocalization_pose_sub;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_global_map_pub;
 
-#ifdef VLN_MSG_FOUND
-  vln_msg::msg::Localization wrapCustomLocalizationMsg(std::string frame_id, const double& time,
+#ifdef VLN_MSGS_FOUND
+  vln_msgs::msg::Localization wrapCustomLocalizationMsg(std::string frame_id, const double& time,
                                                                     const V3D& trans, const M3D& rot);
-  rclcpp::Publisher<vln_msg::msg::Localization>::SharedPtr m_custom_odom_pub;
-  rclcpp::Publisher<vln_msg::msg::Localization>::SharedPtr m_custom_imu_frec_odom_pub;
+  rclcpp::Publisher<vln_msgs::msg::Localization>::SharedPtr m_custom_odom_pub;
+  rclcpp::Publisher<vln_msgs::msg::Localization>::SharedPtr m_custom_imu_frec_odom_pub;
 #endif
 
   std::shared_ptr<Pose> m_relocalization_init_pose;

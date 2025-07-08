@@ -31,7 +31,7 @@ find_package(livox_ros_driver2 REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-find_package(vln_msg QUIET)
+find_package(vln_msgs QUIET)
 
 find_package(OpenMP QUIET)
 find_package(PCL REQUIRED)
@@ -41,12 +41,12 @@ find_package(yaml-cpp REQUIRED)
 find_package(glog REQUIRED)
 
 set(DEPENDENCIES_COMBINE)
-if (vln_msg_FOUND)
-    message(STATUS "Found vln_msg package")
-    list(APPEND DEPENDENCIES_COMBINE vln_msg)
-    add_definitions(-DVLN_MSG_FOUND)
+if (vln_msgs_FOUND)
+    message(STATUS "Found vln_msgs package")
+    list(APPEND DEPENDENCIES_COMBINE vln_msgs)
+    add_definitions(-DVLN_MSGS_FOUND)
 else()
-    message(STATUS "vln_msg package not found")
+    message(STATUS "vln_msgs package not found")
 endif()
 
 

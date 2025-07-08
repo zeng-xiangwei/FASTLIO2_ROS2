@@ -142,9 +142,6 @@ void OccupancyMap::GrowAsNeeded() {
 
 void OccupancyMap::GrowLimits(const Eigen::Vector2f& point) {
   while (!map_limits_->Contains(map_limits_->GetCellIndex(point))) {
-    LOG(INFO) << "Growing map limits, xmin_ymax:" << map_limits_->xmin_ymax().transpose()
-              << ", cell_limits: num_x_cells=" << map_limits_->cell_limits().num_x_cells
-              << ", num_y_cells=" << map_limits_->cell_limits().num_y_cells;
     const int x_offset = map_limits_->cell_limits().num_x_cells / 2;
     const int y_offset = map_limits_->cell_limits().num_y_cells / 2;
     const MapLimits new_limits(

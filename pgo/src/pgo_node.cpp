@@ -277,12 +277,8 @@ class PGONode : public rclcpp::Node {
       pcl::transformPointCloud(*body_cloud, *world_cloud, m_pgo->keyPoses()[i].t_global,
                                Eigen::Quaterniond(m_pgo->keyPoses()[i].r_global));
       *ret += *world_cloud;
-
-      RCLCPP_INFO(this->get_logger(), "add cloud %ld to occupancy map", i);
       occupancy_map.AddLidarFrame(body_cloud, m_pgo->keyPoses()[i].t_global,
           Eigen::Quaterniond(m_pgo->keyPoses()[i].r_global));
-      std::string map_prefix = "map_2d_" + std::to_string(i);
-      occupancy_map.Save(map_path.parent_path().string(), map_prefix);
     }
     txt_file.close();
     pcl::io::savePCDFileBinary(map_path.string(), *ret);

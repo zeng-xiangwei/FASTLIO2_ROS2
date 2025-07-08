@@ -18,10 +18,10 @@ void LIOLocalizationNode::initRos() {
 
   m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
 
-#ifdef VLN_MSG_FOUND
-  m_custom_odom_pub = this->create_publisher<vln_msg::msg::Localization>("localization_lidar_frec", 10000);
+#ifdef VLN_MSGS_FOUND
+  m_custom_odom_pub = this->create_publisher<vln_msgs::msg::Localization>("localization_lidar_frec", 10000);
   m_custom_imu_frec_odom_pub =
-      this->create_publisher<vln_msg::msg::Localization>("localization_imu_frec", 10000);
+      this->create_publisher<vln_msgs::msg::Localization>("localization_imu_frec", 10000);
 #endif
 }
 
@@ -171,25 +171,25 @@ void LIOLocalizationNode::transformToCarbody(const State& input, V3D& trans, M3D
 
 void LIOLocalizationNode::publishCustomOdometryMsg(std::string frame_id, const double& time, const V3D& trans,
                                                    const M3D& rot) {
-#ifdef VLN_MSG_FOUND
-  vln_msg::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
+#ifdef VLN_MSGS_FOUND
+  vln_msgs::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
   m_custom_odom_pub->publish(msg);
 #endif
 }
 void LIOLocalizationNode::publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time, const V3D& trans,
                                                           const M3D& rot) {
-#ifdef VLN_MSG_FOUND
-  vln_msg::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
+#ifdef VLN_MSGS_FOUND
+  vln_msgs::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
   m_custom_imu_frec_odom_pub->publish(msg);
 #endif
 }
 
-#ifdef VLN_MSG_FOUND
-vln_msg::msg::Localization LIOLocalizationNode::wrapCustomLocalizationMsg(std::string frame_id,
+#ifdef VLN_MSGS_FOUND
+vln_msgs::msg::Localization LIOLocalizationNode::wrapCustomLocalizationMsg(std::string frame_id,
                                                                                        const double& time,
                                                                                        const V3D& trans,
                                                                                        const M3D& rot) {
-  vln_msg::msg::Localization msg;
+  vln_msgs::msg::Localization msg;
   msg.header.frame_id = frame_id;
   msg.header.stamp = Utils::getTime(time);
   msg.pose.position.x = trans.x();
