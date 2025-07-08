@@ -103,6 +103,12 @@ ros2 service call /hba/refine_map interface/srv/RefineMap "{"maps_path": "your m
 ```
 **如果需要调用优化服务，保存地图时需要设置save_patches为true**
 
+### 5.直接替换 fast-lio 中的地图实现定位
+```shell
+ros2 launch fastlio2 localization.launch.py
+```
+使用 rviz2 中的 2D Pose Estimate 发布粗略的初始位姿，精确的初始位姿计算方法与重定位模块中的方法一致
+
 ## 特别感谢
 1. [FASTLIO2](https://github.com/hku-mars/FAST_LIO)
 2. [BLAM](https://github.com/hku-mars/BALM)
