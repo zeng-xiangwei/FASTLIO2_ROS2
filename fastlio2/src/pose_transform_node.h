@@ -20,8 +20,11 @@ class PoseTransformNode : public rclcpp::Node {
   struct Config {
     MinPose T_carbody_imu = MinPose(V3D::Zero(), M3D::Identity());
     MinPose T_imu_carbody = MinPose(V3D::Zero(), M3D::Identity());
+    MinPose T_carbody_lidar = MinPose(V3D::Zero(), M3D::Identity());
+    MinPose T_lidar_carbody = MinPose(V3D::Zero(), M3D::Identity());
     std::string map_frame = "map";
     std::string imu_frame = "body";
+    std::string lidar_frame = "lidarbody";
     std::string carbody_frame = "carbody";
   };
 

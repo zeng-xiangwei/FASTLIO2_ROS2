@@ -9,7 +9,9 @@ void PoseTransformNode::initRos() {
   loadParameters();
 
   static_tf_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(*this);
+  // 发布 imu->carbody  carbody->lidar 的 tf 变化
   broadCastTF(config_.imu_frame, config_.carbody_frame, config_.T_imu_carbody.trans, config_.T_imu_carbody.rot);
+  broadCastTF(config_.carbody_frame, config_.lidar_frame, config_.T_carbody_lidar.trans, config_.T_carbody_lidar.rot);
 
   imu_frec_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
       "lio_imu_frec_odom", rclcpp::QoS(10),
@@ -63,9 +65,12 @@ void PoseTransformNode::loadParameters() {
   MinPose T_car_imu = T_car_lidar * T_imu_lidar.inverse();
   config_.T_carbody_imu = T_car_imu;
   config_.T_imu_carbody = T_car_imu.inverse();
+  config_.T_carbody_lidar = T_car_lidar;
+  config_.T_lidar_carbody = T_car_lidar.inverse();
   config_.map_frame = base_config["world_frame"].as<std::string>();
   config_.imu_frame = base_config["body_frame"].as<std::string>();
   config_.carbody_frame = base_config["carbody_frame"].as<std::string>();
+  config_.lidar_frame = base_config["lidarbody_frame"].as<std::string>();
 }
 
 // 低频的位姿数据（imu系）
