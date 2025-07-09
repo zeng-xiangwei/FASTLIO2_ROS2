@@ -1,7 +1,7 @@
 imu_topic: /livox/imu
 lidar_topic: /livox/lidar
 body_frame: body
-world_frame: world
+world_frame: map
 print_time_cost: true
 ros_spin_thread: 2
 
@@ -31,3 +31,25 @@ r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
 t_il: [-0.011, -0.02329, 0.04412]
 
 lidar_cov_inv: 1000.0
+
+carbody_frame: carbody
+t_carbody_lidar: [ 0., 0., 0. ]
+r_carbody_lidar: [ 1., 0., 0.,
+                   0., 1., 0.,
+                   0., 0., 1.]
+
+localization:
+  global_map_file: "/home/xiangweizeng/my_project/fast-lio-relocalization_ws/src/FAST_LIO_LOCALIZATION/PCD/meeting-room/GlobalMap.pcd"
+
+  rough_scan_resolution: 0.25
+  rough_map_resolution: 0.25
+  rough_max_iteration: 5
+  rough_score_thresh: 0.2
+
+  refine_scan_resolution: 0.1
+  refine_map_resolution: 0.1
+  refine_max_iteration: 10
+  refine_score_thresh: 0.1
+
+  # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
+  gravity_align_to_global_map: true

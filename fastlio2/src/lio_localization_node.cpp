@@ -17,12 +17,6 @@ void LIOLocalizationNode::initRos() {
   publishGlobalMap(m_icp_localizer->refineMap());
 
   m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
-
-#ifdef VLN_MSGS_FOUND
-  m_custom_odom_pub = this->create_publisher<vln_msgs::msg::Localization>("localization_lidar_frec", 10000);
-  m_custom_imu_frec_odom_pub =
-      this->create_publisher<vln_msgs::msg::Localization>("localization_imu_frec", 10000);
-#endif
 }
 
 bool LIOLocalizationNode::ready() {
@@ -37,39 +31,33 @@ bool LIOLocalizationNode::ready() {
 void LIOLocalizationNode::loadParameters() {
   LOG(INFO) << "in LIOLocalizationNode loadPrama";
   LIONode::loadParameters();
-  this->declare_parameter("localization_config_path", "");
   std::string config_path;
-  this->get_parameter<std::string>("localization_config_path", config_path);
+  this->get_parameter<std::string>("config_path", config_path);
 
   YAML::Node config = YAML::LoadFile(config_path);
   if (!config) {
     RCLCPP_WARN(this->get_logger(), "FAIL TO LOAD YAML FILE! %s", config_path.c_str());
     return;
   }
-
+  YAML::Node localization_config = config["localization"];
+  if (!localization_config) {
+    RCLCPP_WARN(this->get_logger(), "FAIL TO LOAD localization in YAML FILE! %s", config_path.c_str());
+    return;
+  }
   RCLCPP_INFO(this->get_logger(), "LOAD FROM YAML CONFIG PATH: %s", config_path.c_str());
-  m_localization_config.global_map_file = config["global_map_file"].as<std::string>();
+  m_localization_config.global_map_file = localization_config["global_map_file"].as<std::string>();
 
-  m_localization_config.icp_config.rough_scan_resolution = config["rough_scan_resolution"].as<double>();
-  m_localization_config.icp_config.rough_map_resolution = config["rough_map_resolution"].as<double>();
-  m_localization_config.icp_config.rough_max_iteration = config["rough_max_iteration"].as<int>();
-  m_localization_config.icp_config.rough_score_thresh = config["rough_score_thresh"].as<double>();
+  m_localization_config.icp_config.rough_scan_resolution = localization_config["rough_scan_resolution"].as<double>();
+  m_localization_config.icp_config.rough_map_resolution = localization_config["rough_map_resolution"].as<double>();
+  m_localization_config.icp_config.rough_max_iteration = localization_config["rough_max_iteration"].as<int>();
+  m_localization_config.icp_config.rough_score_thresh = localization_config["rough_score_thresh"].as<double>();
 
-  m_localization_config.icp_config.refine_scan_resolution = config["refine_scan_resolution"].as<double>();
-  m_localization_config.icp_config.refine_map_resolution = config["refine_map_resolution"].as<double>();
-  m_localization_config.icp_config.refine_max_iteration = config["refine_max_iteration"].as<int>();
-  m_localization_config.icp_config.refine_score_thresh = config["refine_score_thresh"].as<double>();
+  m_localization_config.icp_config.refine_scan_resolution = localization_config["refine_scan_resolution"].as<double>();
+  m_localization_config.icp_config.refine_map_resolution = localization_config["refine_map_resolution"].as<double>();
+  m_localization_config.icp_config.refine_max_iteration = localization_config["refine_max_iteration"].as<int>();
+  m_localization_config.icp_config.refine_score_thresh = localization_config["refine_score_thresh"].as<double>();
 
-  m_builder_config.gravity_align_to_global_map = config["gravity_align_to_global_map"].as<bool>();
-
-  std::vector<double> t_bi_vec = config["t_carbody_imu"].as<std::vector<double>>();
-  std::vector<double> r_bi_vec = config["r_carbody_imu"].as<std::vector<double>>();
-  m_localization_config.t_carbody_imu << t_bi_vec[0], t_bi_vec[1], t_bi_vec[2];
-  m_localization_config.r_carbody_imu << r_bi_vec[0], r_bi_vec[1], r_bi_vec[2], r_bi_vec[3], r_bi_vec[4], r_bi_vec[5],
-      r_bi_vec[6], r_bi_vec[7], r_bi_vec[8];
-
-  m_localization_config.r_imu_carbody = m_localization_config.r_carbody_imu.transpose();
-  m_localization_config.t_imu_carbody = -m_localization_config.r_imu_carbody * m_localization_config.t_carbody_imu;
+  m_builder_config.gravity_align_to_global_map = localization_config["gravity_align_to_global_map"].as<bool>();
 }
 
 void LIOLocalizationNode::publishGlobalMap(CloudType::Ptr cloud) {
@@ -161,48 +149,3 @@ void LIOLocalizationNode::clearDataBuffer() {
   m_state_data.last_imu_time = -1.0;
   m_state_data.last_lidar_time = -1.0;
 }
-
-void LIOLocalizationNode::transformToCarbody(const State& input, V3D& trans, M3D& rot, V3D& vel) {
-  // T_w_car = T_w_imu * T_imu_car.inverse()
-  rot = input.r_wi * m_localization_config.r_imu_carbody;
-  trans = input.r_wi * m_localization_config.t_imu_carbody + input.t_wi;
-  vel = rot.transpose() * input.v;
-}
-
-void LIOLocalizationNode::publishCustomOdometryMsg(std::string frame_id, const double& time, const V3D& trans,
-                                                   const M3D& rot) {
-#ifdef VLN_MSGS_FOUND
-  vln_msgs::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
-  m_custom_odom_pub->publish(msg);
-#endif
-}
-void LIOLocalizationNode::publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time, const V3D& trans,
-                                                          const M3D& rot) {
-#ifdef VLN_MSGS_FOUND
-  vln_msgs::msg::Localization msg = wrapCustomLocalizationMsg(frame_id, time, trans, rot);
-  m_custom_imu_frec_odom_pub->publish(msg);
-#endif
-}
-
-#ifdef VLN_MSGS_FOUND
-vln_msgs::msg::Localization LIOLocalizationNode::wrapCustomLocalizationMsg(std::string frame_id,
-                                                                                       const double& time,
-                                                                                       const V3D& trans,
-                                                                                       const M3D& rot) {
-  vln_msgs::msg::Localization msg;
-  msg.header.frame_id = frame_id;
-  msg.header.stamp = Utils::getTime(time);
-  msg.pose.position.x = trans.x();
-  msg.pose.position.y = trans.y();
-  msg.pose.position.z = trans.z();
-  Eigen::Quaterniond q(rot);
-  msg.pose.orientation.x = q.x();
-  msg.pose.orientation.y = q.y();
-  msg.pose.orientation.z = q.z();
-  msg.pose.orientation.w = q.w();
-
-  msg.confidence = 1.0;
-  msg.valid_flag = 1;
-  return msg;
-}
-#endif

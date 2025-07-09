@@ -22,7 +22,7 @@ def generate_launch_description():
                 package="fastlio2",
                 namespace="fastlio2",
                 executable="lio_node",
-                name="lio_node",
+                # name="lio_node",
                 output="screen",
                 parameters=[{"config_path": lio_config_path.perform(launch.LaunchContext())}]
             ),

@@ -150,11 +150,10 @@ void LIONode::publishCloud(rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::Sha
 
 void LIONode::publishLiOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub, std::string frame_id,
                                 std::string child_frame, const double& time) {
-  V3D trans, vel;
-  M3D rot;
-  transformToCarbody(m_kf->x(), trans, rot, vel);
+  V3D trans = m_kf->x().t_wi;
+  V3D vel = m_kf->x().v;
+  M3D rot = m_kf->x().r_wi;
   publishOdometry(odom_pub, frame_id, child_frame, time, trans, rot, vel);
-  publishCustomOdometryMsg(frame_id, time, trans, rot);
 }
 
 void LIONode::publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub, std::string frame_id,
@@ -184,9 +183,8 @@ void LIONode::publishPath(rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path
                           const double& time) {
   if (path_pub->get_subscription_count() <= 0) return;
 
-  V3D trans, vel;
-  M3D rot;
-  transformToCarbody(m_kf->x(), trans, rot, vel);
+  V3D trans = m_kf->x().t_wi;
+  M3D rot = m_kf->x().r_wi;
 
   geometry_msgs::msg::PoseStamped pose;
   pose.header.frame_id = frame_id;
@@ -291,23 +289,12 @@ void LIONode::imuFreqCB() {
     return;
   }
   *m_last_imu_frec_state = state;
-  V3D trans, vel;
-  M3D rot;
-  transformToCarbody(state.state, trans, rot, vel);
+  
+  V3D trans = state.state.t_wi;
+  V3D vel = state.state.v;
+  M3D rot = state.state.r_wi;
   publishOdometry(m_imu_frec_odom_pub, m_node_config.world_frame, m_node_config.body_frame, state.timestamp, trans, rot,
                   vel);
-
-  publishCustomOdometryMsgImuFrec(m_node_config.world_frame, state.timestamp, trans, rot);
 }
 
 bool LIONode::ready() { return true; }
-void LIONode::transformToCarbody(const State& input, V3D& trans, M3D& rot, V3D& vel) {
-  trans = input.t_wi;
-  rot = input.r_wi;
-  vel = input.r_wi.transpose() * input.v;
-}
-
-void LIONode::publishCustomOdometryMsg(std::string frame_id, const double& time,
-                                       const V3D& trans, const M3D& rot) {}
-void LIONode::publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time,
-                                              const V3D& trans, const M3D& rot) {}

@@ -86,3 +86,28 @@ struct SyncPackage
     double cloud_start_time = 0.0;
     double cloud_end_time = 0.0;
 };
+
+struct MinPose {
+    V3D trans = V3D::Zero();
+    Eigen::Quaterniond rot = Eigen::Quaterniond::Identity();
+
+    MinPose(const V3D& t, const Eigen::Quaterniond& r) {
+        trans = t;
+        rot = r.normalized();
+    }
+
+    MinPose(const V3D& t, const M3D& r) {
+        trans = t;
+        rot = Eigen::Quaterniond(r).normalized();
+    }
+
+    MinPose inverse() const {
+        Eigen::Quaterniond inv_rot = rot.conjugate();
+        V3D inv_trans = -(inv_rot * trans);
+        return MinPose{inv_trans, inv_rot};
+    }
+
+    MinPose operator*(const MinPose& other) const {
+        return MinPose{rot * other.trans + trans, rot * other.rot}; 
+    }
+};

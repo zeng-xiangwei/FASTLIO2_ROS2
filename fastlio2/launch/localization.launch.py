@@ -14,10 +14,6 @@ def generate_launch_description():
         [FindPackageShare("fastlio2"), "config", "lio_localizer.yaml"]
     )
 
-    localization_config_path = PathJoinSubstitution(
-        [FindPackageShare("fastlio2"), "config", "localization.yaml"]
-    )
-
 
     return launch.LaunchDescription(
         [
@@ -28,8 +24,7 @@ def generate_launch_description():
                 name="localization_node",
                 output="screen",
                 # prefix=['xterm -e gdb -ex run --args'],
-                parameters=[{"config_path": config_path.perform(launch.LaunchContext()),
-                             "localization_config_path": localization_config_path.perform(launch.LaunchContext())}]
+                parameters=[{"config_path": config_path.perform(launch.LaunchContext())}]
             ),
             launch_ros.actions.Node(
                 package="rviz2",

@@ -51,6 +51,11 @@ sudo make install
 
 **新的Sophus依赖fmt，可以在CMakeLists.txt中添加add_compile_definitions(SOPHUS_USE_BASIC_LOGGING)去除，否则会报错**
 
+### 4. gtsam
+```shell
+sudo add-apt-repository ppa:borglab/gtsam-release-4.0
+sudo apt install libgtsam-dev libgtsam-unstable-dev
+```
 
 ## 实例数据集
 ```text

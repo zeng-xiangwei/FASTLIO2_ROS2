@@ -31,3 +31,9 @@ r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
 t_il: [-0.011, -0.02329, 0.04412]
 
 lidar_cov_inv: 1000.0
+
+carbody_frame: carbody
+t_carbody_lidar: [ 0., 0., 0. ]
+r_carbody_lidar: [ 1., 0., 0.,
+                   0., 1., 0.,
+                   0., 0., 1.]

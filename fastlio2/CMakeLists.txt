@@ -63,7 +63,8 @@ set(SRC_LIST src/map_builder/commons.cpp
              src/utils.cpp
              src/lio_node.cpp
              src/lio_localization_node.cpp
-             src/icp_localizer.cpp)
+             src/icp_localizer.cpp
+             src/pose_transform_node.cpp)
        
 add_executable(lio_node src/lio_main.cpp ${SRC_LIST})
 ament_target_dependencies(lio_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 

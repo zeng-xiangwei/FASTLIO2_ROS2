@@ -52,11 +52,6 @@ class LIONode : public rclcpp::Node {
 
   virtual void loadParameters();
 
-  virtual void transformToCarbody(const State& input, V3D& trans, M3D& rot, V3D& vel);
-  virtual void publishCustomOdometryMsg(std::string frame_id, const double& time, const V3D& trans, const M3D& rot);
-  virtual void publishCustomOdometryMsgImuFrec(std::string frame_id, const double& time, const V3D& trans,
-                                               const M3D& rot);
-
   void imuCB(const sensor_msgs::msg::Imu::SharedPtr msg);
   void lidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
 
