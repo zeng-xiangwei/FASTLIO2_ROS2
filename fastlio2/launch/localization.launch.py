@@ -21,7 +21,7 @@ def generate_launch_description():
                 package="fastlio2",
                 namespace="fastlio2",
                 executable="localization_node",
-                name="localization_node",
+                # name="localization_node",
                 output="screen",
                 # prefix=['xterm -e gdb -ex run --args'],
                 parameters=[{"config_path": config_path.perform(launch.LaunchContext())}]

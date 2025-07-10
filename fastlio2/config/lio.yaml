@@ -1,7 +1,7 @@
 imu_topic: /livox/imu
 lidar_topic: /livox/lidar
-body_frame: body
-world_frame: lidar
+body_frame: imubody
+world_frame: local
 print_time_cost: false
 ros_spin_thread: 1
 
