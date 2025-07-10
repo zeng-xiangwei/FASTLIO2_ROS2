@@ -15,6 +15,7 @@ pcl
 Eigen
 sophus
 gtsam
+glog
 livox_ros_driver2
 ```
 
@@ -45,16 +46,28 @@ cd Sophus
 git checkout 1.22.10
 mkdir build && cd build
 cmake .. -DSOPHUS_USE_BASIC_LOGGING=ON
+# 如果 gcc 版本是 12，则需要添加 -DBUILD_SOPHUS_TESTS=OFF
+cmake .. -DSOPHUS_USE_BASIC_LOGGING=ON -DBUILD_SOPHUS_TESTS=OFF
 make
 sudo make install
 ```
 
 **新的Sophus依赖fmt，可以在CMakeLists.txt中添加add_compile_definitions(SOPHUS_USE_BASIC_LOGGING)去除，否则会报错**
 
-### 4. gtsam
+### 4. gtsam 4.2.0
 ```shell
-sudo add-apt-repository ppa:borglab/gtsam-release-4.0
-sudo apt install libgtsam-dev libgtsam-unstable-dev
+git clone https://github.com/borglab/gtsam.git
+cd gtsam
+git checkout 4.2.0
+mkdir build
+cd build
+cmake ..
+sudo make install
+```
+
+### 5. glog
+```shell
+sudo apt-get install libgflags-dev libgoogle-glog-dev
 ```
 
 ## 实例数据集
