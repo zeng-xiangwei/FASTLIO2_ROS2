@@ -5,11 +5,11 @@ world_frame: map
 print_time_cost: true
 ros_spin_thread: 2
 
-lidar_filter_num: 6
+lidar_filter_num: 1
 lidar_min_range: 0.5
 lidar_max_range: 30.0
-scan_resolution: 0.15
-map_resolution: 0.3
+scan_resolution: 0.2
+map_resolution: 0.2
 
 cube_len: 300
 det_range: 60
