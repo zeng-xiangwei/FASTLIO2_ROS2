@@ -24,7 +24,11 @@ def generate_launch_description():
                 # name="localization_node",
                 output="screen",
                 # prefix=['xterm -e gdb -ex run --args'],
-                parameters=[{"config_path": config_path.perform(launch.LaunchContext())}]
+                parameters=[{"config_path": config_path.perform(launch.LaunchContext())}],
+                remappings=[
+                    ('/localization/custom_lidar_frec_pose', '/localization/custom_pose'),
+                    ('/localization/lidar_frec_pose', '/localization/standard_pose'),
+                ]
             ),
             launch_ros.actions.Node(
                 package="rviz2",
