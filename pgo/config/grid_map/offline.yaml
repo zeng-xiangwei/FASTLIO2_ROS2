@@ -1,0 +1,22 @@
+# 保存的关键帧点云文件夹路径
+patches_path_dir: /home/xiangweizeng/my_project/fastlio2-ros2_ws/data/0704/patches
+
+# 关键帧位姿路径
+pose_file: /home/xiangweizeng/my_project/fastlio2-ros2_ws/data/0704/poses.txt
+
+# 合并后的点云地图文件路径
+combined_pcd_file: /home/xiangweizeng/my_project/fastlio2-ros2_ws/data/0704/map.pcd
+
+# 栅格地图输出文件路径
+output_dir: /home/xiangweizeng/my_project/fastlio2-ros2_ws/data/0704
+
+# 栅格地图文件名前缀
+name_prefix: map_2d
+
+z_min: -0.2
+z_max: 1.0
+resolution: 0.1
+occupancy_weight: 100
+
+#一帧一帧拼接（黑白灰） or 直接使用全局地图（黑白）， BLACK_WHITE_GRAY、BLACK_WHITE
+occupancy_type: BLACK_WHITE

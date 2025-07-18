@@ -50,17 +50,18 @@ add_executable(pgo_node src/pgo_node.cpp ${SRC_LIST})
 ament_target_dependencies(pgo_node rclcpp std_msgs sensor_msgs nav_msgs message_filters pcl_conversions tf2_ros geometry_msgs visualization_msgs interface GTSAM)
 target_link_libraries(pgo_node ${PCL_LIBRARIES} gtsam yaml-cpp glog::glog)
 
-set(test_3d_to_2d_src_list
-  src/test_3d_to_2d.cpp
+set(tools_3d_to_2d_src_list
+  src/tools_3d_to_2d.cpp
   src/utils/point_cloud_3d_to_2d_grid.cpp
   src/utils/file_writer.cpp
   src/utils/occupancy_map.cpp
 )
-add_executable(test_3d_to_2d_gridmap ${test_3d_to_2d_src_list})
-target_link_libraries(test_3d_to_2d_gridmap ${PCL_LIBRARIES} glog::glog)
+add_executable(tools_3d_to_2d_gridmap ${tools_3d_to_2d_src_list})
+target_link_libraries(tools_3d_to_2d_gridmap ${PCL_LIBRARIES} glog::glog yaml-cpp)
+ament_target_dependencies(tools_3d_to_2d_gridmap rclcpp)
 
 
-install(TARGETS pgo_node test_3d_to_2d_gridmap DESTINATION lib/${PROJECT_NAME})
+install(TARGETS pgo_node tools_3d_to_2d_gridmap DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
