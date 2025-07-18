@@ -75,6 +75,9 @@ void LIONode::loadParameters() {
     m_node_config.imu_data_preprocess_rot << tmp_rot_vec[0], tmp_rot_vec[1], tmp_rot_vec[2], tmp_rot_vec[3],
         tmp_rot_vec[4], tmp_rot_vec[5], tmp_rot_vec[6], tmp_rot_vec[7], tmp_rot_vec[8];
   }
+  if (config["n_scans"]) {
+    m_node_config.n_scans = config["n_scans"].as<int>();
+  }
 
   m_builder_config.lidar_filter_num = config["lidar_filter_num"].as<int>();
   m_builder_config.lidar_min_range = config["lidar_min_range"].as<double>();
@@ -140,7 +143,7 @@ void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr ms
 
 void LIONode::robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
   CloudType::Ptr cloud = Utils::robosense2PCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
-                                              m_builder_config.lidar_max_range);
+                                              m_builder_config.lidar_max_range, m_node_config.n_scans);
 
   std::lock_guard<std::mutex> lock(m_mutex);
   double timestamp = Utils::getSec(msg->header);

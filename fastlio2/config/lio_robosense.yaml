@@ -6,6 +6,8 @@ print_time_cost: true
 ros_spin_thread: 1
 # lidar_type: livox、robosense
 lidar_type: robosense
+# only for robosense
+n_scans: 96
 
 lidar_filter_num: 4
 lidar_min_range: 0.5

@@ -39,6 +39,7 @@ struct NodeConfig {
   // lidar_type: livox、robosense
   std::string lidar_type = kLivoxLidarType;
   M3D imu_data_preprocess_rot = M3D::Identity();
+  int n_scans = 96;
 };
 struct StateData {
   bool lidar_pushed = false;

@@ -26,7 +26,8 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driv
 }
 
 pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg,
-                                                                int filter_num, double min_range, double max_range) {
+                                                                int filter_num, double min_range, double max_range,
+                                                                int n_scans) {
   pcl::PointCloud<robosense_ros::Point> pl_orig;
   pcl::fromROSMsg(*msg, pl_orig);
 
@@ -39,19 +40,31 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msg
   int point_num = pl_orig.points.size();
   cloud->reserve(point_num / filter_num + 1);
   double first_point_time = pl_orig.points[0].timestamp;
-  for (int i = 0; i < point_num; i += filter_num) {
-    float x = pl_orig.points[i].x;
-    float y = pl_orig.points[i].y;
-    float z = pl_orig.points[i].z;
-    if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
-    pcl::PointXYZINormal p;
-    p.x = x;
-    p.y = y;
-    p.z = z;
-    p.intensity = pl_orig.points[i].intensity;
-    float relative_time = pl_orig.points[i].timestamp - first_point_time;
-    p.curvature = relative_time * 1000.0f;
-    cloud->push_back(p);
+
+  // 考虑到 robosense airy 的激光扫描是按列扫描，如果直接按filter_num降采样，会导致固定ring号的点云被降采样掉，
+  // 为了使得每个 ring 内的点云被降采样，因此要按列跳过
+  // 这种降采样方式要求驱动必须发布全量点云（包含 nan 点）
+  int cols = point_num / n_scans;
+  if (point_num % n_scans != 0) {
+    // 保证 cols * n_scans <= point_num
+    cols = cols - 1;
+  }
+  for (int ring_idx = 0; ring_idx < n_scans; ++ring_idx) {
+    for (int col_idx = 0; col_idx < cols; col_idx += filter_num) {
+      int idx = col_idx * n_scans + ring_idx;
+      float x = pl_orig.points[idx].x;
+      float y = pl_orig.points[idx].y;
+      float z = pl_orig.points[idx].z;
+      if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
+      pcl::PointXYZINormal p;
+      p.x = x;
+      p.y = y;
+      p.z = z;
+      p.intensity = pl_orig.points[idx].intensity;
+      float relative_time = pl_orig.points[idx].timestamp - first_point_time;
+      p.curvature = relative_time * 1000.0f;
+      cloud->push_back(p);
+    }
   }
 
   return cloud;
