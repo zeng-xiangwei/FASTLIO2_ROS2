@@ -1,0 +1,51 @@
+imu_topic: /rslidar_imu_data
+lidar_topic: /rslidar_points
+body_frame: imubody
+world_frame: local
+print_time_cost: true
+ros_spin_thread: 1
+# lidar_type: livox、robosense
+lidar_type: robosense
+
+lidar_filter_num: 4
+lidar_min_range: 0.5
+lidar_max_range: 30.0
+scan_resolution: 0.2
+map_resolution: 0.2
+
+cube_len: 300
+det_range: 60
+move_thresh: 1.5
+
+na: 0.01
+ng: 0.01
+nba: 0.0001
+nbg: 0.0001
+
+imu_init_num: 20
+near_search_num: 5
+ieskf_max_iter: 5
+
+gravity_align: true
+esti_il: false
+
+# 将 imu 的测量值根据 imu_data_preprocess_rot 旋转到一个虚拟的 imu 坐标系，转到与 lidar 系平行 
+# imu_data_preprocess_rot = T^{lidar}_{imu}
+# 因为 robosense airy 的内置 imu 与 lidar 坐标系不平行
+# imu_data_preprocess_rot: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+imu_data_preprocess_rot: [-0.00861, -0.99986, 0.01442, -0.99991, 0.00846, -0.01046, 0.01034, -0.01451, -0.99984]
+
+# 这里的外参是 lidar 与 虚拟imu 坐标系的外参
+r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+t_il: [-0.00425, -0.00418, 0.00446]
+
+lidar_cov_inv: 1000.0
+
+# 车体系
+carbody_frame: carbody
+# 激光本体系
+lidarbody_frame: lidarbody
+t_carbody_lidar: [ 0., 0., 0. ]
+r_carbody_lidar: [0.00000, -1.00000, 0.00000, 
+                  1.00000, 0.00000, 0.00000, 
+                  0.00000, 0.00000, 1.00000]

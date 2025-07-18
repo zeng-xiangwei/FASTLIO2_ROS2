@@ -50,10 +50,10 @@ class PGONode : public rclcpp::Node {
     RCLCPP_INFO(this->get_logger(), "PGO node started");
     loadParameters();
     m_pgo = std::make_shared<SimplePGO>(m_pgo_config);
-    rclcpp::QoS qos = rclcpp::QoS(10);
+    rclcpp::QoS qos = rclcpp::QoS(1);
     m_cloud_sub.subscribe(this, m_node_config.cloud_topic, qos.get_rmw_qos_profile());
     m_odom_sub.subscribe(this, m_node_config.odom_topic, qos.get_rmw_qos_profile());
-    m_loop_marker_pub = this->create_publisher<visualization_msgs::msg::MarkerArray>("/pgo/loop_markers", 10000);
+    m_loop_marker_pub = this->create_publisher<visualization_msgs::msg::MarkerArray>("/pgo/loop_markers", 10);
     m_tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
     m_sync = std::make_shared<message_filters::Synchronizer<
         message_filters::sync_policies::ApproximateTime<sensor_msgs::msg::PointCloud2, nav_msgs::msg::Odometry>>>(

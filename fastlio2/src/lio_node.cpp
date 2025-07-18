@@ -16,16 +16,23 @@ void LIONode::initRos() {
   RCLCPP_INFO(this->get_logger(), "%s Started", this->get_name());
   loadParameters();
 
-  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, 10,
+  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, 100,
                                                                std::bind(&LIONode::imuCB, this, std::placeholders::_1));
-  m_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-      m_node_config.lidar_topic, 10, std::bind(&LIONode::lidarCB, this, std::placeholders::_1));
+  if (m_node_config.lidar_type == kLivoxLidarType) {
+    m_livox_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
+        m_node_config.lidar_topic, 1, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1));
+  } else if (m_node_config.lidar_type == kRobosenseLidarType) {
+    m_robosense_lidar_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+        m_node_config.lidar_topic, 1, std::bind(&LIONode::robosenseLidarCB, this, std::placeholders::_1));
+  } else {
+    RCLCPP_ERROR(this->get_logger(), "Lidar type error, please check lidar_type");
+  }
 
-  m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", 10000);
-  m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", 10000);
-  m_path_pub = this->create_publisher<nav_msgs::msg::Path>("lio_path", 10000);
-  m_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_odom", 10000);
-  m_imu_frec_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_imu_frec_odom", 10000);
+  m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", 1);
+  m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", 1);
+  m_path_pub = this->create_publisher<nav_msgs::msg::Path>("lio_path", 1);
+  m_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_odom", 10);
+  m_imu_frec_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_imu_frec_odom", 10);
   m_tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
 
   m_state_data.path.poses.clear();
@@ -57,6 +64,17 @@ void LIONode::loadParameters() {
   m_node_config.world_frame = config["world_frame"].as<std::string>();
   m_node_config.print_time_cost = config["print_time_cost"].as<bool>();
   m_node_config.ros_spin_thread = config["ros_spin_thread"].as<int>();
+  m_node_config.lidar_type = config["lidar_type"].as<std::string>();
+
+  if ((m_node_config.lidar_type != kLivoxLidarType) && (m_node_config.lidar_type != kRobosenseLidarType)) {
+    RCLCPP_ERROR(this->get_logger(), "Invalid lidar type: %s", m_node_config.lidar_type.c_str());
+  }
+
+  if (m_node_config.lidar_type == kRobosenseLidarType && config["imu_data_preprocess_rot"]) {
+    std::vector<double> tmp_rot_vec = config["imu_data_preprocess_rot"].as<std::vector<double>>();
+    m_node_config.imu_data_preprocess_rot << tmp_rot_vec[0], tmp_rot_vec[1], tmp_rot_vec[2], tmp_rot_vec[3],
+        tmp_rot_vec[4], tmp_rot_vec[5], tmp_rot_vec[6], tmp_rot_vec[7], tmp_rot_vec[8];
+  }
 
   m_builder_config.lidar_filter_num = config["lidar_filter_num"].as<int>();
   m_builder_config.lidar_min_range = config["lidar_min_range"].as<double>();
@@ -91,18 +109,39 @@ void LIONode::imuCB(const sensor_msgs::msg::Imu::SharedPtr msg) {
     RCLCPP_WARN(this->get_logger(), "IMU Message is out of order");
     std::deque<IMUData>().swap(m_state_data.imu_buffer);
   }
-  m_state_data.imu_buffer.emplace_back(
-      V3D(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z) * 10.0,
-      V3D(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z), timestamp);
+
+  V3D acc = V3D(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z) * 10.0;
+  V3D gyro = V3D(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
+  // 考虑到 imu 与 lidar 坐标系不平行时（robosense airy），将 imu 数据转到与 lidar 平行的坐标系下，否则地图是倒着的
+  acc = m_node_config.imu_data_preprocess_rot * acc;
+  gyro = m_node_config.imu_data_preprocess_rot * gyro;
+
+  m_state_data.imu_buffer.emplace_back(acc, gyro, timestamp);
   m_state_data.last_imu_time = timestamp;
 
   m_imu_pose_predictor->addImuData(m_state_data.imu_buffer.back());
   m_state_data.has_new_data = true;
   m_condition.notify_all();
 }
-void LIONode::lidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg) {
+void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg) {
   CloudType::Ptr cloud = Utils::livox2PCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
                                           m_builder_config.lidar_max_range);
+  std::lock_guard<std::mutex> lock(m_mutex);
+  double timestamp = Utils::getSec(msg->header);
+  if (timestamp < m_state_data.last_lidar_time) {
+    RCLCPP_WARN(this->get_logger(), "Lidar Message is out of order");
+    std::deque<std::pair<double, pcl::PointCloud<pcl::PointXYZINormal>::Ptr>>().swap(m_state_data.lidar_buffer);
+  }
+  m_state_data.lidar_buffer.emplace_back(timestamp, cloud);
+  m_state_data.last_lidar_time = timestamp;
+  m_state_data.has_new_data = true;
+  m_condition.notify_all();
+}
+
+void LIONode::robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+  CloudType::Ptr cloud = Utils::robosense2PCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
+                                              m_builder_config.lidar_max_range);
+
   std::lock_guard<std::mutex> lock(m_mutex);
   double timestamp = Utils::getSec(msg->header);
   if (timestamp < m_state_data.last_lidar_time) {
@@ -289,7 +328,7 @@ void LIONode::imuFreqCB() {
     return;
   }
   *m_last_imu_frec_state = state;
-  
+
   V3D trans = state.state.t_wi;
   V3D vel = state.state.v;
   M3D rot = state.state.r_wi;

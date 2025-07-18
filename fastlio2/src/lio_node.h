@@ -24,6 +24,10 @@
 #include "utils.h"
 
 using namespace std::chrono_literals;
+
+const std::string kLivoxLidarType = "livox";
+const std::string kRobosenseLidarType = "robosense";
+
 struct NodeConfig {
   std::string imu_topic = "/livox/imu";
   std::string lidar_topic = "/livox/lidar";
@@ -31,6 +35,10 @@ struct NodeConfig {
   std::string world_frame = "lidar";
   bool print_time_cost = false;
   int ros_spin_thread = 1;
+
+  // lidar_type: livox、robosense
+  std::string lidar_type = kLivoxLidarType;
+  M3D imu_data_preprocess_rot = M3D::Identity();
 };
 struct StateData {
   bool lidar_pushed = false;
@@ -53,7 +61,8 @@ class LIONode : public rclcpp::Node {
   virtual void loadParameters();
 
   void imuCB(const sensor_msgs::msg::Imu::SharedPtr msg);
-  void lidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
+  void livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
+  void robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
   bool syncPackage();
 
@@ -83,7 +92,8 @@ class LIONode : public rclcpp::Node {
   const NodeConfig& getNodeConfig() const { return m_node_config; }
 
  protected:
-  rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_lidar_sub;
+  rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_livox_lidar_sub;
+  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr m_robosense_lidar_sub;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr m_imu_sub;
 
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_body_cloud_pub;
