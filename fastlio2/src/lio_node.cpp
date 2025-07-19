@@ -142,9 +142,13 @@ void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr ms
 }
 
 void LIONode::robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+  auto t1 = std::chrono::high_resolution_clock::now();
   CloudType::Ptr cloud = Utils::robosense2PCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
                                               m_builder_config.lidar_max_range, m_node_config.n_scans);
+  auto t2 = std::chrono::high_resolution_clock::now();
 
+  double cost = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+  RCLCPP_WARN(this->get_logger(), "get robosense msg cost %f", cost);
   std::lock_guard<std::mutex> lock(m_mutex);
   double timestamp = Utils::getSec(msg->header);
   if (timestamp < m_state_data.last_lidar_time) {

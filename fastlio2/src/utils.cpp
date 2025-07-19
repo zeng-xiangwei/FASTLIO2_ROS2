@@ -28,18 +28,17 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driv
 pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg,
                                                                 int filter_num, double min_range, double max_range,
                                                                 int n_scans) {
-  pcl::PointCloud<robosense_ros::Point> pl_orig;
-  pcl::fromROSMsg(*msg, pl_orig);
-
   pcl::PointCloud<pcl::PointXYZINormal>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZINormal>);
 
-  if (pl_orig.points.empty()) {
+  int point_num = msg->width * msg->height;
+  if (point_num == 0) {
     return cloud;
   }
 
-  int point_num = pl_orig.points.size();
   cloud->reserve(point_num / filter_num + 1);
-  double first_point_time = pl_orig.points[0].timestamp;
+  const uint8_t* first_point = &msg->data[0];
+  double first_point_time = *(reinterpret_cast<const double*>(first_point + msg->fields[5].offset));
+  std::cout << "first_point_time: " << first_point_time << std::endl;
 
   // 考虑到 robosense airy 的激光扫描是按列扫描，如果直接按filter_num降采样，会导致固定ring号的点云被降采样掉，
   // 为了使得每个 ring 内的点云被降采样，因此要按列跳过
@@ -52,16 +51,18 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msg
   for (int ring_idx = 0; ring_idx < n_scans; ++ring_idx) {
     for (int col_idx = 0; col_idx < cols; col_idx += filter_num) {
       int idx = col_idx * n_scans + ring_idx;
-      float x = pl_orig.points[idx].x;
-      float y = pl_orig.points[idx].y;
-      float z = pl_orig.points[idx].z;
+      const uint8_t* point = &msg->data[idx * msg->point_step];
+      float x = *(reinterpret_cast<const float*>(point + msg->fields[0].offset));
+      float y = *(reinterpret_cast<const float*>(point + msg->fields[1].offset));
+      float z = *(reinterpret_cast<const float*>(point + msg->fields[2].offset));
       if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
       pcl::PointXYZINormal p;
       p.x = x;
       p.y = y;
       p.z = z;
-      p.intensity = pl_orig.points[idx].intensity;
-      float relative_time = pl_orig.points[idx].timestamp - first_point_time;
+      p.intensity = *(reinterpret_cast<const float*>(point + msg->fields[3].offset));
+      double point_time = *(reinterpret_cast<const double*>(point + msg->fields[5].offset));
+      float relative_time = point_time - first_point_time;
       p.curvature = relative_time * 1000.0f;
       cloud->push_back(p);
     }
