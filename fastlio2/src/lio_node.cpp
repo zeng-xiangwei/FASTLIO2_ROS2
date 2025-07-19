@@ -319,6 +319,8 @@ void LIONode::timerCB() {
   publishCloud(m_world_cloud_pub, world_cloud, m_node_config.world_frame, m_package.cloud_end_time);
 
   publishPath(m_path_pub, m_node_config.world_frame, m_package.cloud_end_time);
+
+  saveLatestLidarPose();
 }
 
 void LIONode::imuFreqCB() {

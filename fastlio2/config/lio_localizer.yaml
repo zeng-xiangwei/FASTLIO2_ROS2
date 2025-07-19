@@ -44,7 +44,7 @@ r_carbody_lidar: [ 1., 0., 0.,
                    0., 0., 1.]
 
 localization:
-  global_map_file: "/home/xiangweizeng/my_project/fast-lio-relocalization_ws/src/FAST_LIO_LOCALIZATION/PCD/meeting-room/GlobalMap.pcd"
+  global_map_file: "/home/xiangweizeng/my_project/fastlio2-ros2_ws/data/0704/map.pcd"
 
   rough_scan_resolution: 0.25
   rough_map_resolution: 0.25

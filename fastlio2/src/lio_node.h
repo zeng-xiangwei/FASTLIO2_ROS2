@@ -60,6 +60,7 @@ class LIONode : public rclcpp::Node {
   virtual bool ready();
 
   virtual void loadParameters();
+  virtual void saveLatestLidarPose() {}
 
   void imuCB(const sensor_msgs::msg::Imu::SharedPtr msg);
   void livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
