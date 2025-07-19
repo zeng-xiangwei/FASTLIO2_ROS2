@@ -12,9 +12,9 @@ class GridMapUtils {
  public:
   enum OccType {
     // 一帧一帧拼接，按照占据栅格的方式构建（黑白灰）
-    BLACK_WHITE_GRAY = 0,
+    USING_KEY_FRAME = 0,
     // 直接将全局地图构建栅格地图（仅黑白）
-    BLACK_WHITE = 1
+    USING_GLOBAL_MAP = 1
   };
 
   struct GridMapConfig {
@@ -34,7 +34,7 @@ class GridMapUtils {
     float resolution;
     int occupancy_weight;
 
-    OccType occupancy_map_type = BLACK_WHITE_GRAY;
+    OccType occupancy_map_type = USING_KEY_FRAME;
   };
 
   struct Pose {
@@ -59,10 +59,10 @@ class GridMapUtils {
     config_.occupancy_weight = config["occupancy_weight"].as<int>();
     
     std::string occ_type = config["occupancy_type"].as<std::string>();
-    if (occ_type == "BLACK_WHITE_GRAY") {
-      config_.occupancy_map_type = BLACK_WHITE_GRAY;
+    if (occ_type == "USING_KEY_FRAME") {
+      config_.occupancy_map_type = USING_KEY_FRAME;
     } else {
-      config_.occupancy_map_type = BLACK_WHITE;
+      config_.occupancy_map_type = USING_GLOBAL_MAP;
     }
 
     std::cout << "config loaded\n";
@@ -77,7 +77,7 @@ class GridMapUtils {
   }
 
   void run() {
-    if (config_.occupancy_map_type == BLACK_WHITE_GRAY) {
+    if (config_.occupancy_map_type == USING_KEY_FRAME) {
       constructOccupancyMap();
     } else {
       wholeMap2GridMap();
@@ -91,9 +91,18 @@ private:
     CloudType::Ptr cloud_temp(new CloudType());
     reader.read(config_.combined_pcd_file, *cloud_temp);
 
-    utils::PointCloud3DTo2DGrid point_cloud_3d_to_2d_grid;
-    point_cloud_3d_to_2d_grid.convert(cloud_temp, config_.output_dir, config_.name_prefix, config_.z_min, config_.z_max,
-                                      config_.resolution);
+    // utils::PointCloud3DTo2DGrid point_cloud_3d_to_2d_grid;
+    // point_cloud_3d_to_2d_grid.convert(cloud_temp, config_.output_dir, config_.name_prefix, config_.z_min, config_.z_max,
+    //                                   config_.resolution);
+
+    utils::OccupancyMap::Config config;
+    config.resolution = config_.resolution;
+    config.min_z = config_.z_min;
+    config.max_z = config_.z_max;
+    config.occupancy_weight = config_.occupancy_weight;
+    utils::OccupancyMap occupancy_map(config);
+    occupancy_map.AddLidarFrame(cloud_temp, Eigen::Vector3d::Zero(), Eigen::Quaterniond::Identity());
+    occupancy_map.Save(config_.output_dir, config_.name_prefix);
   }
 
   void fromStr(const std::string& str, std::string& file_name, Pose& pose) {

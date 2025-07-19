@@ -16,7 +16,7 @@ name_prefix: map_2d
 z_min: -0.2
 z_max: 1.0
 resolution: 0.1
-occupancy_weight: 100
+occupancy_weight: 10
 
-#一帧一帧拼接（黑白灰） or 直接使用全局地图（黑白）， BLACK_WHITE_GRAY、BLACK_WHITE
-occupancy_type: BLACK_WHITE
+#一帧一帧拼接（黑白灰） or 直接使用全局地图（黑白）， USING_KEY_FRAME、USING_GLOBAL_MAP
+occupancy_type: USING_KEY_FRAME

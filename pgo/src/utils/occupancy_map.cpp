@@ -53,18 +53,21 @@ void OccupancyMap::AddLidarFrame(CloudType::Ptr lidar_cloud, const Eigen::Vector
 
   /// 末端点涂黑
   std::for_each(endpoints.begin(), endpoints.end(),
-                [this](const auto& pt) { SetPoint(pt, true, config_.occupancy_weight); });
+                [this](const auto& pt) { SetPoint(pt, true, true, config_.occupancy_weight); });
 }
 
-void OccupancyMap::SetPoint(const Eigen::Array2i& pt, bool occupy, uint8_t delta) {
+void OccupancyMap::SetPoint(const Eigen::Array2i& pt, bool occupy, bool allow_revisit, uint8_t delta) {
   if (!map_limits_->Contains(pt)) {
     return;
   }
 
-  if (Visited(pt)) {
-    return;
+  if (!allow_revisit) {
+    if (Visited(pt)) {
+      return;
+    }
+    SetVisited(pt);
   }
-  SetVisited(pt);
+
   /// 这里设置了一个上下限
   uint8_t* value = GetMutableValue(pt);
   if (occupy) {

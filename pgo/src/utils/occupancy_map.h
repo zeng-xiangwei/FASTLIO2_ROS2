@@ -24,7 +24,7 @@ class OccupancyMap {
 
  private:
   /// 在某个点填入占据或者非占据信息
-  void SetPoint(const Eigen::Array2i& pt, bool occupy, uint8_t delta = 1u);
+  void SetPoint(const Eigen::Array2i& pt, bool occupy, bool allow_revisit = false, uint8_t delta = 1u);
   void GrowAsNeeded();
   void GrowLimits(const Eigen::Vector2f& point);
 
