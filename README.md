@@ -69,6 +69,7 @@ git checkout 4.2.0
 mkdir build
 cd build
 cmake -DGTSAM_USE_SYSTEM_EIGEN=ON ..
+make -j4
 sudo make install
 ```
 
