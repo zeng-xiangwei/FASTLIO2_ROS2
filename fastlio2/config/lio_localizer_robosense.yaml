@@ -54,15 +54,15 @@ r_carbody_lidar: [0.00000, -1.00000, 0.00000,
 localization:
   global_map_file: "/home/diana/vln/fastlio2-ros2_ws/data/map.pcd"
 
-  rough_scan_resolution: 0.25
-  rough_map_resolution: 0.25
+  rough_scan_resolution: 0.5
+  rough_map_resolution: 0.5
   rough_max_iteration: 5
-  rough_score_thresh: 0.2
+  rough_score_thresh: 0.3
 
   refine_scan_resolution: 0.1
   refine_map_resolution: 0.1
   refine_max_iteration: 10
-  refine_score_thresh: 0.1
+  refine_score_thresh: 0.3
 
   # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
   gravity_align_to_global_map: true

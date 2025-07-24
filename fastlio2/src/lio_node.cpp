@@ -16,14 +16,19 @@ void LIONode::initRos() {
   RCLCPP_INFO(this->get_logger(), "%s Started", this->get_name());
   loadParameters();
 
-  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, 100,
+  rclcpp::QoS imu_qos(100);
+  imu_qos.best_effort();
+  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, imu_qos,
                                                                std::bind(&LIONode::imuCB, this, std::placeholders::_1));
+  
+  rclcpp::QoS lidar_qos(1);
+  lidar_qos.best_effort();
   if (m_node_config.lidar_type == kLivoxLidarType) {
     m_livox_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-        m_node_config.lidar_topic, 1, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1));
+        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1));
   } else if (m_node_config.lidar_type == kRobosenseLidarType) {
     m_robosense_lidar_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-        m_node_config.lidar_topic, 1, std::bind(&LIONode::robosenseLidarCB, this, std::placeholders::_1));
+        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::robosenseLidarCB, this, std::placeholders::_1));
   } else {
     RCLCPP_ERROR(this->get_logger(), "Lidar type error, please check lidar_type");
   }
