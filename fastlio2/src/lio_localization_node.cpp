@@ -168,6 +168,10 @@ void LIOLocalizationNode::readSavedPose(const std::string& file_path) {
   m_saved_pos = V3D(std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3]));
   m_saved_rot =
       Eigen::Quaterniond(std::stod(tokens[7]), std::stod(tokens[4]), std::stod(tokens[5]), std::stod(tokens[6]));
+
+  // 把读取的位姿记录下来，用于更新
+  m_latest_pos = m_saved_pos;
+  m_latest_rot = m_saved_rot;
 }
 
 void LIOLocalizationNode::relocalization() {

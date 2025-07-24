@@ -304,6 +304,8 @@ void LIONode::timerCB() {
 
   if (m_builder->status() != BuilderStatus::MAPPING) return;
 
+  RCLCPP_WARN(this->get_logger(), "start pub");
+
   broadLiCastTF(m_tf_broadcaster, m_node_config.world_frame, m_node_config.body_frame, m_package.cloud_end_time);
 
   publishLiOdometry(m_odom_pub, m_node_config.world_frame, m_node_config.body_frame, m_package.cloud_end_time);
@@ -321,6 +323,7 @@ void LIONode::timerCB() {
   publishPath(m_path_pub, m_node_config.world_frame, m_package.cloud_end_time);
 
   saveLatestLidarPose();
+  RCLCPP_WARN(this->get_logger(), "end pub");
 }
 
 void LIONode::imuFreqCB() {
