@@ -55,6 +55,10 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msg
       float x = *(reinterpret_cast<const float*>(point + msg->fields[0].offset));
       float y = *(reinterpret_cast<const float*>(point + msg->fields[1].offset));
       float z = *(reinterpret_cast<const float*>(point + msg->fields[2].offset));
+      if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
+        continue;
+      }
+      
       if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
       pcl::PointXYZINormal p;
       p.x = x;
