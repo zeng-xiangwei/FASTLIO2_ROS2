@@ -64,28 +64,36 @@ set(SRC_LIST src/map_builder/commons.cpp
              src/lio_node.cpp
              src/lio_localization_node.cpp
              src/icp_localizer.cpp
-             src/pose_transform_node.cpp)
+             src/pose_transform_node.cpp
+             src/accumulate_lidar_cloud_for_calib.cpp)
+
+add_library(map_builder SHARED ${SRC_LIST})
+ament_target_dependencies(map_builder rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
+pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
+target_link_libraries(map_builder 
+  yaml-cpp
+  ${PCL_LIBRARIES})
        
-add_executable(lio_node src/lio_main.cpp ${SRC_LIST})
-ament_target_dependencies(lio_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
-pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
+add_executable(lio_node src/lio_main.cpp)
 target_link_libraries(lio_node
-  yaml-cpp
-  ${PCL_LIBRARIES}
+  map_builder
   glog
 )
 
-add_executable(localization_node src/lio_localization_main.cpp ${SRC_LIST})
-ament_target_dependencies(localization_node rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
-pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
+add_executable(localization_node src/lio_localization_main.cpp)
 target_link_libraries(localization_node
-  yaml-cpp
-  ${PCL_LIBRARIES}
+  map_builder
+  glog
+)
+
+add_executable(accumulate_lidar_cloud src/accumulate_main.cpp)
+target_link_libraries(accumulate_lidar_cloud
+  map_builder
   glog
 )
 
 
-install(TARGETS lio_node localization_node DESTINATION lib/${PROJECT_NAME})
+install(TARGETS lio_node localization_node accumulate_lidar_cloud DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})

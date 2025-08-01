@@ -90,7 +90,9 @@ struct SyncPackage
 struct MinPose {
     V3D trans = V3D::Zero();
     Eigen::Quaterniond rot = Eigen::Quaterniond::Identity();
-
+    
+    MinPose() = default;
+    
     MinPose(const V3D& t, const Eigen::Quaterniond& r) {
         trans = t;
         rot = r.normalized();
