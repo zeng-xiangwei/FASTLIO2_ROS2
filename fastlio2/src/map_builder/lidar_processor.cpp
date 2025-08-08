@@ -266,3 +266,20 @@ CloudType::Ptr LidarProcessor::transformCloud(CloudType::Ptr inp, const M3D &r, 
     pcl::transformPointCloud(*inp, *ret, transform);
     return ret;
 }
+
+CloudType::Ptr LidarProcessor::searchByRadius(V3D point, float radius) 
+{
+    PointVec point_search_result;
+    PointType point_search;
+    point_search.x = point(0);
+    point_search.y = point(1);
+    point_search.z = point(2);
+    m_ikdtree->Radius_Search(point_search, radius, point_search_result);
+
+    CloudType::Ptr ret = std::make_shared<CloudType>();
+    ret->reserve(point_search_result.size());
+    for (auto &point : point_search_result) {
+        ret->points.push_back(point);
+    }
+    return ret;
+}

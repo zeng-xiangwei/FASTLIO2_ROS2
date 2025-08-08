@@ -20,7 +20,7 @@ void LIONode::initRos() {
   imu_qos.best_effort();
   m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, imu_qos,
                                                                std::bind(&LIONode::imuCB, this, std::placeholders::_1));
-  
+
   rclcpp::QoS lidar_qos(1);
   lidar_qos.best_effort();
   if (m_node_config.lidar_type == kLivoxLidarType) {
@@ -35,6 +35,7 @@ void LIONode::initRos() {
 
   m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", 1);
   m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", 1);
+  m_VLA_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("vla_cloud", 1);
   m_path_pub = this->create_publisher<nav_msgs::msg::Path>("lio_path", 1);
   m_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_odom", 10);
   m_imu_frec_odom_pub = this->create_publisher<nav_msgs::msg::Odometry>("lio_imu_frec_odom", 10);
@@ -47,6 +48,9 @@ void LIONode::initRos() {
   m_builder = std::make_shared<MapBuilder>(m_builder_config, m_kf);
   m_imu_pose_predictor = std::make_shared<ImuPosePredictor>();
   m_imu_freq_timer = this->create_wall_timer(10ms, std::bind(&LIONode::imuFreqCB, this));
+
+  m_tf_buffer = std::make_shared<tf2_ros::Buffer>(this->get_clock());
+  m_tf_listener = std::make_shared<tf2_ros::TransformListener>(*m_tf_buffer);
 }
 
 void LIONode::loadParameters() {
@@ -108,6 +112,10 @@ void LIONode::loadParameters() {
   m_builder_config.r_il << r_il_vec[0], r_il_vec[1], r_il_vec[2], r_il_vec[3], r_il_vec[4], r_il_vec[5], r_il_vec[6],
       r_il_vec[7], r_il_vec[8];
   m_builder_config.lidar_cov_inv = config["lidar_cov_inv"].as<double>();
+
+  if (config["vla"]) {
+    readParamForVLA(config["vla"]);
+  }
 }
 
 void LIONode::imuCB(const sensor_msgs::msg::Imu::SharedPtr msg) {
@@ -328,6 +336,7 @@ void LIONode::timerCB() {
   publishPath(m_path_pub, m_node_config.world_frame, m_package.cloud_end_time);
 
   saveLatestLidarPose();
+  publishVLACloud(m_package.cloud_end_time);
   RCLCPP_WARN(this->get_logger(), "end pub");
 }
 
@@ -354,3 +363,100 @@ void LIONode::imuFreqCB() {
 }
 
 bool LIONode::ready() { return true; }
+
+CloudType::Ptr LIONode::getNearPointsForVLA(const double& time) {
+  M3D r_wb = m_kf->x().r_wi;
+  V3D t_wb = m_kf->x().t_wi;
+  CloudType::Ptr cloud_in_w = m_builder->lidar_processor()->searchByRadius(t_wb, m_node_config.vla_radius);
+
+  MinPose T_w_b(t_wb, r_wb);
+  MinPose T_b_w = T_w_b.inverse();
+  RCLCPP_INFO(this->get_logger(), "Get near points for VLA, cloud_in_w size: %d", cloud_in_w->size());
+  std::cout << "T_b_w.rot: " << T_b_w.rot.coeffs().transpose() << "T_b_w.trans: " << T_b_w.trans.transpose()
+            << std::endl;
+  CloudType::Ptr cloud_in_body = transformCloud(cloud_in_w, T_b_w.rot, T_b_w.trans);
+
+  // 过滤
+  CloudType::Ptr cloud_in_body_filtered = std::make_shared<CloudType>();
+  int reserve_size = cloud_in_body->size() / 2;
+  cloud_in_body_filtered->reserve(reserve_size);
+  for (const auto& point : *cloud_in_body) {
+    if (point.x > m_node_config.vla_lidar_remove_x_min && point.x < m_node_config.vla_lidar_remove_x_max &&
+        point.y > m_node_config.vla_lidar_remove_y_min && point.y < m_node_config.vla_lidar_remove_y_max &&
+        point.z > m_node_config.vla_lidar_remove_z_min && point.z < m_node_config.vla_lidar_remove_z_max) {
+      continue;
+    }
+    cloud_in_body_filtered->push_back(point);
+  }
+
+  // 获取T_armbase_lidar
+  geometry_msgs::msg::TransformStamped transform;
+  try {
+    rclcpp::Time ros_time = Utils::getTime(time);
+    transform = m_tf_buffer->lookupTransform(m_node_config.arm_base_frame, m_node_config.body_frame, ros_time,
+                                             tf2::durationFromSec(m_node_config.vla_transform_lookup_time));
+  } catch (tf2::TransformException& ex) {
+    RCLCPP_ERROR(this->get_logger(), "Can't get transform between %s and %s, %s", m_node_config.arm_base_frame,
+                 m_node_config.body_frame, ex.what());
+    return std::make_shared<CloudType>();
+  }
+
+  // 转换到 armbase 系
+  MinPose T_armbase_b;
+  T_armbase_b.rot.w() = transform.transform.rotation.w;
+  T_armbase_b.rot.x() = transform.transform.rotation.x;
+  T_armbase_b.rot.y() = transform.transform.rotation.y;
+  T_armbase_b.rot.z() = transform.transform.rotation.z;
+  T_armbase_b.trans.x() = transform.transform.translation.x;
+  T_armbase_b.trans.y() = transform.transform.translation.y;
+  T_armbase_b.trans.z() = transform.transform.translation.z;
+  CloudType::Ptr cloud_in_armbase = transformCloud(cloud_in_body_filtered, T_armbase_b.rot, T_armbase_b.trans);
+  return cloud_in_armbase;
+}
+
+void LIONode::publishVLACloud(const double& time) {
+  CloudType::Ptr cloud_in_armbase = getNearPointsForVLA(time);
+  publishCloud(m_VLA_cloud_pub, cloud_in_armbase, m_node_config.arm_base_frame, time);
+}
+
+CloudType::Ptr LIONode::transformCloud(CloudType::Ptr inp, const Eigen::Quaterniond& r, const V3D& t) {
+  CloudType::Ptr ret = std::make_shared<CloudType>();
+  ret->reserve(inp->size());
+  for (auto& point : *inp) {
+    V3D point_vec(point.x, point.y, point.z);
+    V3D point_trans_vec = r * point_vec + t;
+    PointType point_trans;
+    point_trans.x = point_trans_vec.x();
+    point_trans.y = point_trans_vec.y();
+    point_trans.z = point_trans_vec.z();
+    ret->push_back(point_trans);
+  }
+  return ret;
+}
+
+void LIONode::readParamForVLA(YAML::Node config) {
+  if (config["vla_radius"]) {
+    m_node_config.vla_radius = config["vla_radius"].as<float>();
+  }
+  if (config["vla_transform_lookup_time"]) {
+    m_node_config.vla_transform_lookup_time = config["vla_transform_lookup_time"].as<float>();
+  }
+  if (config["vla_lidar_remove_x_max"]) {
+    m_node_config.vla_lidar_remove_x_max = config["vla_lidar_remove_x_max"].as<float>();
+  }
+  if (config["vla_lidar_remove_x_min"]) {
+    m_node_config.vla_lidar_remove_x_min = config["vla_lidar_remove_x_min"].as<float>();
+  }
+  if (config["vla_lidar_remove_y_max"]) {
+    m_node_config.vla_lidar_remove_y_max = config["vla_lidar_remove_y_max"].as<float>();
+  }
+  if (config["vla_lidar_remove_y_min"]) {
+    m_node_config.vla_lidar_remove_y_min = config["vla_lidar_remove_y_min"].as<float>();
+  }
+  if (config["vla_lidar_remove_z_max"]) {
+    m_node_config.vla_lidar_remove_z_max = config["vla_lidar_remove_z_max"].as<float>();
+  }
+  if (config["vla_lidar_remove_z_min"]) {
+    m_node_config.vla_lidar_remove_z_min = config["vla_lidar_remove_z_min"].as<float>();
+  }
+}

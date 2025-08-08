@@ -94,6 +94,11 @@ target_link_libraries(accumulate_lidar_cloud
 
 
 install(TARGETS lio_node localization_node accumulate_lidar_cloud DESTINATION lib/${PROJECT_NAME})
+install(TARGETS map_builder
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION lib
+)
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})

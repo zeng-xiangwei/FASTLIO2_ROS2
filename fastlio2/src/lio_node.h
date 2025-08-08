@@ -20,7 +20,9 @@
 #include "map_builder/commons.h"
 #include "map_builder/imu_pose_predictor.h"
 #include "map_builder/map_builder.h"
+#include "tf2_ros/buffer.h"
 #include "tf2_ros/transform_broadcaster.h"
+#include "tf2_ros/transform_listener.h"
 #include "utils.h"
 
 using namespace std::chrono_literals;
@@ -33,6 +35,7 @@ struct NodeConfig {
   std::string lidar_topic = "/livox/lidar";
   std::string body_frame = "body";
   std::string world_frame = "lidar";
+  std::string arm_base_frame = "armbasebody";
   bool print_time_cost = false;
   int ros_spin_thread = 1;
 
@@ -40,6 +43,16 @@ struct NodeConfig {
   std::string lidar_type = kLivoxLidarType;
   M3D imu_data_preprocess_rot = M3D::Identity();
   int n_scans = 96;
+
+  // 仅用于 vla 测试
+  float vla_lidar_remove_x_min = -0.2;
+  float vla_lidar_remove_x_max = 0.8;
+  float vla_lidar_remove_y_min = -0.7;
+  float vla_lidar_remove_y_max = 0.7;
+  float vla_lidar_remove_z_min = 0.0;
+  float vla_lidar_remove_z_max = 1.2;
+  float vla_radius = 5.0;
+  float vla_transform_lookup_time = 0.1;
 };
 struct StateData {
   bool lidar_pushed = false;
@@ -94,12 +107,18 @@ class LIONode : public rclcpp::Node {
   const NodeConfig& getNodeConfig() const { return m_node_config; }
 
  protected:
+  CloudType::Ptr getNearPointsForVLA(const double& time);
+  void publishVLACloud(const double& time);
+  void readParamForVLA(YAML::Node config);
+  CloudType::Ptr transformCloud(CloudType::Ptr inp, const Eigen::Quaterniond& r, const V3D& t);
+
   rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_livox_lidar_sub;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr m_robosense_lidar_sub;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr m_imu_sub;
 
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_body_cloud_pub;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_world_cloud_pub;
+  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_VLA_cloud_pub;
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr m_path_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_odom_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_imu_frec_odom_pub;
@@ -120,4 +139,7 @@ class LIONode : public rclcpp::Node {
   std::condition_variable m_condition;
   std::thread m_thread;
   bool m_finished = false;
+
+  std::shared_ptr<tf2_ros::Buffer> m_tf_buffer;
+  std::shared_ptr<tf2_ros::TransformListener> m_tf_listener;
 };

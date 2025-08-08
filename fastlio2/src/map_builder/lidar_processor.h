@@ -31,6 +31,8 @@ public:
     M3D r_wl() { return m_kf->x().r_wi * m_kf->x().r_il; }
     V3D t_wl() { return m_kf->x().t_wi + m_kf->x().r_wi * m_kf->x().t_il; }
 
+    CloudType::Ptr searchByRadius(V3D point, float radius);
+
 private:
     Config m_config;
     LocalMap m_local_map;
