@@ -39,6 +39,6 @@ carbody_frame: carbody
 # 激光本体系
 lidarbody_frame: lidarbody
 t_carbody_lidar: [ 0.37, 0., 0. ]
-r_carbody_lidar: [ 1., 0., 0.,
-                   0., 1., 0.,
-                   0., 0., 1.]
+r_carbody_lidar: [-1.00000, -0.00000, 0.00000, 
+                  0.00000, -1.00000, 0.00000, 
+                  0.00000, 0.00000, 1.00000]

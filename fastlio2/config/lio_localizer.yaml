@@ -39,9 +39,9 @@ carbody_frame: carbody
 # 激光本体系
 lidarbody_frame: lidarbody
 t_carbody_lidar: [ 0.37, 0., 0. ]
-r_carbody_lidar: [ 1., 0., 0.,
-                   0., 1., 0.,
-                   0., 0., 1.]
+r_carbody_lidar: [-1.00000, -0.00000, 0.00000, 
+                  0.00000, -1.00000, 0.00000, 
+                  0.00000, 0.00000, 1.00000]
 
 localization:
   global_map_file: "/home/diana/vln/fastlio2-ros2_ws/data/map.pcd"
@@ -58,3 +58,13 @@ localization:
 
   # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
   gravity_align_to_global_map: true
+
+vla:
+  vla_lidar_remove_x_min: -0.2
+  vla_lidar_remove_x_max: 0.8
+  vla_lidar_remove_y_min: -0.7
+  vla_lidar_remove_y_max: 0.7
+  vla_lidar_remove_z_min: 0.0
+  vla_lidar_remove_z_max: 1.2
+  vla_radius: 3.0
+  vla_transform_lookup_time: 0.1

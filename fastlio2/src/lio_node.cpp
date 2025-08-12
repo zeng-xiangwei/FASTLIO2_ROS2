@@ -34,6 +34,7 @@ void LIONode::initRos() {
   }
 
   m_body_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("body_cloud", 1);
+  m_lidarbody_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("lidarbody_cloud", 1);
   m_world_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("world_cloud", 1);
   m_VLA_cloud_pub = this->create_publisher<sensor_msgs::msg::PointCloud2>("vla_cloud", 1);
   m_path_pub = this->create_publisher<nav_msgs::msg::Path>("lio_path", 1);
@@ -51,6 +52,10 @@ void LIONode::initRos() {
 
   m_tf_buffer = std::make_shared<tf2_ros::Buffer>(this->get_clock());
   m_tf_listener = std::make_shared<tf2_ros::TransformListener>(*m_tf_buffer);
+#ifdef VLN_MSGS_FOUND
+  m_get_near_points_srv = this->create_service<vln_msgs::srv::QueryCloudPoints>(
+      "get_near_points", std::bind(&LIONode::getNearPointsCB, this, std::placeholders::_1, std::placeholders::_2));
+#endif
 }
 
 void LIONode::loadParameters() {
@@ -74,6 +79,7 @@ void LIONode::loadParameters() {
   m_node_config.print_time_cost = config["print_time_cost"].as<bool>();
   m_node_config.ros_spin_thread = config["ros_spin_thread"].as<int>();
   m_node_config.lidar_type = config["lidar_type"].as<std::string>();
+  m_node_config.lidarbody_frame = config["lidarbody_frame"].as<std::string>();
 
   if ((m_node_config.lidar_type != kLivoxLidarType) && (m_node_config.lidar_type != kRobosenseLidarType)) {
     RCLCPP_ERROR(this->get_logger(), "Invalid lidar type: %s", m_node_config.lidar_type.c_str());
@@ -299,6 +305,7 @@ void LIONode::loopThread() {
   }
 }
 void LIONode::timerCB() {
+  auto start = std::chrono::high_resolution_clock::now();
   if (!ready()) {
     return;
   }
@@ -328,6 +335,9 @@ void LIONode::timerCB() {
 
   publishCloud(m_body_cloud_pub, body_cloud, m_node_config.body_frame, m_package.cloud_end_time);
 
+  // 使用这个点云时，需要结合 pose_transform_node 来使用，pose_transform_node 会发布 imubody->lidarbody 的 tf
+  publishCloud(m_lidarbody_cloud_pub, m_package.cloud, m_node_config.lidarbody_frame, m_package.cloud_end_time);
+
   CloudType::Ptr world_cloud = m_builder->lidar_processor()->transformCloud(
       m_package.cloud, m_builder->lidar_processor()->r_wl(), m_builder->lidar_processor()->t_wl());
 
@@ -336,8 +346,18 @@ void LIONode::timerCB() {
   publishPath(m_path_pub, m_node_config.world_frame, m_package.cloud_end_time);
 
   saveLatestLidarPose();
-  publishVLACloud(m_package.cloud_end_time);
-  RCLCPP_WARN(this->get_logger(), "end pub");
+
+  {
+    std::lock_guard<std::mutex> lock(m_vla_mutex);
+    m_vla_cloud_time = m_package.cloud_end_time;
+    m_vla_cloud_in_body = body_cloud;
+    m_vla_body_pose = MinPose(m_kf->x().t_wi, m_kf->x().r_wi);
+  }
+  // publishVLACloud(m_package.cloud_end_time, body_cloud);
+
+  auto end = std::chrono::high_resolution_clock::now();
+  auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+  RCLCPP_WARN(this->get_logger(), "end pub, all process time: %.2f ms", time_used);
 }
 
 void LIONode::imuFreqCB() {
@@ -365,17 +385,19 @@ void LIONode::imuFreqCB() {
 bool LIONode::ready() { return true; }
 
 CloudType::Ptr LIONode::getNearPointsForVLA(const double& time) {
-  M3D r_wb = m_kf->x().r_wi;
-  V3D t_wb = m_kf->x().t_wi;
+  V3D t_wb = m_vla_body_pose.trans;
   CloudType::Ptr cloud_in_w = m_builder->lidar_processor()->searchByRadius(t_wb, m_node_config.vla_radius);
 
-  MinPose T_w_b(t_wb, r_wb);
-  MinPose T_b_w = T_w_b.inverse();
+  MinPose T_b_w = m_vla_body_pose.inverse();
   RCLCPP_INFO(this->get_logger(), "Get near points for VLA, cloud_in_w size: %d", cloud_in_w->size());
   std::cout << "T_b_w.rot: " << T_b_w.rot.coeffs().transpose() << "T_b_w.trans: " << T_b_w.trans.transpose()
             << std::endl;
   CloudType::Ptr cloud_in_body = transformCloud(cloud_in_w, T_b_w.rot, T_b_w.trans);
 
+  return getNearPointsInNewestForVLA(time, cloud_in_body);
+}
+
+CloudType::Ptr LIONode::getNearPointsInNewestForVLA(const double& time, CloudType::Ptr cloud_in_body) {
   // 过滤
   CloudType::Ptr cloud_in_body_filtered = std::make_shared<CloudType>();
   int reserve_size = cloud_in_body->size() / 2;
@@ -384,6 +406,11 @@ CloudType::Ptr LIONode::getNearPointsForVLA(const double& time) {
     if (point.x > m_node_config.vla_lidar_remove_x_min && point.x < m_node_config.vla_lidar_remove_x_max &&
         point.y > m_node_config.vla_lidar_remove_y_min && point.y < m_node_config.vla_lidar_remove_y_max &&
         point.z > m_node_config.vla_lidar_remove_z_min && point.z < m_node_config.vla_lidar_remove_z_max) {
+      continue;
+    }
+
+    float dis = point.x * point.x + point.y * point.y + point.z * point.z;
+    if (dis > m_node_config.vla_radius * m_node_config.vla_radius) {
       continue;
     }
     cloud_in_body_filtered->push_back(point);
@@ -414,8 +441,9 @@ CloudType::Ptr LIONode::getNearPointsForVLA(const double& time) {
   return cloud_in_armbase;
 }
 
-void LIONode::publishVLACloud(const double& time) {
+void LIONode::publishVLACloud(const double& time, CloudType::Ptr cloud_in_body) {
   CloudType::Ptr cloud_in_armbase = getNearPointsForVLA(time);
+  // CloudType::Ptr cloud_in_armbase = getNearPointsInNewestForVLA(time, cloud_in_body);
   publishCloud(m_VLA_cloud_pub, cloud_in_armbase, m_node_config.arm_base_frame, time);
 }
 
@@ -460,3 +488,21 @@ void LIONode::readParamForVLA(YAML::Node config) {
     m_node_config.vla_lidar_remove_z_min = config["vla_lidar_remove_z_min"].as<float>();
   }
 }
+
+#ifdef VLN_MSGS_FOUND
+void LIONode::getNearPointsCB(const std::shared_ptr<vln_msgs::srv::QueryCloudPoints::Request> request,
+                              std::shared_ptr<vln_msgs::srv::QueryCloudPoints::Response> response) {
+  std::lock_guard<std::mutex> lock(m_vla_mutex);
+  RCLCPP_INFO(this->get_logger(), "Get near points service called");
+  if (m_vla_cloud_time > 0) {
+    CloudType::Ptr cloud = getNearPointsForVLA(m_vla_cloud_time);
+    sensor_msgs::msg::PointCloud2 cloud_msg;
+    pcl::toROSMsg(*cloud, cloud_msg);
+    cloud_msg.header.frame_id = m_node_config.arm_base_frame;
+    cloud_msg.header.stamp = Utils::getTime(m_vla_cloud_time);
+    response->near_points = cloud_msg;
+  } else {
+    response->near_points = sensor_msgs::msg::PointCloud2();
+  }
+}
+#endif

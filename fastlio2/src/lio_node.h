@@ -25,6 +25,10 @@
 #include "tf2_ros/transform_listener.h"
 #include "utils.h"
 
+#ifdef VLN_MSGS_FOUND
+#include <vln_msgs/srv/query_cloud_points.hpp>
+#endif
+
 using namespace std::chrono_literals;
 
 const std::string kLivoxLidarType = "livox";
@@ -35,6 +39,7 @@ struct NodeConfig {
   std::string lidar_topic = "/livox/lidar";
   std::string body_frame = "body";
   std::string world_frame = "lidar";
+  std::string lidarbody_frame = "lidarbody";
   std::string arm_base_frame = "armbasebody";
   bool print_time_cost = false;
   int ros_spin_thread = 1;
@@ -108,7 +113,8 @@ class LIONode : public rclcpp::Node {
 
  protected:
   CloudType::Ptr getNearPointsForVLA(const double& time);
-  void publishVLACloud(const double& time);
+  CloudType::Ptr getNearPointsInNewestForVLA(const double& time, CloudType::Ptr cloud_in_body = nullptr);
+  void publishVLACloud(const double& time, CloudType::Ptr cloud_in_body);
   void readParamForVLA(YAML::Node config);
   CloudType::Ptr transformCloud(CloudType::Ptr inp, const Eigen::Quaterniond& r, const V3D& t);
 
@@ -117,11 +123,18 @@ class LIONode : public rclcpp::Node {
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr m_imu_sub;
 
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_body_cloud_pub;
+  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_lidarbody_cloud_pub;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_world_cloud_pub;
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_VLA_cloud_pub;
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr m_path_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_odom_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_imu_frec_odom_pub;
+
+#ifdef VLN_MSGS_FOUND
+  rclcpp::Service<vln_msgs::srv::QueryCloudPoints>::SharedPtr m_get_near_points_srv;
+  void getNearPointsCB(const std::shared_ptr<vln_msgs::srv::QueryCloudPoints::Request> request,
+                       std::shared_ptr<vln_msgs::srv::QueryCloudPoints::Response> response);
+#endif
 
   rclcpp::TimerBase::SharedPtr m_imu_freq_timer;
   StateData m_state_data;
@@ -142,4 +155,10 @@ class LIONode : public rclcpp::Node {
 
   std::shared_ptr<tf2_ros::Buffer> m_tf_buffer;
   std::shared_ptr<tf2_ros::TransformListener> m_tf_listener;
+
+  // 临时功能，提供获取附近点云的服务
+  std::mutex m_vla_mutex;
+  CloudType::Ptr m_vla_cloud_in_body;
+  MinPose m_vla_body_pose;
+  double m_vla_cloud_time = -1.0;
 };

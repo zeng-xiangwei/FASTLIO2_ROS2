@@ -20,7 +20,6 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(message_filters REQUIRED)
 find_package(rclcpp_components REQUIRED)
@@ -60,8 +59,15 @@ add_executable(tools_3d_to_2d_gridmap ${tools_3d_to_2d_src_list})
 target_link_libraries(tools_3d_to_2d_gridmap ${PCL_LIBRARIES} glog::glog yaml-cpp)
 ament_target_dependencies(tools_3d_to_2d_gridmap rclcpp)
 
+set(occupancy_map_saver_src_list
+src/utils/file_writer.cpp
+src/occupancy_map_saver.cpp
+)
+add_executable(occupancy_map_saver ${occupancy_map_saver_src_list})
+ament_target_dependencies(occupancy_map_saver rclcpp nav_msgs)
 
-install(TARGETS pgo_node tools_3d_to_2d_gridmap DESTINATION lib/${PROJECT_NAME})
+
+install(TARGETS pgo_node tools_3d_to_2d_gridmap occupancy_map_saver DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
