@@ -110,11 +110,6 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
       wrapCustomLocalizationMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
   custom_imu_frec_pose_pub_->publish(custom_msg);
 #endif
-
-  std::stringstream ss;
-  ss << "T_w_carbody in imu frec: t: " << T_w_carbody.trans.transpose()
-     << ", q: " << T_w_carbody.rot.coeffs().transpose();
-  RCLCPP_INFO(this->get_logger(), ss.str().c_str());
 }
 
 void PoseTransformNode::broadCastTF(std::string frame_id, std::string child_frame, const V3D& trans,

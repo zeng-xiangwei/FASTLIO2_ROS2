@@ -21,8 +21,8 @@ void LIONode::initRos() {
   m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, imu_qos,
                                                                std::bind(&LIONode::imuCB, this, std::placeholders::_1));
 
-  rclcpp::QoS lidar_qos(1);
-  lidar_qos.best_effort();
+  rclcpp::QoS lidar_qos(5);
+  // lidar_qos.best_effort();
   if (m_node_config.lidar_type == kLivoxLidarType) {
     m_livox_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
         m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1));
@@ -158,6 +158,13 @@ void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr ms
   m_state_data.last_lidar_time = timestamp;
   m_state_data.has_new_data = true;
   m_condition.notify_all();
+
+  double interval = timestamp - debug_last_lidar_sensor_time_;
+  if (interval > 0.15) {
+    RCLCPP_INFO(this->get_logger(), "lidar msg interval is too large, interval: %f, before: %f, cur: %f", interval,
+                debug_last_lidar_sensor_time_, timestamp);
+  }
+  debug_last_lidar_sensor_time_ = timestamp;
 }
 
 void LIONode::robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
@@ -293,13 +300,12 @@ void LIONode::loopThread() {
     {
       std::unique_lock<std::mutex> lock(m_mutex);
       m_condition.wait(lock, [this]() -> bool { return m_state_data.has_new_data || m_finished; });
+      m_state_data.has_new_data = false;
     }
 
     if (m_finished) {
       break;
     }
-
-    m_state_data.has_new_data = false;
 
     timerCB();
   }

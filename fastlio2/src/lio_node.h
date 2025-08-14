@@ -161,4 +161,7 @@ class LIONode : public rclcpp::Node {
   CloudType::Ptr m_vla_cloud_in_body;
   MinPose m_vla_body_pose;
   double m_vla_cloud_time = -1.0;
+
+  // debug
+  double debug_last_lidar_sensor_time_ = -1.0;
 };
