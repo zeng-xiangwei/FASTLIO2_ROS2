@@ -58,6 +58,7 @@ localization:
 
   # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
   gravity_align_to_global_map: true
+  update_map: false
 
 vla:
   vla_lidar_remove_x_min: -0.2

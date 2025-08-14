@@ -167,9 +167,16 @@ void LidarProcessor::process(SyncPackage &package)
     {
         pcl::copyPointCloud(*package.cloud, *m_cloud_down_lidar);
     }
-    trimCloudMap();
+
+    if (m_config.update_map) {
+        trimCloudMap();
+    }
+    
     m_kf->update();
-    incrCloudMap();
+
+    if (m_config.update_map) {
+        incrCloudMap();
+    }
 }
 
 void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)

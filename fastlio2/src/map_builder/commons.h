@@ -54,6 +54,8 @@ struct Config
     V3D t_il = V3D::Zero();
 
     double lidar_cov_inv = 1000.0;
+
+    bool update_map = true;
 };
 
 struct IMUData
