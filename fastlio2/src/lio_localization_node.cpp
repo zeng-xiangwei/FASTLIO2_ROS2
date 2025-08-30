@@ -56,11 +56,13 @@ void LIOLocalizationNode::loadParameters() {
   m_localization_config.icp_config.rough_map_resolution = localization_config["rough_map_resolution"].as<double>();
   m_localization_config.icp_config.rough_max_iteration = localization_config["rough_max_iteration"].as<int>();
   m_localization_config.icp_config.rough_score_thresh = localization_config["rough_score_thresh"].as<double>();
+  m_localization_config.icp_config.rough_score_dis_thresh = localization_config["rough_score_dis_thresh"].as<double>();
 
   m_localization_config.icp_config.refine_scan_resolution = localization_config["refine_scan_resolution"].as<double>();
   m_localization_config.icp_config.refine_map_resolution = localization_config["refine_map_resolution"].as<double>();
   m_localization_config.icp_config.refine_max_iteration = localization_config["refine_max_iteration"].as<int>();
   m_localization_config.icp_config.refine_score_thresh = localization_config["refine_score_thresh"].as<double>();
+  m_localization_config.icp_config.refine_score_dis_thresh = localization_config["refine_score_dis_thresh"].as<double>();
 
   m_builder_config.gravity_align_to_global_map = localization_config["gravity_align_to_global_map"].as<bool>();
 
