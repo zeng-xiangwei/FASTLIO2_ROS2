@@ -3,7 +3,8 @@
 #include <pcl_conversions/pcl_conversions.h>
 
 pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg,
-                                                            int filter_num, double min_range, double max_range) {
+                                                            int filter_num, double min_range, double max_range,
+                                                            double min_z, double max_z) {
   pcl::PointCloud<pcl::PointXYZINormal>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZINormal>);
   int point_num = msg->point_num;
   cloud->reserve(point_num / filter_num + 1);
@@ -12,7 +13,12 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driv
       float x = msg->points[i].x;
       float y = msg->points[i].y;
       float z = msg->points[i].z;
-      if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
+      if (z < min_z || z > max_z) {
+        continue;
+      }
+      if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) {
+        continue;
+      }
       pcl::PointXYZINormal p;
       p.x = x;
       p.y = y;
@@ -58,7 +64,7 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msg
       if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
         continue;
       }
-      
+
       if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
       pcl::PointXYZINormal p;
       p.x = x;

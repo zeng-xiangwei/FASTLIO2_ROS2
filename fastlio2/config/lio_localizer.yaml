@@ -10,6 +10,8 @@ lidar_type: livox
 lidar_filter_num: 1
 lidar_min_range: 0.5
 lidar_max_range: 30.0
+lidar_min_z: -1000.0
+lidar_max_z: 1000.0
 scan_resolution: 0.2
 map_resolution: 0.2
 

@@ -36,6 +36,10 @@ struct Config
     double scan_resolution = 0.15;
     double map_resolution = 0.3;
 
+    // 特殊场景限制z值
+    double lidar_min_z = -1000.0;
+    double lidar_max_z = 1000.0;
+
     double cube_len = 300;
     double det_range = 60;
     double move_thresh = 1.5;
