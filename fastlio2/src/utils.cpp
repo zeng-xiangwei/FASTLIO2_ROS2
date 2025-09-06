@@ -4,10 +4,14 @@
 
 pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg,
                                                             int filter_num, double min_range, double max_range,
-                                                            double min_z, double max_z) {
+                                                            double min_z, double max_z,
+                                                            const Eigen::Vector3f& filter_box_min,
+                                                            const Eigen::Vector3f& filter_box_max) {
   pcl::PointCloud<pcl::PointXYZINormal>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZINormal>);
   int point_num = msg->point_num;
   cloud->reserve(point_num / filter_num + 1);
+
+  bool filter_by_box = (filter_box_max.array() > filter_box_min.array()).all();
   for (int i = 0; i < point_num; i += filter_num) {
     if ((msg->points[i].line < 4) && ((msg->points[i].tag & 0x30) == 0x10 || (msg->points[i].tag & 0x30) == 0x00)) {
       float x = msg->points[i].x;
@@ -18,6 +22,14 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::livox2PCL(const livox_ros_driv
       }
       if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) {
         continue;
+      }
+
+      if (filter_by_box) {
+        // 过滤掉 box 内的点云，主要用于过滤上身的机械臂
+        if (x > filter_box_min.x() && x < filter_box_max.x() && y > filter_box_min.y() && y < filter_box_max.y() &&
+            z > filter_box_min.z() && z < filter_box_max.z()) {
+          continue;
+        }
       }
       pcl::PointXYZINormal p;
       p.x = x;

@@ -124,6 +124,8 @@ void LIONode::loadParameters() {
   if (config["vla"]) {
     readParamForVLA(config["vla"]);
   }
+
+  readParamFilterBox(config);
 }
 
 void LIONode::imuCB(const sensor_msgs::msg::Imu::SharedPtr msg) {
@@ -150,7 +152,8 @@ void LIONode::imuCB(const sensor_msgs::msg::Imu::SharedPtr msg) {
 void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg) {
   CloudType::Ptr cloud =
       Utils::livox2PCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
-                       m_builder_config.lidar_max_range, m_builder_config.lidar_min_z, m_builder_config.lidar_max_z);
+                       m_builder_config.lidar_max_range, m_builder_config.lidar_min_z, m_builder_config.lidar_max_z,
+                       m_node_config.filter_box_min, m_node_config.filter_box_max);
   std::lock_guard<std::mutex> lock(m_mutex);
   double timestamp = Utils::getSec(msg->header);
   if (timestamp < m_state_data.last_lidar_time) {
@@ -495,6 +498,27 @@ void LIONode::readParamForVLA(YAML::Node config) {
   }
   if (config["vla_lidar_remove_z_min"]) {
     m_node_config.vla_lidar_remove_z_min = config["vla_lidar_remove_z_min"].as<float>();
+  }
+}
+
+void LIONode::readParamFilterBox(YAML::Node config) {
+  if (config["filter_box_min_x"]) {
+    m_node_config.filter_box_min.x() = config["filter_box_min_x"].as<float>();
+  }
+  if (config["filter_box_min_y"]) {
+    m_node_config.filter_box_min.y() = config["filter_box_min_y"].as<float>();
+  }
+  if (config["filter_box_min_z"]) {
+    m_node_config.filter_box_min.z() = config["filter_box_min_z"].as<float>();
+  }
+  if (config["filter_box_max_x"]) {
+    m_node_config.filter_box_max.x() = config["filter_box_max_x"].as<float>();
+  }
+  if (config["filter_box_max_y"]) {
+    m_node_config.filter_box_max.y() = config["filter_box_max_y"].as<float>();
+  }
+  if (config["filter_box_max_z"]) {
+    m_node_config.filter_box_max.z() = config["filter_box_max_z"].as<float>();
   }
 }
 

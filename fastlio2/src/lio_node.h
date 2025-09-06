@@ -49,6 +49,10 @@ struct NodeConfig {
   M3D imu_data_preprocess_rot = M3D::Identity();
   int n_scans = 96;
 
+  // 过滤打到车体上的臂的点云
+  Eigen::Vector3f filter_box_min = Eigen::Vector3f::Zero();
+  Eigen::Vector3f filter_box_max = Eigen::Vector3f::Zero();
+
   // 仅用于 vla 测试
   float vla_lidar_remove_x_min = -0.2;
   float vla_lidar_remove_x_max = 0.8;
@@ -116,6 +120,7 @@ class LIONode : public rclcpp::Node {
   CloudType::Ptr getNearPointsInNewestForVLA(const double& time, CloudType::Ptr cloud_in_body = nullptr);
   void publishVLACloud(const double& time, CloudType::Ptr cloud_in_body);
   void readParamForVLA(YAML::Node config);
+  void readParamFilterBox(YAML::Node config);
   CloudType::Ptr transformCloud(CloudType::Ptr inp, const Eigen::Quaterniond& r, const V3D& t);
 
   rclcpp::Subscription<livox_ros_driver2::msg::CustomMsg>::SharedPtr m_livox_lidar_sub;

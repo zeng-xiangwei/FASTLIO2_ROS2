@@ -12,6 +12,14 @@ lidar_min_range: 0.5
 lidar_max_range: 30.0
 lidar_min_z: -1000.0
 lidar_max_z: 1000.0
+
+filter_box_min_x: -0.2
+filter_box_max_x: 0.8
+filter_box_min_y: -0.7
+filter_box_max_y: 0.7
+filter_box_min_z: 0.0
+filter_box_max_z: 1.2
+
 scan_resolution: 0.2
 map_resolution: 0.2
 

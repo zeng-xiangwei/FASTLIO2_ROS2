@@ -40,10 +40,11 @@ class Utils {
   // static pcl::PointCloud<pcl::PointXYZ>::Ptr convertToPCL(const sensor_msgs::msg::PointCloud2 &msg);
   // static sensor_msgs::msg::PointCloud2 convertToROS(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
   static double getSec(std_msgs::msg::Header& header);
-  static pcl::PointCloud<pcl::PointXYZINormal>::Ptr livox2PCL(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg,
-                                                              int filter_num, double min_range = 0.5,
-                                                              double max_range = 20.0, double min_z = -1000.0,
-                                                              double max_z = 1000.0);
+  static pcl::PointCloud<pcl::PointXYZINormal>::Ptr livox2PCL(
+      const livox_ros_driver2::msg::CustomMsg::SharedPtr msg, int filter_num, double min_range = 0.5,
+      double max_range = 20.0, double min_z = -1000.0, double max_z = 1000.0,
+      const Eigen::Vector3f& filter_box_min = Eigen::Vector3f::Zero(),
+      const Eigen::Vector3f& filter_box_max = Eigen::Vector3f::Zero());
   static pcl::PointCloud<pcl::PointXYZINormal>::Ptr robosense2PCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg,
                                                                   int filter_num, double min_range = 0.5,
                                                                   double max_range = 20.0, int n_scans = 96);
