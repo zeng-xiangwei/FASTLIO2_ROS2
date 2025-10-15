@@ -1,0 +1,106 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-58df7dac077d5f574f19.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "fastlio2",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "accumulate_lidar_cloud::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-accumulate_lidar_cloud-Release-1ec02f2c54447da88279.json",
+					"name" : "accumulate_lidar_cloud",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fastlio2_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fastlio2_uninstall-Release-35d10d3fa1048d8b7d28.json",
+					"name" : "fastlio2_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "lio_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-lio_node-Release-e3543823f3843acb441c.json",
+					"name" : "lio_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "localization_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-localization_node-Release-baf953eb5ca1541369f7.json",
+					"name" : "localization_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "map_builder::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-map_builder-Release-0c1cabdb662a62e4e465.json",
+					"name" : "map_builder",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Release-eb3bede3c5d6fa582be3.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2",
+		"source" : "/home/haiboliu/project/vln/localization/src/fastlio2/fastlio2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

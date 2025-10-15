@@ -1,0 +1,97 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-41033084e3a4ae0beb15.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "pgo",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "occupancy_map_saver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-occupancy_map_saver-Release-750238260eecab3e3a4f.json",
+					"name" : "occupancy_map_saver",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "pgo_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-pgo_node-Release-081b41d8d21d93b50c90.json",
+					"name" : "pgo_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "pgo_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-pgo_uninstall-Release-53b47daa7e0917d05d67.json",
+					"name" : "pgo_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "tools_3d_to_2d_gridmap::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tools_3d_to_2d_gridmap-Release-fcd01f9a78eef5c837dd.json",
+					"name" : "tools_3d_to_2d_gridmap",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-Release-552bb79a4c1dca577abe.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo",
+		"source" : "/home/haiboliu/project/vln/localization/src/fastlio2/pgo"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

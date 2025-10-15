@@ -1,0 +1,332 @@
+[0.081s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.081s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=16, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7a25811eb550>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7a2581374a30>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7a2581374a30>>)
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.209s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.209s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/haiboliu/project/vln/localization/src/fastlio2'
+[0.209s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extensions ['ignore', 'ignore_ament_install']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extension 'ignore'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extension 'ignore_ament_install'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extensions ['colcon_pkg']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extension 'colcon_pkg'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extensions ['colcon_meta']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extension 'colcon_meta'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extensions ['ros']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(fastlio2) by extension 'ros'
+[0.222s] DEBUG:colcon.colcon_core.package_identification:Package 'fastlio2' with type 'ros.ament_cmake' and name 'fastlio2'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extensions ['ignore', 'ignore_ament_install']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extension 'ignore'
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extension 'ignore_ament_install'
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extensions ['colcon_pkg']
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extension 'colcon_pkg'
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extensions ['colcon_meta']
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extension 'colcon_meta'
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extensions ['ros']
+[0.223s] Level 1:colcon.colcon_core.package_identification:_identify(hba) by extension 'ros'
+[0.223s] DEBUG:colcon.colcon_core.package_identification:Package 'hba' with type 'ros.ament_cmake' and name 'hba'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extensions ['ignore', 'ignore_ament_install']
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extension 'ignore'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extension 'ignore_ament_install'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extensions ['colcon_pkg']
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extension 'colcon_pkg'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extensions ['colcon_meta']
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extension 'colcon_meta'
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extensions ['ros']
+[0.224s] Level 1:colcon.colcon_core.package_identification:_identify(interface) by extension 'ros'
+[0.224s] DEBUG:colcon.colcon_core.package_identification:Package 'interface' with type 'ros.ament_cmake' and name 'interface'
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extensions ['ignore', 'ignore_ament_install']
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extension 'ignore'
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extension 'ignore_ament_install'
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extensions ['colcon_pkg']
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extension 'colcon_pkg'
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extensions ['colcon_meta']
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extension 'colcon_meta'
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extensions ['ros']
+[0.225s] Level 1:colcon.colcon_core.package_identification:_identify(livox_ros_driver2) by extension 'ros'
+[0.226s] DEBUG:colcon.colcon_core.package_identification:Package 'livox_ros_driver2' with type 'ros.ament_cmake' and name 'livox_ros_driver2'
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extensions ['ignore', 'ignore_ament_install']
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extension 'ignore'
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extension 'ignore_ament_install'
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extensions ['colcon_pkg']
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extension 'colcon_pkg'
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extensions ['colcon_meta']
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extension 'colcon_meta'
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extensions ['ros']
+[0.226s] Level 1:colcon.colcon_core.package_identification:_identify(localizer) by extension 'ros'
+[0.227s] DEBUG:colcon.colcon_core.package_identification:Package 'localizer' with type 'ros.ament_cmake' and name 'localizer'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extensions ['ignore', 'ignore_ament_install']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extension 'ignore'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extension 'ignore_ament_install'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extensions ['colcon_pkg']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extension 'colcon_pkg'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extensions ['colcon_meta']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extension 'colcon_meta'
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extensions ['ros']
+[0.227s] Level 1:colcon.colcon_core.package_identification:_identify(pgo) by extension 'ros'
+[0.228s] DEBUG:colcon.colcon_core.package_identification:Package 'pgo' with type 'ros.ament_cmake' and name 'pgo'
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.228s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.246s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.246s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.248s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 277 installed packages in /opt/ros/humble
+[0.260s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.289s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_target' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_clean_cache' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_clean_first' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'cmake_force_configure' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'ament_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'catkin_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'interface' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.290s] DEBUG:colcon.colcon_core.verb:Building package 'interface' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/interface', 'symlink_install': False, 'test_result_base': None}
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_target' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_clean_cache' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_clean_first' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'cmake_force_configure' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'ament_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'catkin_cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'livox_ros_driver2' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.290s] DEBUG:colcon.colcon_core.verb:Building package 'livox_ros_driver2' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/livox_ros_driver2', 'symlink_install': False, 'test_result_base': None}
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_args' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_target' from command line to 'None'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_clean_cache' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_clean_first' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'cmake_force_configure' from command line to 'False'
+[0.290s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'ament_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'catkin_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'fastlio2' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.291s] DEBUG:colcon.colcon_core.verb:Building package 'fastlio2' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/fastlio2', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/fastlio2', 'symlink_install': False, 'test_result_base': None}
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_target' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_clean_cache' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_clean_first' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'cmake_force_configure' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'ament_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'catkin_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'hba' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.291s] DEBUG:colcon.colcon_core.verb:Building package 'hba' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/hba', 'symlink_install': False, 'test_result_base': None}
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_target' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_clean_cache' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_clean_first' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'cmake_force_configure' from command line to 'False'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'ament_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'catkin_cmake_args' from command line to 'None'
+[0.291s] Level 5:colcon.colcon_core.verb:set package 'localizer' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.291s] DEBUG:colcon.colcon_core.verb:Building package 'localizer' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/localizer', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/localizer', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/localizer', 'symlink_install': False, 'test_result_base': None}
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_args' from command line to 'None'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_target' from command line to 'None'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_clean_cache' from command line to 'False'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_clean_first' from command line to 'False'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'cmake_force_configure' from command line to 'False'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'ament_cmake_args' from command line to 'None'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'catkin_cmake_args' from command line to 'None'
+[0.292s] Level 5:colcon.colcon_core.verb:set package 'pgo' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.292s] DEBUG:colcon.colcon_core.verb:Building package 'pgo' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo', 'merge_install': False, 'path': '/home/haiboliu/project/vln/localization/src/fastlio2/pgo', 'symlink_install': False, 'test_result_base': None}
+[0.292s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.293s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.293s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/interface' with build type 'ament_cmake'
+[0.293s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/interface'
+[0.295s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.295s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.295s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.298s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/livox_ros_driver2' with build type 'ament_cmake'
+[0.298s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/livox_ros_driver2'
+[0.298s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.298s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.306s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/interface -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface
+[0.309s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/livox_ros_driver2 -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2
+[2.190s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/livox_ros_driver2 -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2
+[2.193s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2 -- -j16 -l16
+[2.208s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/interface -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface
+[2.210s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/interface -- -j16 -l16
+[6.148s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2 -- -j16 -l16
+[6.159s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2
+[6.241s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(livox_ros_driver2)
+[6.241s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/livox_ros_driver2
+[6.249s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2' for CMake module files
+[6.251s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2' for CMake config files
+[6.252s] Level 1:colcon.colcon_core.shell:create_environment_hook('livox_ros_driver2', 'cmake_prefix_path')
+[6.252s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.ps1'
+[6.254s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.dsv'
+[6.255s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.sh'
+[6.257s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib'
+[6.257s] Level 1:colcon.colcon_core.shell:create_environment_hook('livox_ros_driver2', 'ld_library_path_lib')
+[6.258s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.ps1'
+[6.258s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.dsv'
+[6.259s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.sh'
+[6.259s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/bin'
+[6.259s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib/pkgconfig/livox_ros_driver2.pc'
+[6.259s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib/python3.10/site-packages'
+[6.259s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/bin'
+[6.260s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.ps1'
+[6.261s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.dsv'
+[6.261s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.sh'
+[6.262s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.bash'
+[6.262s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.zsh'
+[6.263s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/colcon-core/packages/livox_ros_driver2)
+[6.263s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(livox_ros_driver2)
+[6.264s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2' for CMake module files
+[6.264s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2' for CMake config files
+[6.264s] Level 1:colcon.colcon_core.shell:create_environment_hook('livox_ros_driver2', 'cmake_prefix_path')
+[6.264s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.ps1'
+[6.265s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.dsv'
+[6.265s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/cmake_prefix_path.sh'
+[6.265s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib'
+[6.266s] Level 1:colcon.colcon_core.shell:create_environment_hook('livox_ros_driver2', 'ld_library_path_lib')
+[6.266s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.ps1'
+[6.266s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.dsv'
+[6.266s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/hook/ld_library_path_lib.sh'
+[6.267s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/bin'
+[6.267s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib/pkgconfig/livox_ros_driver2.pc'
+[6.267s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib/python3.10/site-packages'
+[6.267s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/bin'
+[6.267s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.ps1'
+[6.268s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.dsv'
+[6.269s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.sh'
+[6.269s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.bash'
+[6.269s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/livox_ros_driver2/package.zsh'
+[6.270s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/share/colcon-core/packages/livox_ros_driver2)
+[6.270s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/fastlio2' with build type 'ament_cmake'
+[6.270s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/fastlio2'
+[6.270s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.270s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.279s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/fastlio2 -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/fastlio2
+[6.702s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/interface -- -j16 -l16
+[6.704s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/interface
+[6.788s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(interface)
+[6.789s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface' for CMake module files
+[6.789s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/interface
+[6.790s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface' for CMake config files
+[6.791s] Level 1:colcon.colcon_core.shell:create_environment_hook('interface', 'cmake_prefix_path')
+[6.791s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.ps1'
+[6.792s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.dsv'
+[6.793s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.sh'
+[6.793s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib'
+[6.794s] Level 1:colcon.colcon_core.shell:create_environment_hook('interface', 'ld_library_path_lib')
+[6.794s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.ps1'
+[6.794s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.dsv'
+[6.795s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.sh'
+[6.796s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/bin'
+[6.796s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/pkgconfig/interface.pc'
+[6.796s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/python3.10/site-packages'
+[6.796s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/bin'
+[6.797s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.ps1'
+[6.798s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.dsv'
+[6.798s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.sh'
+[6.799s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.bash'
+[6.800s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.zsh'
+[6.800s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/colcon-core/packages/interface)
+[6.801s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(interface)
+[6.802s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface' for CMake module files
+[6.803s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface' for CMake config files
+[6.803s] Level 1:colcon.colcon_core.shell:create_environment_hook('interface', 'cmake_prefix_path')
+[6.804s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.ps1'
+[6.804s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.dsv'
+[6.805s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/cmake_prefix_path.sh'
+[6.806s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib'
+[6.806s] Level 1:colcon.colcon_core.shell:create_environment_hook('interface', 'ld_library_path_lib')
+[6.806s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.ps1'
+[6.807s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.dsv'
+[6.808s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/hook/ld_library_path_lib.sh'
+[6.808s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/bin'
+[6.808s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/pkgconfig/interface.pc'
+[6.809s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/python3.10/site-packages'
+[6.809s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/bin'
+[6.810s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.ps1'
+[6.811s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.dsv'
+[6.812s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.sh'
+[6.813s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.bash'
+[6.814s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.zsh'
+[6.814s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/colcon-core/packages/interface)
+[6.815s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/hba' with build type 'ament_cmake'
+[6.815s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/hba'
+[6.816s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.816s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.821s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/localizer' with build type 'ament_cmake'
+[6.822s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/localizer'
+[6.822s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.822s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.828s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/haiboliu/project/vln/localization/src/fastlio2/pgo' with build type 'ament_cmake'
+[6.829s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/haiboliu/project/vln/localization/src/fastlio2/pgo'
+[6.829s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.829s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.840s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/hba -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/hba
+[6.845s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/localizer': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/localizer -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/localizer
+[6.850s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/pgo -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo
+[10.670s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/localizer' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/localizer -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/localizer
+[10.673s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/localizer': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/localizer -- -j16 -l16
+[10.724s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/pgo -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo
+[10.727s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo -- -j16 -l16
+[10.899s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/fastlio2 -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/fastlio2
+[10.900s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/livox_ros_driver2/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/fastlio2 -- -j16 -l16
+[11.467s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/hba -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/hba
+[11.468s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/hba -- -j16 -l16
+[19.377s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(hba)
+[19.378s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba' for CMake module files
+[19.379s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba' for CMake config files
+[19.379s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/bin'
+[19.387s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/lib/pkgconfig/hba.pc'
+[19.387s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/lib/python3.10/site-packages'
+[19.388s] Level 1:colcon.colcon_core.environment:checking '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/bin'
+[19.389s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/hba/package.ps1'
+[19.391s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba' returned '2': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/hba -- -j16 -l16
+[19.393s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/hba/package.dsv'
+[19.395s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/hba/package.sh'
+[19.397s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/hba/package.bash'
+[19.399s] INFO:colcon.colcon_core.shell:Creating package script '/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/hba/package.zsh'
+[19.400s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/haiboliu/project/vln/localization/src/fastlio2/install/hba/share/colcon-core/packages/hba)
+[59.781s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[59.781s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[59.781s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '2'
+[59.781s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[59.786s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[59.786s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[59.786s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[59.808s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[59.808s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/haiboliu/project/vln/localization/src/fastlio2/install/local_setup.ps1'
+[59.810s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/haiboliu/project/vln/localization/src/fastlio2/install/_local_setup_util_ps1.py'
+[59.814s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/haiboliu/project/vln/localization/src/fastlio2/install/setup.ps1'
+[59.816s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/haiboliu/project/vln/localization/src/fastlio2/install/local_setup.sh'
+[59.817s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/haiboliu/project/vln/localization/src/fastlio2/install/_local_setup_util_sh.py'
+[59.818s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/haiboliu/project/vln/localization/src/fastlio2/install/setup.sh'
+[59.821s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/haiboliu/project/vln/localization/src/fastlio2/install/local_setup.bash'
+[59.822s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/haiboliu/project/vln/localization/src/fastlio2/install/setup.bash'
+[59.824s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/haiboliu/project/vln/localization/src/fastlio2/install/local_setup.zsh'
+[59.825s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/haiboliu/project/vln/localization/src/fastlio2/install/setup.zsh'

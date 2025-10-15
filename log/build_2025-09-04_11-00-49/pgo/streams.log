@@ -1,0 +1,44 @@
+[0.020s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo -- -j16 -l16
+[0.076s] [35m[1mConsolidate compiler generated dependencies of target occupancy_map_saver[0m
+[0.079s] [35m[1mConsolidate compiler generated dependencies of target tools_3d_to_2d_gridmap[0m
+[0.083s] [35m[1mConsolidate compiler generated dependencies of target pgo_node[0m
+[0.105s] [ 20%] Built target occupancy_map_saver
+[0.127s] [ 53%] Built target tools_3d_to_2d_gridmap
+[0.168s] [100%] Built target pgo_node
+[0.202s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo -- -j16 -l16
+[0.204s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo
+[0.217s] -- Install configuration: "Release"
+[0.217s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/pgo_node
+[0.222s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/pgo_node" to ""
+[0.222s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/tools_3d_to_2d_gridmap
+[0.223s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/tools_3d_to_2d_gridmap" to ""
+[0.223s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/occupancy_map_saver
+[0.225s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/occupancy_map_saver" to ""
+[0.225s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch
+[0.225s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/occupancy_map_saver.launch.py
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/pgo_robosense_launch.py
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/grid_map_offline_tool.launch.py
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/pgo_launch.py
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/grid_map
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/grid_map/offline.yaml
+[0.226s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/pgo.yaml
+[0.227s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz
+[0.227s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz/pgo.rviz
+[0.227s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz/pgo_best_effort.rviz
+[0.227s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/package_run_dependencies/pgo
+[0.228s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/parent_prefix_path/pgo
+[0.228s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/ament_prefix_path.sh
+[0.228s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/ament_prefix_path.dsv
+[0.229s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/path.sh
+[0.229s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/path.dsv
+[0.229s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.bash
+[0.230s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.sh
+[0.230s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.zsh
+[0.230s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.dsv
+[0.231s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/package.dsv
+[0.231s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/packages/pgo
+[0.232s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/cmake/pgoConfig.cmake
+[0.232s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/cmake/pgoConfig-version.cmake
+[0.232s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/package.xml
+[0.236s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo

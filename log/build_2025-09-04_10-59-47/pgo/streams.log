@@ -1,0 +1,147 @@
+[0.020s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/pgo -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo
+[0.088s] -- The C compiler identification is GNU 11.4.0
+[0.148s] -- The CXX compiler identification is GNU 11.4.0
+[0.159s] -- Detecting C compiler ABI info
+[0.241s] -- Detecting C compiler ABI info - done
+[0.248s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.248s] -- Detecting C compile features
+[0.248s] -- Detecting C compile features - done
+[0.251s] -- Detecting CXX compiler ABI info
+[0.341s] -- Detecting CXX compiler ABI info - done
+[0.349s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.349s] -- Detecting CXX compile features
+[0.350s] -- Detecting CXX compile features - done
+[0.353s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.511s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.606s] -- Found std_msgs: 4.9.0 (/opt/ros/humble/share/std_msgs/cmake)
+[0.638s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.643s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.650s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.661s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.676s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.701s] -- Found rclcpp: 16.0.14 (/opt/ros/humble/share/rclcpp/cmake)
+[0.737s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.739s] -- Found rmw_fastrtps_cpp: 6.2.8 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.865s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.892s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.936s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.944s] -- Looking for pthread.h
+[1.029s] -- Looking for pthread.h - found
+[1.030s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.119s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.120s] -- Found Threads: TRUE  
+[1.160s] -- Found nav_msgs: 4.9.0 (/opt/ros/humble/share/nav_msgs/cmake)
+[1.191s] -- Found tf2_ros: 0.25.16 (/opt/ros/humble/share/tf2_ros/cmake)
+[1.294s] -- Found pcl_conversions: 2.4.5 (/opt/ros/humble/share/pcl_conversions/cmake)
+[1.350s] -- Checking for module 'eigen3'
+[1.366s] --   Found eigen3, version 3.4.0
+[1.422s] -- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+[1.422s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[1.458s] -- Checking for module 'flann'
+[1.475s] --   Found flann, version 1.9.1
+[1.534s] -- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  
+[1.534s] -- FLANN found (include: /usr/include, lib: /usr/lib/x86_64-linux-gnu/libflann_cpp.so)
+[2.692s] -- Checking for module 'libusb-1.0'
+[2.710s] --   Found libusb-1.0, version 1.0.25
+[2.762s] -- Found libusb: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+[2.763s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.857s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[3.020s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[3.029s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[3.038s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[3.198s] -- Found Qhull version 8.0.2
+[3.370s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[3.528s] -- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+[3.528s] -- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  
+[3.529s] -- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+[3.530s] -- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  
+[3.531s] -- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  
+[3.531s] -- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  
+[3.532s] -- Found PCL_2D: /usr/include/pcl-1.12  
+[3.532s] -- Found PCL_GEOMETRY: /usr/include/pcl-1.12  
+[3.533s] -- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+[3.534s] -- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  
+[3.535s] -- Found PCL_ML: /usr/lib/x86_64-linux-gnu/libpcl_ml.so  
+[3.536s] -- Found PCL_SEGMENTATION: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so  
+[3.537s] -- Found PCL_VISUALIZATION: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so  
+[3.538s] -- Found PCL_SURFACE: /usr/lib/x86_64-linux-gnu/libpcl_surface.so  
+[3.540s] -- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  
+[3.541s] -- Found PCL_KEYPOINTS: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so  
+[3.543s] -- Found PCL_TRACKING: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so  
+[3.544s] -- Found PCL_RECOGNITION: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so  
+[3.545s] -- Found PCL_STEREO: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so  
+[3.546s] -- Found PCL_APPS: /usr/lib/x86_64-linux-gnu/libpcl_apps.so  
+[3.547s] -- Found PCL_IN_HAND_SCANNER: /usr/include/pcl-1.12  
+[3.547s] -- Found PCL_MODELER: /usr/include/pcl-1.12  
+[3.548s] -- Found PCL_POINT_CLOUD_EDITOR: /usr/include/pcl-1.12  
+[3.549s] -- Found PCL_OUTOFCORE: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so  
+[3.549s] -- Found PCL_PEOPLE: /usr/lib/x86_64-linux-gnu/libpcl_people.so  
+[3.554s] -- Found visualization_msgs: 4.9.0 (/opt/ros/humble/share/visualization_msgs/cmake)
+[3.600s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found suitable version "1.74.0", minimum required is "1.65") found components: serialization system filesystem thread program_options date_time timer chrono regex 
+[3.609s] -- GTSAM include directory:  /usr/local/lib/cmake/GTSAM/../../../include
+[3.609s] [33mCMake Warning (dev) at CMakeLists.txt:30 (find_package):
+[3.610s]   Policy CMP0074 is not set: find_package uses <PackageName>_ROOT variables.
+[3.610s]   Run "cmake --help-policy CMP0074" for policy details.  Use the cmake_policy
+[3.610s]   command to set the policy and suppress this warning.
+[3.610s] 
+[3.610s]   CMake variable PCL_ROOT is set to:
+[3.610s] 
+[3.610s]     /usr
+[3.610s] 
+[3.611s]   For compatibility, CMake is ignoring the variable.
+[3.611s] This warning is for project developers.  Use -Wno-dev to suppress it.
+[3.611s] [0m
+[3.623s] -- Found interface: 0.0.0 (/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake)
+[3.657s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[3.753s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[3.753s] -- Configured cppcheck include dirs: /home/haiboliu/project/vln/localization/src/fastlio2/pgo/src
+[3.753s] -- Configured cppcheck exclude dirs and/or files: 
+[3.754s] -- Added test 'flake8' to check Python code syntax and style conventions
+[3.755s] -- Added test 'lint_cmake' to check CMake code style
+[3.756s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[3.758s] -- Added test 'uncrustify' to check C / C++ code style
+[3.759s] -- Configured uncrustify additional arguments: 
+[3.759s] -- Added test 'xmllint' to check XML markup files
+[3.760s] -- Configuring done
+[3.844s] -- Generating done
+[3.868s] -- Build files have been written to: /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo
+[3.894s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/pgo -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo
+[3.897s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/pgo': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/pgo -- -j16 -l16
+[3.976s] [ 40%] [32mBuilding CXX object CMakeFiles/tools_3d_to_2d_gridmap.dir/src/utils/file_writer.cpp.o[0m
+[3.976s] [ 40%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/utils/file_writer.cpp.o[0m
+[3.976s] [ 40%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/pgo_node.cpp.o[0m
+[3.976s] [ 40%] [32mBuilding CXX object CMakeFiles/tools_3d_to_2d_gridmap.dir/src/utils/point_cloud_3d_to_2d_grid.cpp.o[0m
+[3.976s] [ 40%] [32mBuilding CXX object CMakeFiles/tools_3d_to_2d_gridmap.dir/src/tools_3d_to_2d.cpp.o[0m
+[3.976s] [ 46%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/pgos/commons.cpp.o[0m
+[3.978s] [ 40%] [32mBuilding CXX object CMakeFiles/tools_3d_to_2d_gridmap.dir/src/utils/occupancy_map.cpp.o[0m
+[3.978s] [ 60%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/pgos/simple_pgo.cpp.o[0m
+[3.978s] [ 60%] [32mBuilding CXX object CMakeFiles/occupancy_map_saver.dir/src/utils/file_writer.cpp.o[0m
+[3.978s] [ 73%] [32mBuilding CXX object CMakeFiles/occupancy_map_saver.dir/src/occupancy_map_saver.cpp.o[0m
+[3.979s] [ 80%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/utils/occupancy_map.cpp.o[0m
+[3.979s] [ 80%] [32mBuilding CXX object CMakeFiles/pgo_node.dir/src/utils/point_cloud_3d_to_2d_grid.cpp.o[0m
+[14.798s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:[m[K In member function ‘[01m[Kvoid utils::PointCloud3DTo2DGrid::convert(pcl::PointCloud<pcl::PointXYZI>::Ptr, const string&, const string&, float, float, float)[m[K’:
+[14.801s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:32:41:[m[K [01;35m[Kwarning: [m[Koverflow in conversion from ‘[01m[Kint[m[K’ to ‘[01m[Kchar[m[K’ changes value from ‘[01m[K255[m[K’ to ‘[01m[K'\37777777777'[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Woverflow-Woverflow]8;;[m[K]
+[14.801s]    32 |   char occupied_value = 0, free_value = [01;35m[K255[m[K;
+[14.801s]       |                                         [01;35m[K^~~[m[K
+[14.875s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:50:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kr_max[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[14.876s]    50 |   const char [01;35m[Kr_max[m[K = (char)255;
+[14.876s]       |              [01;35m[K^~~~~[m[K
+[14.877s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:51:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kunknown[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[14.877s]    51 |   const char [01;35m[Kunknown[m[K = (char)128;
+[14.877s]       |              [01;35m[K^~~~~~~[m[K
+[15.329s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:[m[K In member function ‘[01m[Kvoid utils::PointCloud3DTo2DGrid::convert(pcl::PointCloud<pcl::PointXYZI>::Ptr, const string&, const string&, float, float, float)[m[K’:
+[15.330s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:32:41:[m[K [01;35m[Kwarning: [m[Koverflow in conversion from ‘[01m[Kint[m[K’ to ‘[01m[Kchar[m[K’ changes value from ‘[01m[K255[m[K’ to ‘[01m[K'\37777777777'[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Woverflow-Woverflow]8;;[m[K]
+[15.330s]    32 |   char occupied_value = 0, free_value = [01;35m[K255[m[K;
+[15.330s]       |                                         [01;35m[K^~~[m[K
+[15.399s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:50:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kr_max[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[15.399s]    50 |   const char [01;35m[Kr_max[m[K = (char)255;
+[15.400s]       |              [01;35m[K^~~~~[m[K
+[15.400s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/pgo/src/utils/point_cloud_3d_to_2d_grid.cpp:51:14:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kunknown[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[15.400s]    51 |   const char [01;35m[Kunknown[m[K = (char)128;
+[15.400s]       |              [01;35m[K^~~~~~~[m[K
+[23.300s] [ 86%] [32m[1mLinking CXX executable tools_3d_to_2d_gridmap[0m
+[24.589s] [ 86%] Built target tools_3d_to_2d_gridmap
+[26.567s] [ 93%] [32m[1mLinking CXX executable occupancy_map_saver[0m
+[26.850s] [ 93%] Built target occupancy_map_saver
+[51.363s] [100%] [32m[1mLinking CXX executable pgo_node[0m
+[52.927s] [100%] Built target pgo_node

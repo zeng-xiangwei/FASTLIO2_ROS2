@@ -1,0 +1,134 @@
+[0.023s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/hba -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/hba
+[0.088s] -- The C compiler identification is GNU 11.4.0
+[0.152s] -- The CXX compiler identification is GNU 11.4.0
+[0.162s] -- Detecting C compiler ABI info
+[0.246s] -- Detecting C compiler ABI info - done
+[0.256s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.256s] -- Detecting C compile features
+[0.256s] -- Detecting C compile features - done
+[0.260s] -- Detecting CXX compiler ABI info
+[0.363s] -- Detecting CXX compiler ABI info - done
+[0.371s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.371s] -- Detecting CXX compile features
+[0.372s] -- Detecting CXX compile features - done
+[0.374s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.544s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.668s] -- Found rclcpp: 16.0.14 (/opt/ros/humble/share/rclcpp/cmake)
+[0.707s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.711s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.719s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.732s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.748s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.790s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.793s] -- Found rmw_fastrtps_cpp: 6.2.8 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.910s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.938s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.986s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.994s] -- Looking for pthread.h
+[1.083s] -- Looking for pthread.h - found
+[1.084s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.175s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.176s] -- Found Threads: TRUE  
+[1.228s] -- Found sensor_msgs: 4.9.0 (/opt/ros/humble/share/sensor_msgs/cmake)
+[1.258s] -- Found interface: 0.0.0 (/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake)
+[1.272s] -- Found pcl_conversions: 2.4.5 (/opt/ros/humble/share/pcl_conversions/cmake)
+[1.314s] -- Checking for module 'eigen3'
+[1.336s] --   Found eigen3, version 3.4.0
+[1.383s] -- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+[1.383s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[1.419s] -- Checking for module 'flann'
+[1.439s] --   Found flann, version 1.9.1
+[1.492s] -- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  
+[1.492s] -- FLANN found (include: /usr/include, lib: /usr/lib/x86_64-linux-gnu/libflann_cpp.so)
+[2.663s] -- Checking for module 'libusb-1.0'
+[2.681s] --   Found libusb-1.0, version 1.0.25
+[2.729s] -- Found libusb: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+[2.730s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.807s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[2.971s] -- Eigen found (include: /usr/include/eigen3, version: 3.4.0)
+[2.981s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[2.989s] -- OpenNI2 found (version: 2.2.0.33, include: /usr/include/openni2, lib: /usr/lib/x86_64-linux-gnu/libOpenNI2.so;libusb::libusb)
+[3.143s] -- Found Qhull version 8.0.2
+[3.313s] -- OpenNI found (version: 1.5.4.0, include: /usr/include/ni, lib: /usr/lib/libOpenNI.so;libusb::libusb)
+[3.470s] -- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+[3.471s] -- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  
+[3.472s] -- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+[3.473s] -- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  
+[3.474s] -- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  
+[3.475s] -- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  
+[3.475s] -- Found PCL_2D: /usr/include/pcl-1.12  
+[3.475s] -- Found PCL_GEOMETRY: /usr/include/pcl-1.12  
+[3.476s] -- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+[3.477s] -- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  
+[3.478s] -- Found PCL_ML: /usr/lib/x86_64-linux-gnu/libpcl_ml.so  
+[3.479s] -- Found PCL_SEGMENTATION: /usr/lib/x86_64-linux-gnu/libpcl_segmentation.so  
+[3.480s] -- Found PCL_VISUALIZATION: /usr/lib/x86_64-linux-gnu/libpcl_visualization.so  
+[3.481s] -- Found PCL_SURFACE: /usr/lib/x86_64-linux-gnu/libpcl_surface.so  
+[3.482s] -- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  
+[3.483s] -- Found PCL_KEYPOINTS: /usr/lib/x86_64-linux-gnu/libpcl_keypoints.so  
+[3.484s] -- Found PCL_TRACKING: /usr/lib/x86_64-linux-gnu/libpcl_tracking.so  
+[3.484s] -- Found PCL_RECOGNITION: /usr/lib/x86_64-linux-gnu/libpcl_recognition.so  
+[3.486s] -- Found PCL_STEREO: /usr/lib/x86_64-linux-gnu/libpcl_stereo.so  
+[3.486s] -- Found PCL_APPS: /usr/lib/x86_64-linux-gnu/libpcl_apps.so  
+[3.487s] -- Found PCL_IN_HAND_SCANNER: /usr/include/pcl-1.12  
+[3.488s] -- Found PCL_MODELER: /usr/include/pcl-1.12  
+[3.488s] -- Found PCL_POINT_CLOUD_EDITOR: /usr/include/pcl-1.12  
+[3.489s] -- Found PCL_OUTOFCORE: /usr/lib/x86_64-linux-gnu/libpcl_outofcore.so  
+[3.490s] -- Found PCL_PEOPLE: /usr/lib/x86_64-linux-gnu/libpcl_people.so  
+[3.520s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found suitable version "1.74.0", minimum required is "1.65") found components: serialization system filesystem thread program_options date_time timer chrono regex 
+[3.531s] -- GTSAM include directory:  /usr/local/lib/cmake/GTSAM/../../../include
+[3.532s] [33mCMake Warning (dev) at CMakeLists.txt:30 (find_package):
+[3.532s]   Policy CMP0074 is not set: find_package uses <PackageName>_ROOT variables.
+[3.532s]   Run "cmake --help-policy CMP0074" for policy details.  Use the cmake_policy
+[3.533s]   command to set the policy and suppress this warning.
+[3.533s] 
+[3.533s]   CMake variable PCL_ROOT is set to:
+[3.533s] 
+[3.533s]     /usr
+[3.533s] 
+[3.533s]   For compatibility, CMake is ignoring the variable.
+[3.533s] This warning is for project developers.  Use -Wno-dev to suppress it.
+[3.533s] [0m
+[4.055s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[4.253s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[4.253s] -- Configured cppcheck include dirs: 
+[4.253s] -- Configured cppcheck exclude dirs and/or files: 
+[4.253s] -- Added test 'flake8' to check Python code syntax and style conventions
+[4.259s] -- Added test 'lint_cmake' to check CMake code style
+[4.259s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[4.259s] -- Added test 'uncrustify' to check C / C++ code style
+[4.259s] -- Configured uncrustify additional arguments: 
+[4.260s] -- Added test 'xmllint' to check XML markup files
+[4.263s] -- Configuring done
+[4.486s] -- Generating done
+[4.538s] -- Build files have been written to: /home/haiboliu/project/vln/localization/src/fastlio2/build/hba
+[4.650s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba' returned '0': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/hba -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/hba
+[4.651s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/hba -- -j16 -l16
+[4.887s] [ 20%] [32mBuilding CXX object CMakeFiles/hba_node.dir/src/hba/commons.cpp.o[0m
+[4.895s] [ 60%] [32mBuilding CXX object CMakeFiles/hba_node.dir/src/hba/hba.cpp.o[0m
+[4.896s] [ 80%] [32mBuilding CXX object CMakeFiles/hba_node.dir/src/hba/blam.cpp.o[0m
+[4.900s] [ 80%] [32mBuilding CXX object CMakeFiles/hba_node.dir/src/hba_node.cpp.o[0m
+[6.213s] In file included from [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/blam.cpp:1[m[K:
+[6.214s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/blam.h:5:10:[m[K [01;31m[Kfatal error: [m[Ksophus/so3.hpp: No such file or directory
+[6.214s]     5 | #include [01;31m[K<sophus/so3.hpp>[m[K
+[6.218s]       |          [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[6.218s] compilation terminated.
+[6.231s] gmake[2]: *** [CMakeFiles/hba_node.dir/build.make:104: CMakeFiles/hba_node.dir/src/hba/blam.cpp.o] Error 1
+[6.231s] gmake[2]: *** Waiting for unfinished jobs....
+[8.610s] In file included from [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/hba.h:3[m[K,
+[8.610s]                  from [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/hba.cpp:1[m[K:
+[8.610s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/blam.h:5:10:[m[K [01;31m[Kfatal error: [m[Ksophus/so3.hpp: No such file or directory
+[8.610s]     5 | #include [01;31m[K<sophus/so3.hpp>[m[K
+[8.611s]       |          [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[8.611s] compilation terminated.
+[8.663s] gmake[2]: *** [CMakeFiles/hba_node.dir/build.make:118: CMakeFiles/hba_node.dir/src/hba/hba.cpp.o] Error 1
+[8.917s] In file included from [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/hba.h:3[m[K,
+[8.918s]                  from [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba_node.cpp:4[m[K:
+[8.918s] [01m[K/home/haiboliu/project/vln/localization/src/fastlio2/hba/src/hba/blam.h:5:10:[m[K [01;31m[Kfatal error: [m[Ksophus/so3.hpp: No such file or directory
+[8.918s]     5 | #include [01;31m[K<sophus/so3.hpp>[m[K
+[8.918s]       |          [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[8.918s] compilation terminated.
+[8.966s] gmake[2]: *** [CMakeFiles/hba_node.dir/build.make:76: CMakeFiles/hba_node.dir/src/hba_node.cpp.o] Error 1
+[12.547s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/hba_node.dir/all] Error 2
+[12.547s] gmake: *** [Makefile:146: all] Error 2
+[12.574s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/hba' returned '2': AMENT_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface:/opt/ros/humble LD_LIBRARY_PATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/hba -- -j16 -l16

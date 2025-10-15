@@ -1,0 +1,40 @@
+[35m[1mConsolidate compiler generated dependencies of target occupancy_map_saver[0m
+[35m[1mConsolidate compiler generated dependencies of target tools_3d_to_2d_gridmap[0m
+[35m[1mConsolidate compiler generated dependencies of target pgo_node[0m
+[ 20%] Built target occupancy_map_saver
+[ 53%] Built target tools_3d_to_2d_gridmap
+[100%] Built target pgo_node
+-- Install configuration: "Release"
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/pgo_node
+-- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/pgo_node" to ""
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/tools_3d_to_2d_gridmap
+-- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/tools_3d_to_2d_gridmap" to ""
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/occupancy_map_saver
+-- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/lib/pgo/occupancy_map_saver" to ""
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/occupancy_map_saver.launch.py
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/pgo_robosense_launch.py
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/grid_map_offline_tool.launch.py
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/launch/pgo_launch.py
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/grid_map
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/grid_map/offline.yaml
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/config/pgo.yaml
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz/pgo.rviz
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/rviz/pgo_best_effort.rviz
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/package_run_dependencies/pgo
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/parent_prefix_path/pgo
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/ament_prefix_path.sh
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/ament_prefix_path.dsv
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/path.sh
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/environment/path.dsv
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.bash
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.sh
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.zsh
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/local_setup.dsv
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/package.dsv
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/ament_index/resource_index/packages/pgo
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/cmake/pgoConfig.cmake
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/cmake/pgoConfig-version.cmake
+-- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/pgo/share/pgo/package.xml

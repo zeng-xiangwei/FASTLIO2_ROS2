@@ -1,0 +1,361 @@
+[0.012s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/interface -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface
+[0.074s] -- The C compiler identification is GNU 11.4.0
+[0.142s] -- The CXX compiler identification is GNU 11.4.0
+[0.155s] -- Detecting C compiler ABI info
+[0.246s] -- Detecting C compiler ABI info - done
+[0.252s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.252s] -- Detecting C compile features
+[0.252s] -- Detecting C compile features - done
+[0.255s] -- Detecting CXX compiler ABI info
+[0.353s] -- Detecting CXX compiler ABI info - done
+[0.359s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.359s] -- Detecting CXX compile features
+[0.360s] -- Detecting CXX compile features - done
+[0.362s] -- Found ament_cmake: 1.3.12 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.508s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.617s] -- Found std_msgs: 4.9.0 (/opt/ros/humble/share/std_msgs/cmake)
+[0.644s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.648s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.655s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.664s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.677s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.698s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[1.047s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[1.499s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.670s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.695s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+[1.698s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[1.722s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+[1.722s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.722s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[1.722s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[1.747s] -- Found PythonExtra: .so  
+[1.837s] -- Found ament_lint_auto: 0.12.14 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.853s] -- Added test 'lint_cmake' to check CMake code style
+[1.854s] -- Added test 'xmllint' to check XML markup files
+[1.857s] -- Configuring done
+[1.895s] -- Generating done
+[1.906s] -- Build files have been written to: /home/haiboliu/project/vln/localization/src/fastlio2/build/interface
+[1.914s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/haiboliu/project/vln/localization/src/fastlio2/interface -DCMAKE_INSTALL_PREFIX=/home/haiboliu/project/vln/localization/src/fastlio2/install/interface
+[1.916s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/interface -- -j16 -l16
+[1.966s] [  1%] [34m[1mGenerating C code for ROS interfaces[0m
+[1.980s] [  3%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[1.988s] [  3%] Built target ament_cmake_python_copy_interface
+[2.244s] running egg_info
+[2.245s] creating interface.egg-info
+[2.246s] writing interface.egg-info/PKG-INFO
+[2.246s] writing dependency_links to interface.egg-info/dependency_links.txt
+[2.246s] writing top-level names to interface.egg-info/top_level.txt
+[2.247s] writing manifest file 'interface.egg-info/SOURCES.txt'
+[2.248s] reading manifest file 'interface.egg-info/SOURCES.txt'
+[2.249s] writing manifest file 'interface.egg-info/SOURCES.txt'
+[2.296s] [  3%] Built target ament_cmake_python_build_interface_egg
+[2.604s] [  6%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_c.dir/rosidl_generator_c/interface/srv/detail/save_maps__functions.c.o[0m
+[2.604s] [  6%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_c.dir/rosidl_generator_c/interface/srv/detail/relocalize__functions.c.o[0m
+[2.605s] [  7%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_c.dir/rosidl_generator_c/interface/srv/detail/is_valid__functions.c.o[0m
+[2.606s] [  9%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_c.dir/rosidl_generator_c/interface/srv/detail/refine_map__functions.c.o[0m
+[2.608s] [ 11%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_c.dir/rosidl_generator_c/interface/srv/detail/save_poses__functions.c.o[0m
+[2.667s] [ 11%] Built target interface__cpp
+[2.687s] [ 12%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[2.690s] [ 15%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[2.691s] [ 15%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[2.727s] [ 17%] [32m[1mLinking C shared library libinterface__rosidl_generator_c.so[0m
+[2.788s] [ 17%] Built target interface__rosidl_generator_c
+[2.808s] [ 19%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[2.808s] [ 20%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[2.809s] [ 22%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[3.233s] [ 23%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/interface/srv/refine_map__type_support.cpp.o[0m
+[3.233s] [ 25%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/interface/srv/is_valid__type_support.cpp.o[0m
+[3.233s] [ 26%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/interface/srv/save_maps__type_support.cpp.o[0m
+[3.245s] [ 28%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/interface/srv/save_poses__type_support.cpp.o[0m
+[3.253s] [ 30%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/interface/srv/relocalize__type_support.cpp.o[0m
+[3.725s] [ 31%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_c.dir/rosidl_typesupport_c/interface/srv/relocalize__type_support.cpp.o[0m
+[3.732s] [ 33%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_c.dir/rosidl_typesupport_c/interface/srv/save_maps__type_support.cpp.o[0m
+[3.739s] [ 34%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_c.dir/rosidl_typesupport_c/interface/srv/save_poses__type_support.cpp.o[0m
+[3.744s] [ 38%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_c.dir/rosidl_typesupport_c/interface/srv/is_valid__type_support.cpp.o[0m
+[3.744s] [ 38%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_c.dir/rosidl_typesupport_c/interface/srv/refine_map__type_support.cpp.o[0m
+[3.880s] [ 39%] [32m[1mLinking CXX shared library libinterface__rosidl_typesupport_c.so[0m
+[3.953s] [ 41%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/interface/srv/detail/save_maps__type_support.c.o[0m
+[3.970s] [ 42%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/interface/srv/detail/relocalize__type_support.c.o[0m
+[3.978s] [ 44%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/interface/srv/detail/is_valid__type_support.c.o[0m
+[3.979s] [ 46%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/interface/srv/detail/refine_map__type_support.c.o[0m
+[3.979s] [ 47%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/interface/srv/detail/save_poses__type_support.c.o[0m
+[4.000s] [ 49%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/interface/srv/detail/save_maps__type_support.cpp.o[0m
+[4.003s] [ 50%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/interface/srv/detail/is_valid__type_support.cpp.o[0m
+[4.007s] [ 52%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/interface/srv/detail/relocalize__type_support.cpp.o[0m
+[4.014s] [ 53%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/interface/srv/detail/dds_fastrtps/relocalize__type_support.cpp.o[0m
+[4.017s] [ 55%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/interface/srv/detail/dds_fastrtps/save_maps__type_support.cpp.o[0m
+[4.018s] [ 57%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/interface/srv/detail/dds_fastrtps/is_valid__type_support.cpp.o[0m
+[4.019s] [ 58%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/interface/srv/detail/refine_map__type_support.cpp.o[0m
+[4.019s] [ 60%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/interface/srv/detail/save_poses__type_support.cpp.o[0m
+[4.023s] [ 60%] Built target interface__rosidl_typesupport_c
+[4.026s] [ 61%] [32m[1mLinking CXX shared library libinterface__rosidl_typesupport_cpp.so[0m
+[4.040s] [ 63%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/interface/srv/detail/save_maps__type_support_c.cpp.o[0m
+[4.053s] [ 65%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/interface/srv/detail/relocalize__type_support_c.cpp.o[0m
+[4.066s] [ 66%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/interface/srv/detail/dds_fastrtps/refine_map__type_support.cpp.o[0m
+[4.080s] [ 68%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/interface/srv/detail/refine_map__type_support_c.cpp.o[0m
+[4.080s] [ 69%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/interface/srv/detail/is_valid__type_support_c.cpp.o[0m
+[4.080s] [ 71%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/interface/srv/detail/dds_fastrtps/save_poses__type_support.cpp.o[0m
+[4.087s] [ 73%] [32m[1mLinking C shared library libinterface__rosidl_typesupport_introspection_c.so[0m
+[4.218s] [ 73%] Built target interface__rosidl_typesupport_cpp
+[4.238s] [ 73%] Built target interface__rosidl_typesupport_introspection_c
+[4.267s] [ 74%] [32mBuilding CXX object CMakeFiles/interface__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/interface/srv/detail/save_poses__type_support_c.cpp.o[0m
+[4.939s] [ 76%] [32m[1mLinking CXX shared library libinterface__rosidl_typesupport_introspection_cpp.so[0m
+[4.978s] [ 77%] [32m[1mLinking CXX shared library libinterface__rosidl_typesupport_fastrtps_c.so[0m
+[4.999s] [ 79%] [32m[1mLinking CXX shared library libinterface__rosidl_typesupport_fastrtps_cpp.so[0m
+[5.030s] [ 79%] Built target interface__rosidl_typesupport_introspection_cpp
+[5.097s] [ 79%] Built target interface__rosidl_typesupport_fastrtps_c
+[5.110s] [ 79%] Built target interface__rosidl_typesupport_fastrtps_cpp
+[5.142s] [ 79%] Built target interface
+[5.175s] [ 80%] [34m[1mGenerating Python code for ROS interfaces[0m
+[5.975s] [ 80%] Built target interface__py
+[5.999s] [ 85%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_py.dir/rosidl_generator_py/interface/srv/_save_poses_s.c.o[0m
+[5.999s] [ 85%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_py.dir/rosidl_generator_py/interface/srv/_is_valid_s.c.o[0m
+[5.999s] [ 85%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_py.dir/rosidl_generator_py/interface/srv/_save_maps_s.c.o[0m
+[5.999s] [ 88%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_py.dir/rosidl_generator_py/interface/srv/_refine_map_s.c.o[0m
+[5.999s] [ 88%] [32mBuilding C object CMakeFiles/interface__rosidl_generator_py.dir/rosidl_generator_py/interface/srv/_relocalize_s.c.o[0m
+[6.125s] [ 90%] [32m[1mLinking C shared library rosidl_generator_py/interface/libinterface__rosidl_generator_py.so[0m
+[6.178s] [ 90%] Built target interface__rosidl_generator_py
+[6.200s] [ 93%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/interface/_interface_s.ep.rosidl_typesupport_c.c.o[0m
+[6.200s] [ 93%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/interface/_interface_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[6.206s] [ 95%] [32mBuilding C object CMakeFiles/interface__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/interface/_interface_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[6.326s] [ 96%] [32m[1mLinking C shared library rosidl_generator_py/interface/interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[6.337s] [ 98%] [32m[1mLinking C shared library rosidl_generator_py/interface/interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[6.340s] [100%] [32m[1mLinking C shared library rosidl_generator_py/interface/interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[6.373s] [100%] Built target interface__rosidl_typesupport_c__pyext
+[6.386s] [100%] Built target interface__rosidl_typesupport_introspection_c__pyext
+[6.393s] [100%] Built target interface__rosidl_typesupport_fastrtps_c__pyext
+[6.408s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/haiboliu/project/vln/localization/src/fastlio2/build/interface -- -j16 -l16
+[6.410s] Invoking command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/interface
+[6.417s] -- Install configuration: ""
+[6.417s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/ament_index/resource_index/rosidl_interfaces/interface
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/relocalize.h
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/save_maps.h
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/save_poses.h
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/is_valid.h
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/refine_map.h
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.418s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__type_support.h
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__type_support.h
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__functions.c
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__struct.h
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__functions.h
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__struct.h
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__functions.c
+[6.419s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__functions.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__functions.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__type_support.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__functions.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__type_support.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__struct.h
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__functions.c
+[6.420s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__struct.h
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__struct.h
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__type_support.h
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__functions.c
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__functions.c
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__functions.h
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg
+[6.421s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg/rosidl_generator_c__visibility_control.h
+[6.422s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/library_path.sh
+[6.422s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/library_path.dsv
+[6.422s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_generator_c.so
+[6.423s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_generator_c.so" to ""
+[6.423s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.423s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.423s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__rosidl_typesupport_fastrtps_c.h
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__rosidl_typesupport_fastrtps_c.h
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__rosidl_typesupport_fastrtps_c.h
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__rosidl_typesupport_fastrtps_c.h
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__rosidl_typesupport_fastrtps_c.h
+[6.423s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[6.423s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_fastrtps_c.so
+[6.424s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_fastrtps_c.so" to ""
+[6.424s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.424s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.424s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/is_valid.hpp
+[6.424s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/refine_map.hpp
+[6.424s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/relocalize.hpp
+[6.424s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/save_maps.hpp
+[6.425s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__struct.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__struct.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__traits.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__builder.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__type_support.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__traits.hpp
+[6.425s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__traits.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__type_support.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__struct.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__builder.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__traits.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__type_support.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__builder.hpp
+[6.426s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__builder.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__traits.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__builder.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__type_support.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__type_support.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__struct.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__struct.hpp
+[6.427s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/save_poses.hpp
+[6.427s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg/rosidl_generator_cpp__visibility_control.hpp
+[6.428s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.428s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.428s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__rosidl_typesupport_fastrtps_cpp.hpp
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/dds_fastrtps
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__rosidl_typesupport_fastrtps_cpp.hpp
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__rosidl_typesupport_fastrtps_cpp.hpp
+[6.428s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__rosidl_typesupport_fastrtps_cpp.hpp
+[6.429s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__rosidl_typesupport_fastrtps_cpp.hpp
+[6.429s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg
+[6.429s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[6.429s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_fastrtps_cpp.so
+[6.429s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_fastrtps_cpp.so" to ""
+[6.429s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.429s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.430s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__type_support.c
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__type_support.c
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__type_support.c
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__rosidl_typesupport_introspection_c.h
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__type_support.c
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__rosidl_typesupport_introspection_c.h
+[6.430s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__rosidl_typesupport_introspection_c.h
+[6.431s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__type_support.c
+[6.431s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__rosidl_typesupport_introspection_c.h
+[6.431s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__rosidl_typesupport_introspection_c.h
+[6.431s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg
+[6.431s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[6.431s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_introspection_c.so
+[6.432s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_introspection_c.so" to ""
+[6.432s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_c.so
+[6.432s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_c.so" to ""
+[6.432s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface
+[6.432s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv
+[6.432s] -- Up-to-date: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__type_support.cpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__type_support.cpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__type_support.cpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__type_support.cpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_maps__rosidl_typesupport_introspection_cpp.hpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/refine_map__rosidl_typesupport_introspection_cpp.hpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/save_poses__rosidl_typesupport_introspection_cpp.hpp
+[6.433s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__type_support.cpp
+[6.434s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/is_valid__rosidl_typesupport_introspection_cpp.hpp
+[6.434s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/include/interface/interface/srv/detail/relocalize__rosidl_typesupport_introspection_cpp.hpp
+[6.434s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_introspection_cpp.so
+[6.434s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_introspection_cpp.so" to ""
+[6.434s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_cpp.so
+[6.435s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_typesupport_cpp.so" to ""
+[6.435s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/pythonpath.sh
+[6.435s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/pythonpath.dsv
+[6.435s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface-0.0.0-py3.10.egg-info
+[6.435s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface-0.0.0-py3.10.egg-info/dependency_links.txt
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface-0.0.0-py3.10.egg-info/SOURCES.txt
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface-0.0.0-py3.10.egg-info/top_level.txt
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface-0.0.0-py3.10.egg-info/PKG-INFO
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/__init__.py
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_is_valid_s.c
+[6.436s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/__init__.py
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_relocalize_s.c
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_refine_map.py
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_refine_map_s.c
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_poses_s.c
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_is_valid.py
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_relocalize.py
+[6.437s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_poses.py
+[6.438s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_maps.py
+[6.438s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_maps_s.c
+[6.438s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/_interface_s.ep.rosidl_typesupport_introspection_c.c
+[6.438s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[6.438s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/_interface_s.ep.rosidl_typesupport_c.c
+[6.439s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/libinterface__rosidl_generator_py.so
+[6.439s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[6.439s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/_interface_s.ep.rosidl_typesupport_fastrtps_c.c
+[6.475s] Listing '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface'...
+[6.475s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/__init__.py'...
+[6.475s] Listing '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv'...
+[6.475s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/__init__.py'...
+[6.475s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_is_valid.py'...
+[6.475s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_refine_map.py'...
+[6.475s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_relocalize.py'...
+[6.476s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_maps.py'...
+[6.476s] Compiling '/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/srv/_save_poses.py'...
+[6.480s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[6.480s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+[6.480s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[6.481s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+[6.481s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[6.481s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/local/lib/python3.10/dist-packages/interface/interface_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+[6.482s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_generator_py.so
+[6.482s] -- Set runtime path of "/home/haiboliu/project/vln/localization/src/fastlio2/install/interface/lib/libinterface__rosidl_generator_py.so" to ""
+[6.482s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SaveMaps.idl
+[6.482s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/Relocalize.idl
+[6.482s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/IsValid.idl
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/RefineMap.idl
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SavePoses.idl
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SaveMaps.srv
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SaveMaps_Request.msg
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SaveMaps_Response.msg
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/Relocalize.srv
+[6.483s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/Relocalize_Request.msg
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/Relocalize_Response.msg
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/IsValid.srv
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/IsValid_Request.msg
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/IsValid_Response.msg
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/RefineMap.srv
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/RefineMap_Request.msg
+[6.484s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/RefineMap_Response.msg
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SavePoses.srv
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SavePoses_Request.msg
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/srv/SavePoses_Response.msg
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/ament_index/resource_index/package_run_dependencies/interface
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/ament_index/resource_index/parent_prefix_path/interface
+[6.485s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/ament_prefix_path.sh
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/ament_prefix_path.dsv
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/path.sh
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/environment/path.dsv
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/local_setup.bash
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/local_setup.sh
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/local_setup.zsh
+[6.486s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/local_setup.dsv
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.dsv
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/ament_index/resource_index/packages/interface
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_generator_cExport.cmake
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_generator_cExport-noconfig.cmake
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_typesupport_fastrtps_cExport.cmake
+[6.487s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_generator_cppExport.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_typesupport_fastrtps_cppExport.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_introspection_cExport.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_cExport.cmake
+[6.488s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_cExport-noconfig.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_introspection_cppExport.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_cppExport.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interface__rosidl_typesupport_cppExport-noconfig.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_generator_pyExport.cmake
+[6.489s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/export_interface__rosidl_generator_pyExport-noconfig.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/rosidl_cmake-extras.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/ament_cmake_export_dependencies-extras.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/ament_cmake_export_include_directories-extras.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/ament_cmake_export_libraries-extras.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/ament_cmake_export_targets-extras.cmake
+[6.490s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[6.491s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[6.491s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interfaceConfig.cmake
+[6.491s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/cmake/interfaceConfig-version.cmake
+[6.491s] -- Installing: /home/haiboliu/project/vln/localization/src/fastlio2/install/interface/share/interface/package.xml
+[6.495s] Invoked command in '/home/haiboliu/project/vln/localization/src/fastlio2/build/interface' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/haiboliu/project/vln/localization/src/fastlio2/build/interface

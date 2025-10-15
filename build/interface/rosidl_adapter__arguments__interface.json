@@ -1,0 +1,10 @@
+{
+  "package_name": "interface",
+  "non_idl_tuples": [
+    "/home/haiboliu/project/vln/localization/src/fastlio2/interface:srv/SaveMaps.srv",
+    "/home/haiboliu/project/vln/localization/src/fastlio2/interface:srv/Relocalize.srv",
+    "/home/haiboliu/project/vln/localization/src/fastlio2/interface:srv/IsValid.srv",
+    "/home/haiboliu/project/vln/localization/src/fastlio2/interface:srv/RefineMap.srv",
+    "/home/haiboliu/project/vln/localization/src/fastlio2/interface:srv/SavePoses.srv"
+  ]
+}
