@@ -1,5 +1,6 @@
 #pragma once
 #include "commons.h"
+#include <stdint.h>
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/common/transforms.h>
 #include <pcl/filters/voxel_grid.h>
@@ -40,15 +41,17 @@ struct Config
     int loop_submap_half_range = 5;
     double submap_resolution = 0.1;
     double min_loop_detect_duration = 10.0;
+
+    double global_score_tresh = 0.15;
     std::string global_pcd_file = "";
     std::string model = "map";
 
 };
 
-class SimplePGO
+class PGO
 {
 public:
-    SimplePGO(const Config &config);
+    PGO(const Config &config);
 
     bool isKeyPose(const PoseWithTime &pose);
 
@@ -67,6 +70,9 @@ public:
     M3D offsetR() { return m_r_offset; }
     V3D offsetT() { return m_t_offset; }
 
+    void loadMap();
+    void GlobalMatch();
+
 private:
     Config m_config;
     std::vector<KeyPoseWithCloud> m_key_poses;
@@ -78,4 +84,9 @@ private:
     gtsam::Values m_initial_values;
     gtsam::NonlinearFactorGraph m_graph;
     pcl::IterativeClosestPoint<PointType, PointType> m_icp;
+
+    pcl::IterativeClosestPoint<PointType, PointType> global_icp;
+    size_t global_idx;
+    bool global_map_load;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud
 };

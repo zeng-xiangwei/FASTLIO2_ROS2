@@ -16,3 +16,8 @@ grid_2d_z_min: -0.2
 grid_2d_z_max: 1.0
 grid_2d_resolution: 0.02
 occupancy_weight: 10
+
+global_score_tresh: 0.15
+global_pcd_file: /home/haiboliu/project/vln/localization/map.pcd
+model: mapping 
+# model: localization 

@@ -20,6 +20,7 @@
 #include "interface/srv/save_maps.hpp"
 #include "pgos/commons.h"
 #include "pgos/simple_pgo.h"
+#include "pgos/pgo.h"
 #include "utils/occupancy_map.h"
 
 using namespace std::chrono_literals;
@@ -49,7 +50,8 @@ class PGONode : public rclcpp::Node {
   PGONode() : Node("pgo_node") {
     RCLCPP_INFO(this->get_logger(), "PGO node started");
     loadParameters();
-    m_pgo = std::make_shared<SimplePGO>(m_pgo_config);
+    // m_pgo = std::make_shared<SimplePGO>(m_pgo_config);
+     m_pgo = std::make_shared<PGO>(m_pgo_config);
     rclcpp::QoS qos = rclcpp::QoS(1);
     m_cloud_sub.subscribe(this, m_node_config.cloud_topic, qos.get_rmw_qos_profile());
     m_odom_sub.subscribe(this, m_node_config.odom_topic, qos.get_rmw_qos_profile());
@@ -89,11 +91,16 @@ class PGONode : public rclcpp::Node {
     m_pgo_config.loop_submap_half_range = config["loop_submap_half_range"].as<int>();
     m_pgo_config.submap_resolution = config["submap_resolution"].as<double>();
     m_pgo_config.min_loop_detect_duration = config["min_loop_detect_duration"].as<double>();
+    m_pgo_config.global_score_tresh = config["global_score_tresh"].as<double>();
+    m_pgo_config.global_pcd_file = config["global_pcd_file"].as<std::string>();
+    m_pgo_config.model = config["model"].as<std::string>();
 
     m_grid_map_config.grid_2d_z_min = config["grid_2d_z_min"].as<float>();
     m_grid_map_config.grid_2d_z_max = config["grid_2d_z_max"].as<float>();
     m_grid_map_config.grid_2d_resolution = config["grid_2d_resolution"].as<float>();
     m_grid_map_config.occupancy_weight = config["occupancy_weight"].as<int>();
+
+
   }
   void syncCB(const sensor_msgs::msg::PointCloud2::ConstSharedPtr& cloud_msg,
               const nav_msgs::msg::Odometry::ConstSharedPtr& odom_msg) {
@@ -134,6 +141,7 @@ class PGONode : public rclcpp::Node {
 
   void publishLoopMarkers(builtin_interfaces::msg::Time& time) {
     if (m_loop_marker_pub->get_subscription_count() == 0) return;
+    // here return if localization model
     if (m_pgo->historyPairs().size() == 0) return;
 
     visualization_msgs::msg::MarkerArray marker_array;
@@ -202,6 +210,9 @@ class PGONode : public rclcpp::Node {
         m_state.cloud_buffer.pop();
       }
     }
+    if(!mpgo->initialPose(cp)) {
+      return;
+    }
     builtin_interfaces::msg::Time cur_time;
     cur_time.sec = cp.pose.sec;
     cur_time.nanosec = cp.pose.nsec;
@@ -209,10 +220,10 @@ class PGONode : public rclcpp::Node {
       sendBroadCastTF(cur_time);
       return;
     }
+    m_pgo->Match();
+    // m_pgo->searchForLoopPairs();
 
-    m_pgo->searchForLoopPairs();
-
-    m_pgo->smoothAndUpdate();
+    // m_pgo->smoothAndUpdate();
 
     sendBroadCastTF(cur_time);
 
@@ -295,7 +306,9 @@ class PGONode : public rclcpp::Node {
   Config m_pgo_config;
   GridMapConfig m_grid_map_config;
   NodeState m_state;
-  std::shared_ptr<SimplePGO> m_pgo;
+  // std::shared_ptr<SimplePGO> m_pgo;
+  std::shared_ptr<PGO> m_pgo;
+
   rclcpp::TimerBase::SharedPtr m_timer;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr m_loop_marker_pub;
   rclcpp::Service<interface::srv::SaveMaps>::SharedPtr m_save_map_srv;
