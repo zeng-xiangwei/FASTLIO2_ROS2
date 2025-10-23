@@ -66,8 +66,8 @@ void LIOLocalizationNode::loadParameters() {
 
   m_builder_config.gravity_align_to_global_map = localization_config["gravity_align_to_global_map"].as<bool>();
 
-  if (config["update_map"]) {
-    m_builder_config.update_map = config["update_map"].as<bool>();
+  if (localization_config["update_map"]) {
+    m_builder_config.update_map = localization_config["update_map"].as<bool>();
   }
   // 读取上次保留的定位结果，用于重定位
   m_saved_pose_file_path = saved_pose_file_path;
