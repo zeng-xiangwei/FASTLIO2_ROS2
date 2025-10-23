@@ -1,0 +1,86 @@
+imu_topic: /livox/imu
+lidar_topic: /livox/lidar
+body_frame: imubody
+# world_frame: local
+world_frame: map
+print_time_cost: true
+ros_spin_thread: 2
+# lidar_type: livox、robosense
+lidar_type: livox
+
+lidar_filter_num: 1
+lidar_min_range: 0.5
+lidar_max_range: 30.0
+# lidar_min_z: -1000.0
+# lidar_max_z: 1000.0
+lidar_min_z: -2.0
+lidar_max_z: 1.0
+
+filter_box_min_x: -0.2
+filter_box_max_x: 0.8
+filter_box_min_y: -0.7
+filter_box_max_y: 0.7
+filter_box_min_z: 0.0
+filter_box_max_z: 1.2
+
+scan_resolution: 0.2
+map_resolution: 0.2
+
+cube_len: 300
+det_range: 60
+move_thresh: 1.5
+
+na: 0.01
+ng: 0.01
+nba: 0.0001
+nbg: 0.0001
+
+imu_init_num: 20
+near_search_num: 5
+ieskf_max_iter: 5
+
+gravity_align: false
+esti_il: false
+
+r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+t_il: [-0.011, -0.02329, 0.04412]
+
+lidar_cov_inv: 1000.0
+
+# 车体系
+carbody_frame: carbody
+# 激光本体系
+lidarbody_frame: lidarbody
+t_carbody_lidar: [ 0.35, 0., 0. ]
+r_carbody_lidar: [-1.00000, -0.00000, 0.00000, 
+                  0.00000, -1.00000, 0.00000, 
+                  0.00000, 0.00000, 1.00000]
+
+localization:
+  global_map_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
+
+  rough_scan_resolution: 0.5
+  rough_map_resolution: 0.5
+  rough_max_iteration: 5
+  rough_score_thresh: 0.3
+  rough_score_dis_thresh: 1.0
+
+  refine_scan_resolution: 0.1
+  refine_map_resolution: 0.1
+  refine_max_iteration: 10
+  refine_score_thresh: 0.3
+  refine_score_dis_thresh: 1.0
+
+  # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
+  gravity_align_to_global_map: true
+  update_map: false
+
+vla:
+  vla_lidar_remove_x_min: -0.2
+  vla_lidar_remove_x_max: 0.8
+  vla_lidar_remove_y_min: -0.7
+  vla_lidar_remove_y_max: 0.7
+  vla_lidar_remove_z_min: 0.0
+  vla_lidar_remove_z_max: 1.2
+  vla_radius: 3.0
+  vla_transform_lookup_time: 0.1

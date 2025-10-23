@@ -28,6 +28,7 @@ void MapBuilder::process(SyncPackage& package) {
     } else {
       cloud_world = LidarProcessor::transformCloud(package.cloud, m_lidar_processor->r_wl(), m_lidar_processor->t_wl());
     }
+    // 定位时，采用全局地图作为匹配的target地图，且不更新
     m_lidar_processor->initCloudMap(cloud_world->points);
     m_status = BuilderStatus::MAPPING;
     return;

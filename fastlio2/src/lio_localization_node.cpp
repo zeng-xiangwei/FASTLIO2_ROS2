@@ -17,8 +17,9 @@ void LIOLocalizationNode::initRos() {
       this->create_publisher<sensor_msgs::msg::PointCloud2>("/global_map", rclcpp::QoS(1).transient_local());
 
   LOG(INFO) << "refine map points size: " << m_icp_localizer->refineMap()->size();
+ 
   publishGlobalMap(m_icp_localizer->refineMap());
-
+  // 定位时，采用全局地图作为匹配的target地图，且不更新
   m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
 }
 
@@ -169,7 +170,7 @@ void LIOLocalizationNode::readSavedPose(const std::string& file_path) {
   }
 
   CHECK(tokens.size() == 8) << "not valid pose file";
-  double time = std::stod(tokens[0]);
+  // double time = std::stod(tokens[0]);
   m_saved_pos = V3D(std::stod(tokens[1]), std::stod(tokens[2]), std::stod(tokens[3]));
   m_saved_rot =
       Eigen::Quaterniond(std::stod(tokens[7]), std::stod(tokens[4]), std::stod(tokens[5]), std::stod(tokens[6]));

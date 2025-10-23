@@ -47,7 +47,7 @@ class LIOLocalizationNode : public LIONode {
   bool m_relocalize_success = false;
 
   // 上一次程序关闭后保存的定位位姿，用于重定位
-  bool m_try_saved_pose = true;
+  bool m_try_saved_pose = false;
   Eigen::Vector3d m_saved_pos;
   Eigen::Quaterniond m_saved_rot;
   std::string m_saved_pose_file_path;

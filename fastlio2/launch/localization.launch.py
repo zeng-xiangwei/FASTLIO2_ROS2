@@ -11,7 +11,7 @@ def generate_launch_description():
     )
 
     config_path = PathJoinSubstitution(
-        [FindPackageShare("fastlio2"), "config", "lio_localizer.yaml"]
+        [FindPackageShare("fastlio2"), "config", "lio_localizer_op.yaml"]
     )
 
     saved_pose_file_path = PathJoinSubstitution(
