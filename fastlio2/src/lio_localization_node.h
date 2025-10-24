@@ -54,4 +54,5 @@ class LIOLocalizationNode : public LIONode {
   // 记录最新的位姿，用于在位姿变化时保存到文件
   Eigen::Vector3d m_latest_pos = Eigen::Vector3d::Zero();
   Eigen::Quaterniond m_latest_rot = Eigen::Quaterniond::Identity();
+
 };

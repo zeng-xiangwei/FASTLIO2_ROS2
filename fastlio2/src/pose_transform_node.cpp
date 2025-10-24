@@ -89,10 +89,10 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   custom_lidar_frec_pose_pub_->publish(custom_msg);
 #endif
 
-  std::stringstream ss;
-  ss << "T_w_carbody in lidar frec: t: " << T_w_carbody.trans.transpose()
-     << ", q: " << T_w_carbody.rot.coeffs().transpose();
-  RCLCPP_INFO(this->get_logger(), ss.str().c_str());
+  // std::stringstream ss;
+  // ss << "T_w_carbody in lidar frec: t: " << T_w_carbody.trans.transpose()
+  //    << ", q: " << T_w_carbody.rot.coeffs().transpose();
+  // RCLCPP_INFO(this->get_logger(), ss.str().c_str());
 }
 
 // 高频的位姿数据（imu系）

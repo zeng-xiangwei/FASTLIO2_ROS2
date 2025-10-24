@@ -1,4 +1,5 @@
 #pragma once
+#include <yaml-cpp/yaml.h>
 #include <Eigen/Eigen>
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
@@ -28,3 +29,39 @@ struct CloudWithPose {
     CloudType::Ptr cloud;
     PoseWithTime pose;
 };
+
+struct Pose
+{
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    double offset;
+    V3D acc;
+    V3D gyro;
+    V3D vel;
+    V3D trans;
+    M3D rot;
+    Pose() = default;
+    Pose(double t, const V3D &a, const V3D &g, const V3D &v, const V3D &p, const M3D &r) : offset(t), acc(a), gyro(g), vel(v), trans(p), rot(r) {}
+};
+
+namespace YAML {
+    template<>
+    struct convert<V3D> {
+        static Node encode(const V3D& vec) {
+            Node node;
+            node.push_back(vec.x());
+            node.push_back(vec.y());
+            node.push_back(vec.z());
+            return node;
+        }
+
+        static bool decode(const Node& node, V3D& vec) {
+            if(!node.IsSequence() || node.size() != 3) {
+                return false;
+            }
+            vec.x() = node[0].as<double>();
+            vec.y() = node[1].as<double>();
+            vec.z() = node[2].as<double>();
+            return true;
+        }
+    };
+}

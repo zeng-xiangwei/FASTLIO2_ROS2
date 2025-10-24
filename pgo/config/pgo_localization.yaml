@@ -1,0 +1,51 @@
+cloud_topic: /fastlio2/body_cloud
+odom_topic: /fastlio2/lio_odom
+map_frame: map
+local_frame: local
+
+pgo_config:
+    key_pose_delta_deg: 10
+    key_pose_delta_trans: 0.5
+    loop_search_radius: 1.0
+    loop_time_tresh: 60.0
+    loop_score_tresh: 0.15
+    loop_submap_half_range: 5
+    submap_resolution: 0.1
+    min_loop_detect_duration: 5.0
+
+    global_score_tresh: 0.15
+    global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
+    # global_pcd_file: " "
+    # model: mapping
+    model: localization
+    match_enable: true
+    # eular angle in degree
+    initial_pose_r : [0.0, 0.0, 0.0]
+    initial_pose_t : [0.0, 0.0, 0.0]
+    pose_load_mode: 0 # load from yaml, 1 load from file.txt
+    # initial_pose_file: /home/haiboliu/project/vln/localization/pose.txt
+    initial_pose_file: " "
+    # used for initial local
+    # angle_thresh: 0.1
+    angle_thresh: 100
+    trans_thresh: 100
+
+    icp_config:
+        rough_scan_resolution: 0.5
+        rough_map_resolution: 0.5
+        rough_max_iteration: 5
+        rough_score_thresh: 0.3
+        rough_score_dis_thresh: 1.0
+
+        refine_scan_resolution: 0.1
+        refine_map_resolution: 0.1
+        refine_max_iteration: 10
+        refine_score_thresh: 0.3
+        refine_score_dis_thresh: 1.0
+
+grid_map_config:
+    grid_2d_z_min: -0.2
+    grid_2d_z_max: 1.0
+    grid_2d_resolution: 0.02
+    occupancy_weight: 10
+

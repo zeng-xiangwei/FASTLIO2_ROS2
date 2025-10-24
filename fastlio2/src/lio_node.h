@@ -38,7 +38,8 @@ struct NodeConfig {
   std::string imu_topic = "/livox/imu";
   std::string lidar_topic = "/livox/lidar";
   std::string body_frame = "body";
-  std::string world_frame = "lidar";
+  std::string world_frame = "local";
+  std::string global_frame = "map";
   std::string lidarbody_frame = "lidarbody";
   std::string arm_base_frame = "armbasebody";
   bool print_time_cost = false;

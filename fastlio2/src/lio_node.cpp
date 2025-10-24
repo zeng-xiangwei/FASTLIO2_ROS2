@@ -76,6 +76,7 @@ void LIONode::loadParameters() {
   m_node_config.lidar_topic = config["lidar_topic"].as<std::string>();
   m_node_config.body_frame = config["body_frame"].as<std::string>();
   m_node_config.world_frame = config["world_frame"].as<std::string>();
+  m_node_config.global_frame = config["global_frame"].as<std::string>();
   m_node_config.print_time_cost = config["print_time_cost"].as<bool>();
   m_node_config.ros_spin_thread = config["ros_spin_thread"].as<int>();
   m_node_config.lidar_type = config["lidar_type"].as<std::string>();
@@ -317,26 +318,26 @@ void LIONode::loopThread() {
   }
 }
 void LIONode::timerCB() {
-  auto start = std::chrono::high_resolution_clock::now();
+  // auto start = std::chrono::high_resolution_clock::now();
   if (!ready()) {
     return;
   }
   if (!syncPackage()) {
     return;
   }
-  auto t1 = std::chrono::high_resolution_clock::now();
+  // auto t1 = std::chrono::high_resolution_clock::now();
   m_builder->process(m_package);
   m_imu_pose_predictor->setLioState({m_kf->x(), m_package.cloud_end_time});
-  auto t2 = std::chrono::high_resolution_clock::now();
+  // auto t2 = std::chrono::high_resolution_clock::now();
 
   if (m_node_config.print_time_cost) {
-    auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
-    RCLCPP_WARN(this->get_logger(), "Time cost: %.2f ms", time_used);
+    // auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+    // RCLCPP_WARN(this->get_logger(), "Time cost: %.2f ms", time_used);
   }
 
   if (m_builder->status() != BuilderStatus::MAPPING) return;
 
-  RCLCPP_WARN(this->get_logger(), "start pub");
+  // RCLCPP_WARN(this->get_logger(), "start pub");
 
   broadLiCastTF(m_tf_broadcaster, m_node_config.world_frame, m_node_config.body_frame, m_package.cloud_end_time);
 
@@ -367,9 +368,9 @@ void LIONode::timerCB() {
   }
   // publishVLACloud(m_package.cloud_end_time, body_cloud);
 
-  auto end = std::chrono::high_resolution_clock::now();
-  auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
-  RCLCPP_WARN(this->get_logger(), "end pub, all process time: %.2f ms", time_used);
+  // auto end = std::chrono::high_resolution_clock::now();
+  // auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+  // RCLCPP_WARN(this->get_logger(), "end pub, all process time: %.2f ms", time_used);
 }
 
 void LIONode::imuFreqCB() {
@@ -401,7 +402,7 @@ CloudType::Ptr LIONode::getNearPointsForVLA(const double& time) {
   CloudType::Ptr cloud_in_w = m_builder->lidar_processor()->searchByRadius(t_wb, m_node_config.vla_radius);
 
   MinPose T_b_w = m_vla_body_pose.inverse();
-  RCLCPP_INFO(this->get_logger(), "Get near points for VLA, cloud_in_w size: %d", cloud_in_w->size());
+  RCLCPP_INFO(this->get_logger(), "Get near points for VLA, cloud_in_w size: %zu", cloud_in_w->size());
   std::cout << "T_b_w.rot: " << T_b_w.rot.coeffs().transpose() << "T_b_w.trans: " << T_b_w.trans.transpose()
             << std::endl;
   CloudType::Ptr cloud_in_body = transformCloud(cloud_in_w, T_b_w.rot, T_b_w.trans);
@@ -435,8 +436,8 @@ CloudType::Ptr LIONode::getNearPointsInNewestForVLA(const double& time, CloudTyp
     transform = m_tf_buffer->lookupTransform(m_node_config.arm_base_frame, m_node_config.body_frame, ros_time,
                                              tf2::durationFromSec(m_node_config.vla_transform_lookup_time));
   } catch (tf2::TransformException& ex) {
-    RCLCPP_ERROR(this->get_logger(), "Can't get transform between %s and %s, %s", m_node_config.arm_base_frame,
-                 m_node_config.body_frame, ex.what());
+    RCLCPP_ERROR(this->get_logger(), "Can't get transform between %s and %s, %s", m_node_config.arm_base_frame.c_str(),
+                 m_node_config.body_frame.c_str(), ex.what());
     return std::make_shared<CloudType>();
   }
 

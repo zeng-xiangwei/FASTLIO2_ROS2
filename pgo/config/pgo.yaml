@@ -18,6 +18,16 @@ grid_2d_resolution: 0.02
 occupancy_weight: 10
 
 global_score_tresh: 0.15
-global_pcd_file: /home/haiboliu/project/vln/localization/map.pcd
+global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
 model: mapping 
-# model: localization 
+# model: localization
+match_enable: false
+# eular angle in degree
+initial_pose_r : [0.0, 0.0, 0.0]
+initial_pose_t : [0.0, 0.0, 0.0]
+pose_load_mode: 0 # load from yaml, 1 load from file.txt
+initial_pose_file: /home/haiboliu/project/vln/localization/pose.txt
+# used for initial local
+angle_thresh: 0.1
+trans_thresh: 0.1
+

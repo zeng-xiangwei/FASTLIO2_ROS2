@@ -1,8 +1,8 @@
 imu_topic: /livox/imu
 lidar_topic: /livox/lidar
 body_frame: imubody
-# world_frame: local
-world_frame: map
+global_frame: map
+world_frame: local
 print_time_cost: true
 ros_spin_thread: 2
 # lidar_type: livox、robosense
@@ -11,10 +11,10 @@ lidar_type: livox
 lidar_filter_num: 1
 lidar_min_range: 0.5
 lidar_max_range: 30.0
-# lidar_min_z: -1000.0
-# lidar_max_z: 1000.0
-lidar_min_z: -2.0
-lidar_max_z: 1.0
+lidar_min_z: -1000.0
+lidar_max_z: 1000.0
+# lidar_min_z: -2.0
+# lidar_max_z: 1.0
 
 filter_box_min_x: -0.2
 filter_box_max_x: 0.8
@@ -73,7 +73,7 @@ localization:
 
   # 定位模式下需要这个参数，用来计算初始的地图系下的重力，gravity_align 开关需要关闭
   gravity_align_to_global_map: true
-  update_map: false
+  update_map: true
 
 vla:
   vla_lidar_remove_x_min: -0.2

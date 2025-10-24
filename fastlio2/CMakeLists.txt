@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
 project(fastlio2)
 
 set(CMAKE_BUILD_TYPE "Release")
@@ -68,8 +71,7 @@ set(SRC_LIST src/map_builder/commons.cpp
              src/accumulate_lidar_cloud_for_calib.cpp)
 
 add_library(map_builder SHARED ${SRC_LIST})
-ament_target_dependencies(map_builder rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 
-pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
+ament_target_dependencies(map_builder rclcpp std_msgs tf2 tf2_ros nav_msgs sensor_msgs livox_ros_driver2 pcl_conversions geometry_msgs ${DEPENDENCIES_COMBINE})
 target_link_libraries(map_builder 
   yaml-cpp
   ${PCL_LIBRARIES})

@@ -11,25 +11,27 @@ void LIOLocalizationNode::initRos() {
   LIONode::initRos();
   m_icp_localizer = std::make_shared<ICPLocalizer>(m_localization_config.icp_config);
   m_icp_localizer->loadMap(m_localization_config.global_map_file);
-  m_relocalization_pose_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
-      "/initialpose", 1, std::bind(&LIOLocalizationNode::initPoseCB, this, std::placeholders::_1));
-  m_global_map_pub =
-      this->create_publisher<sensor_msgs::msg::PointCloud2>("/global_map", rclcpp::QoS(1).transient_local());
+  // m_relocalization_pose_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+  //     "/initialpose", 1, std::bind(&LIOLocalizationNode::initPoseCB, this, std::placeholders::_1));
+  // m_global_map_pub =
+  //     this->create_publisher<sensor_msgs::msg::PointCloud2>("/global_map", rclcpp::QoS(1).transient_local());
 
-  LOG(INFO) << "refine map points size: " << m_icp_localizer->refineMap()->size();
- 
-  publishGlobalMap(m_icp_localizer->refineMap());
+  // LOG(INFO) << "refine map points size: " << m_icp_localizer->refineMap()->size();
+
+  // publishGlobalMap(m_icp_localizer->refineMap());
   // 定位时，采用全局地图作为匹配的target地图，且不更新
-  m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
+  // m_builder->setLocalizationGlobalMap(m_icp_localizer->refineMap());
+
 }
 
 bool LIOLocalizationNode::ready() {
-  if (m_relocalize_success) {
-    return true;
-  }
+  // if (m_relocalize_success) {
+  //   return true;
+  // }
 
-  relocalization();
-  return m_relocalize_success;
+  // relocalization();
+  // return m_relocalize_success;
+  return true;
 }
 
 void LIOLocalizationNode::loadParameters() {
@@ -67,8 +69,9 @@ void LIOLocalizationNode::loadParameters() {
 
   m_builder_config.gravity_align_to_global_map = localization_config["gravity_align_to_global_map"].as<bool>();
 
-  if (config["update_map"]) {
-    m_builder_config.update_map = config["update_map"].as<bool>();
+  // update map的配置在localization中
+  if (localization_config["update_map"]) {
+    m_builder_config.update_map = localization_config["update_map"].as<bool>();
   }
   // 读取上次保留的定位结果，用于重定位
   m_saved_pose_file_path = saved_pose_file_path;
@@ -78,7 +81,7 @@ void LIOLocalizationNode::loadParameters() {
 void LIOLocalizationNode::publishGlobalMap(CloudType::Ptr cloud) {
   sensor_msgs::msg::PointCloud2 cloud_msg;
   pcl::toROSMsg(*cloud, cloud_msg);
-  cloud_msg.header.frame_id = m_node_config.world_frame;
+  cloud_msg.header.frame_id = m_node_config.global_frame;
   cloud_msg.header.stamp = this->get_clock()->now();
   m_global_map_pub->publish(cloud_msg);
 }
@@ -229,11 +232,15 @@ void LIOLocalizationNode::relocalization() {
     transform_w_l.topRightCorner(3, 1) = transform_global_local.topRightCorner(3, 1).cast<double>();
 
     M4D transform_w_i = transform_w_l * transform_i_l.inverse();
-
-    State& init_state = m_kf->x();
-    init_state.r_wi = transform_w_i.topLeftCorner(3, 3);
-    init_state.t_wi = transform_w_i.topRightCorner(3, 1);
-    LOG(INFO) << "state after relocalization: \n" << init_state;
+    // 更新到kf中
+    // State& init_state = m_kf->x();
+    // init_state.r_wi = transform_w_i.topLeftCorner(3, 3);
+    // init_state.t_wi = transform_w_i.topRightCorner(3, 1);
+    // LOG(INFO) << "state after relocalization: \n" << init_state;
+    // 更新map到local的tf
+    broadCastTF(m_tf_broadcaster, m_node_config.global_frame, m_node_config.world_frame, 
+      m_state_data.last_lidar_time, 
+      transform_w_i.topRightCorner(3, 1), transform_w_i.topLeftCorner(3, 3));
 
     // 清空数据缓存，避免重定位期间数据堆积过多
     {

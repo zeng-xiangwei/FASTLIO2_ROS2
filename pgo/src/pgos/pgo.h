@@ -5,6 +5,7 @@
 #include <pcl/common/transforms.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/registration/icp.h>
+#include <pcl/io/pcd_io.h>
 #include <gtsam/geometry/Rot3.h>
 #include <gtsam/geometry/Pose3.h>
 #include <gtsam/nonlinear/ISAM2.h>
@@ -12,26 +13,10 @@
 #include <gtsam/slam/PriorFactor.h>
 #include <gtsam/slam/BetweenFactor.h>
 #include <gtsam/nonlinear/NonlinearFactorGraph.h>
+#include "simple_pgo.h"
+#include "icp_localizer.h"
 
-struct KeyPoseWithCloud
-{
-    M3D r_local;
-    V3D t_local;
-    M3D r_global;
-    V3D t_global;
-    double time;
-    CloudType::Ptr body_cloud;
-};
-struct LoopPair
-{
-    size_t source_id;
-    size_t target_id;
-    M3D r_offset;
-    V3D t_offset;
-    double score;
-};
-
-struct Config
+struct PgoConfig
 {
     double key_pose_delta_deg = 10;
     double key_pose_delta_trans = 1.0;
@@ -45,13 +30,25 @@ struct Config
     double global_score_tresh = 0.15;
     std::string global_pcd_file = "";
     std::string model = "map";
+    bool match_enable = false;
+    int pose_load_mode = 0;
+    Eigen::Vector3d initial_pose_r = Eigen::Vector3d::Zero();
+    Eigen::Vector3d initial_pose_t = Eigen::Vector3d::Zero();
+    std::string initial_pose_file = "";
+    double angle_thresh = 0.1;
+    double trans_thresh = 0.1;
 
+    ICPConfig icp_config;
 };
 
 class PGO
 {
 public:
-    PGO(const Config &config);
+    PGO(const PgoConfig &config);
+
+    void loadPose();
+    bool initialPose(const CloudWithPose &cloud_with_pose, const Eigen::Vector3d &init_pos, 
+        const Eigen::Quaterniond &init_rot);
 
     bool isKeyPose(const PoseWithTime &pose);
 
@@ -70,11 +67,17 @@ public:
     M3D offsetR() { return m_r_offset; }
     V3D offsetT() { return m_t_offset; }
 
+    void Match();
+
     void loadMap();
     void GlobalMatch();
+    
+    bool getGlobalMapLoadStatus() { return global_map_load; }
+
+    pcl::PointCloud<pcl::PointXYZI>::Ptr getMapCloud();
 
 private:
-    Config m_config;
+    PgoConfig m_config;
     std::vector<KeyPoseWithCloud> m_key_poses;
     std::vector<std::pair<size_t, size_t>> m_history_pairs;
     std::vector<LoopPair> m_cache_pairs;
@@ -85,8 +88,15 @@ private:
     gtsam::NonlinearFactorGraph m_graph;
     pcl::IterativeClosestPoint<PointType, PointType> m_icp;
 
-    pcl::IterativeClosestPoint<PointType, PointType> global_icp;
+    // pcl::IterativeClosestPoint<PointType, PointType> global_icp;
     size_t global_idx;
+    
     bool global_map_load;
-    pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud
+    pcl::PointCloud<pcl::PointXYZI>::Ptr map_cloud;
+    M3D initial_pose_r;
+    V3D initial_pose_t;
+    double angle_thresh;
+    double trans_thresh;
+
+    std::shared_ptr<ICPLocalizer> m_icp_localizer;
 };

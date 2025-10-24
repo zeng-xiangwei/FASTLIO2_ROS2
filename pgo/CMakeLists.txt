@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
 project(pgo)
 
 set(CMAKE_BUILD_TYPE "Release")
@@ -32,22 +35,24 @@ find_package(interface REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(glog REQUIRED)
 
-
 include_directories(
   ${EIGEN3_INCLUDE_DIR}
   ${PCL_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-set(SRC_LIST src/pgos/commons.cpp
-             src/pgos/simple_pgo.cpp
-             src/utils/file_writer.cpp
-             src/utils/point_cloud_3d_to_2d_grid.cpp
-             src/utils/occupancy_map.cpp)
+set(SRC_LIST
+  src/pgos/commons.cpp
+  src/pgos/icp_localizer.cpp
+  src/pgos/pgo.cpp
+  src/utils/file_writer.cpp
+  src/utils/point_cloud_3d_to_2d_grid.cpp
+  src/utils/occupancy_map.cpp)
 
 add_executable(pgo_node src/pgo_node.cpp ${SRC_LIST})
 ament_target_dependencies(pgo_node rclcpp std_msgs sensor_msgs nav_msgs message_filters pcl_conversions tf2_ros geometry_msgs visualization_msgs interface GTSAM)
-target_link_libraries(pgo_node ${PCL_LIBRARIES} gtsam yaml-cpp glog::glog)
+target_link_libraries(pgo_node 
+  ${PCL_LIBRARIES} gtsam yaml-cpp glog)
 
 set(tools_3d_to_2d_src_list
   src/tools_3d_to_2d.cpp
@@ -56,7 +61,8 @@ set(tools_3d_to_2d_src_list
   src/utils/occupancy_map.cpp
 )
 add_executable(tools_3d_to_2d_gridmap ${tools_3d_to_2d_src_list})
-target_link_libraries(tools_3d_to_2d_gridmap ${PCL_LIBRARIES} glog::glog yaml-cpp)
+target_link_libraries(tools_3d_to_2d_gridmap 
+  ${PCL_LIBRARIES} glog yaml-cpp)
 ament_target_dependencies(tools_3d_to_2d_gridmap rclcpp)
 
 set(occupancy_map_saver_src_list
