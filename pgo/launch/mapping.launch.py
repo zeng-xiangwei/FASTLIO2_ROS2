@@ -5,7 +5,7 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     rviz_cfg = PathJoinSubstitution(
-        [FindPackageShare("pgo"), "rviz", "pgo.rviz"]
+        [FindPackageShare("pgo"), "rviz", "pgo_mapping.rviz"]
     )
     pgo_config_path = PathJoinSubstitution(
         [FindPackageShare("pgo"), "config", "pgo.yaml"]

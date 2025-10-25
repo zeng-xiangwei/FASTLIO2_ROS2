@@ -12,24 +12,6 @@
 #include <gtsam/slam/BetweenFactor.h>
 #include <gtsam/nonlinear/NonlinearFactorGraph.h>
 
-struct KeyPoseWithCloud
-{
-    M3D r_local;
-    V3D t_local;
-    M3D r_global;
-    V3D t_global;
-    double time;
-    CloudType::Ptr body_cloud;
-};
-struct LoopPair
-{
-    size_t source_id;
-    size_t target_id;
-    M3D r_offset;
-    V3D t_offset;
-    double score;
-};
-
 struct Config
 {
     double key_pose_delta_deg = 10;

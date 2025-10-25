@@ -37,6 +37,7 @@ struct PgoConfig
     std::string initial_pose_file = "";
     double angle_thresh = 0.1;
     double trans_thresh = 0.1;
+    size_t max_key_poses = 1000;
 
     ICPConfig icp_config;
 };
@@ -90,6 +91,7 @@ private:
 
     // pcl::IterativeClosestPoint<PointType, PointType> global_icp;
     size_t global_idx;
+    size_t key_size_all;
     
     bool global_map_load;
     pcl::PointCloud<pcl::PointXYZI>::Ptr map_cloud;
@@ -97,6 +99,8 @@ private:
     V3D initial_pose_t;
     double angle_thresh;
     double trans_thresh;
+    bool have_add_global_pose = false;
+
 
     std::shared_ptr<ICPLocalizer> m_icp_localizer;
 };

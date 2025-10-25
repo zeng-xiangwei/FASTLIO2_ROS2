@@ -33,7 +33,9 @@ public:
     ICPConfig &config() { return m_config; }
     CloudType::Ptr roughMap() { return m_rough_tgt; }
     CloudType::Ptr refineMap() { return m_refine_tgt; }
-
+    
+    double getRoughScore() { return rough_score; }
+    double getRefineScore() { return refine_score; }
 private:
     ICPConfig m_config;
     pcl::VoxelGrid<PointType> m_voxel_filter;
@@ -44,4 +46,6 @@ private:
     CloudType::Ptr m_refine_tgt;
     CloudType::Ptr m_rough_tgt;
     std::string m_pcd_path;
+    double rough_score = 0.0;
+    double refine_score = 0.0;
 };

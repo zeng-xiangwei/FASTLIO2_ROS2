@@ -14,7 +14,8 @@ pgo_config:
     min_loop_detect_duration: 5.0
 
     global_score_tresh: 0.15
-    global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
+    # global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
+    global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
     # global_pcd_file: " "
     # model: mapping
     model: localization
@@ -27,8 +28,9 @@ pgo_config:
     initial_pose_file: " "
     # used for initial local
     # angle_thresh: 0.1
-    angle_thresh: 100
-    trans_thresh: 100
+    angle_thresh: 10
+    trans_thresh: 10
+    max_key_poses: 1000
 
     icp_config:
         rough_scan_resolution: 0.5

@@ -31,9 +31,11 @@ PGO::PGO(const PgoConfig &config) : m_config(config)
 
     global_idx = SIZE_MAX;
     global_map_load = false;
+    key_size_all = 0;
     // 加载初始位姿，目前是通过rviz指定的，所这这里暂时不需要
     // loadPose();
     m_icp_localizer = std::make_shared<ICPLocalizer>(m_config.icp_config);
+    m_key_poses.reserve(m_config.max_key_poses);
 }
 
 
@@ -93,37 +95,6 @@ bool PGO::initialPose(const CloudWithPose &cloud_with_pose,
         loadMap();
     }
 
-    // if (!map_cloud)
-    // {
-    //     std::cout << "current map cloud is empty" << std::endl;
-    //     return false;
-    // }
-
-    // only used the current frame
-    // CloudType::Ptr source_cloud = getSubMap(m_key_poses.size() - 1, 0, m_config.submap_resolution);
-
-    // CloudType::Ptr body_cloud = cloud_with_pose.cloud;
-    // CloudType::Ptr global_cloud(new CloudType);
-    // pcl::transformPointCloud(*body_cloud, *global_cloud, initial_pose_t, 
-    //     Eigen::Quaterniond(initial_pose_r));
-    // pcl::transformPointCloud(*body_cloud, *global_cloud, init_pose_t, init_pose_r);
-
-    // if (resolution > 0)
-    // {
-    //     pcl::VoxelGrid<PointType> voxel_grid;
-    //     voxel_grid.setLeafSize(resolution, resolution, resolution);
-    //     voxel_grid.setInputCloud(ret);
-    //     voxel_grid.filter(*ret);
-    // }
-
-    // pcl::PointCloud<pcl::PointXYZI>::Ptr align_cloud(new pcl::PointCloud<pcl::PointXYZI>);
-    // global_icp.setInputSource(global_cloud);
-    // global_icp.setInputTarget(map_cloud);
-    // global_icp.align(*align_cloud);
-    // if (!global_icp.hasConverged() || global_icp.getFitnessScore() > m_config.global_score_tresh)
-    //     return ;
-    // M4F global_transform = global_icp.getFinalTransformation();
-
     m_icp_localizer->setInput(cloud_with_pose.cloud);
     M4F transform_global_local = M4F::Identity();
     transform_global_local.topRightCorner(3, 1) = init_pose_t.cast<float>();
@@ -159,12 +130,15 @@ bool PGO::initialPose(const CloudWithPose &cloud_with_pose,
 bool PGO::addKeyPose(const CloudWithPose &cloud_with_pose)
 {
     bool is_key_pose = isKeyPose(cloud_with_pose.pose);
-    if(m_config.model == "mapping")
-    {
-        if (!is_key_pose)
-            return false;
-    }
-    size_t idx = m_key_poses.size();
+    // if(m_config.model == "mapping")
+    // {
+    //     if (!is_key_pose)
+    //         return false;
+    // }
+    if (!is_key_pose)
+        return false;
+    // size_t idx = m_key_poses.size();
+    size_t idx = key_size_all;
     M3D init_r = m_r_offset * cloud_with_pose.pose.r;
     V3D init_t = m_r_offset * cloud_with_pose.pose.t + m_t_offset;
     // 添加初始值
@@ -196,6 +170,11 @@ bool PGO::addKeyPose(const CloudWithPose &cloud_with_pose)
     item.r_global = init_r;
     item.t_global = init_t;
     m_key_poses.push_back(item);
+    key_size_all++;
+    // 如果m_key_poses的size大于某个数量，删除一半的最早的key pose,这个只在定位的时候会生效
+    // if (m_key_poses.size() > static_cast<size_t>(m_config.max_key_poses))
+    if (m_key_poses.size() > m_config.max_key_poses && m_config.model == "localization")
+        m_key_poses.erase(m_key_poses.begin(), m_key_poses.begin() + m_config.max_key_poses/2);
     return true;
 }
 
@@ -310,7 +289,7 @@ void PGO::searchForLoopPairs()
 void PGO::Match() {
     if (m_config.model == "localization" && m_config.match_enable)
     {
-        // GlobalMatch();
+        GlobalMatch();
     }
     else if (m_config.model == "mapping")
     {
@@ -318,39 +297,50 @@ void PGO::Match() {
     }
 
     smoothAndUpdate();
-
-    // if(m_config.model == "localization")
-    // {
-
-    // }
-        
+    
 }
 void PGO::GlobalMatch()
 {
-    // if (!map_cloud)
-    //     return;
-    // pcl::PointCloud<pcl::PointXYZI>::Ptr align_cloud(new pcl::PointCloud<pcl::PointXYZI>);
-    // // only used the current frame
-    // CloudType::Ptr source_cloud = getSubMap(m_key_poses.size() - 1, 0, m_config.submap_resolution);
+    // m_icp_localizer->setInput(cloud_with_pose.cloud);
+    m_icp_localizer->setInput(m_key_poses.back().body_cloud);
 
-    // global_icp.setInputSource(source_cloud);
-    // global_icp.setInputTarget(map_cloud);
-    // global_icp.align(*align_cloud);
-    // if (!global_icp.hasConverged() || global_icp.getFitnessScore() > m_config.global_score_tresh)
-    //     return;
-    // M4F global_transform = global_icp.getFinalTransformation();
+    // double转float会有损失？
+    M4F transform_global_local = M4F::Identity();
+    transform_global_local.topRightCorner(3, 1) = m_key_poses.back().t_global.cast<float>();
+    transform_global_local.topLeftCorner(3, 3) = m_key_poses.back().r_global.cast<float>();  
+    // 打印匹配需要的耗时
+    auto start = std::chrono::steady_clock::now();
+    if(m_icp_localizer->align(transform_global_local)) {
+        // update offset by icp
+        m_r_offset = transform_global_local.block<3, 3>(0, 0).cast<double>();
+        m_t_offset = transform_global_local.block<3, 1>(0, 3).cast<double>();
+    }
+    // 打印匹配耗时
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "GlobalMatch time: " 
+        << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
+        << " ms" << std::endl;
 
-    // std::cout << "global_transform: " << global_transform << std::endl;
+    std::cout << "GlobalMatch score: " << m_icp_localizer->getRefineScore() << std::endl;
+    std::cout << "GlobalMatch r_offset: " << m_r_offset << std::endl;
+    std::cout << "GlobalMatch t_offset: " << m_t_offset << std::endl;
+
+    // 添加全局地图的初始位姿，都是0
+    if(!have_add_global_pose)
+    {
+        m_initial_values.insert(global_idx, gtsam::Pose3(gtsam::Rot3(), gtsam::Point3()));
+        have_add_global_pose = true;
+    }
 
     // size_t cur_idx = m_key_poses.size() - 1;
-
-    // LoopPair one_pair;
-    // one_pair.source_id = cur_idx;
-    // one_pair.target_id = global_idx;
-    // one_pair.score = m_icp.getFitnessScore();
-    // one_pair.r_offset = global_transform.block<3, 3>(0, 0).cast<double>();
-    // one_pair.t_offset= global_transform.block<3, 1>(0, 3).cast<double>();
-    // m_cache_pairs.push_back(one_pair);
+    size_t cur_idx = key_size_all - 1;
+    LoopPair one_pair;
+    one_pair.source_id = cur_idx;
+    one_pair.target_id = global_idx;
+    one_pair.score = m_icp_localizer->getRefineScore();
+    one_pair.r_offset = m_r_offset;
+    one_pair.t_offset= m_t_offset;
+    m_cache_pairs.push_back(one_pair);
 }
 
 void PGO::smoothAndUpdate()
@@ -367,6 +357,8 @@ void PGO::smoothAndUpdate()
         }
         std::vector<LoopPair>().swap(m_cache_pairs);
     }
+    // 打印isam2的优化耗时
+    auto start = std::chrono::steady_clock::now();
     // smooth and mapping
     m_isam2->update(m_graph, m_initial_values);
     m_isam2->update();
@@ -377,6 +369,12 @@ void PGO::smoothAndUpdate()
         m_isam2->update();
         m_isam2->update();
     }
+    // 打印isam2的优化耗时，按照微妙打印
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "isam2 time: " 
+        << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
+        << " us" << std::endl;
+
     m_graph.resize(0);
     m_initial_values.clear();
 
@@ -398,18 +396,7 @@ void PGO::smoothAndUpdate()
 
 void PGO::loadMap()
 {
-    // if (m_config.global_pcd_file.empty())
-    // {
-    //     std::cout << "Global map file is empty" <<std::endl;
-    //     // return false;
-    // }
-    // map_cloud.reset(new pcl::PointCloud<pcl::PointXYZI>);
-    // if (pcl::io::loadPCDFile(m_config.global_pcd_file, *map_cloud) == -1)
-    // {
-    //     std::cerr << "Failed to load map cloud from " << m_config.global_pcd_file << std::endl;
-    //     // return false;
-    // }
-    
+
     global_map_load = m_icp_localizer->loadMap(m_config.global_pcd_file);
     // global_map_load = true;
     // return true;

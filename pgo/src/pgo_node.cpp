@@ -65,13 +65,15 @@ void PGONode::loadParameters() {
   m_pgo_config.global_score_tresh = pgo_config["global_score_tresh"].as<double>();
   m_pgo_config.global_pcd_file = pgo_config["global_pcd_file"].as<std::string>();
   m_pgo_config.model = pgo_config["model"].as<std::string>();
+  m_pgo_config.match_enable = pgo_config["match_enable"].as<bool>();
   m_pgo_config.initial_pose_r = pgo_config["initial_pose_r"].as<Eigen::Vector3d>();
   m_pgo_config.initial_pose_t = pgo_config["initial_pose_t"].as<Eigen::Vector3d>();
   m_pgo_config.pose_load_mode = pgo_config["pose_load_mode"].as<int>();
   m_pgo_config.initial_pose_file = pgo_config["initial_pose_file"].as<std::string>();
   m_pgo_config.angle_thresh = pgo_config["angle_thresh"].as<double>();
   m_pgo_config.trans_thresh = pgo_config["trans_thresh"].as<double>();
-
+  m_pgo_config.max_key_poses = pgo_config["max_key_poses"].as<int>();
+  
   YAML::Node icp_config = pgo_config["icp_config"];
   m_pgo_config.icp_config.rough_scan_resolution = icp_config["rough_scan_resolution"].as<double>();
   m_pgo_config.icp_config.rough_map_resolution = icp_config["rough_map_resolution"].as<double>();
@@ -211,7 +213,7 @@ void PGONode::timerCB() {
   cur_time.sec = cp.pose.sec;
   cur_time.nanosec = cp.pose.nsec;
 
-  if(!initial_state)
+  if(!initial_state &&  m_pgo_config.model == "localization")
   {
     if(!getInitPose(init_pos, init_rot)) {
       return;
@@ -221,9 +223,11 @@ void PGONode::timerCB() {
     }
 
     //加载地图并发布到rviz
-    if(!m_pgo->getGlobalMapLoadStatus()) {
+    if(m_pgo->getGlobalMapLoadStatus()) {
+      std::cout << "Load global map."  << std::endl;
       publishGlobalMap(m_pgo->getMapCloud());
     }
+
     std::cout << "initial pose success." << std::endl;
     std::cout << "initial pose: " << init_pos.transpose() << " " 
         << init_rot.coeffs().transpose() << std::endl;
@@ -232,10 +236,10 @@ void PGONode::timerCB() {
   }
 
   //test
-  if (true) {
-    sendBroadCastTF(cur_time);
-    return;
-  }
+  // if (true) {
+  //   sendBroadCastTF(cur_time);
+  //   return;
+  // }
 
   if (!m_pgo->addKeyPose(cp)) {
     sendBroadCastTF(cur_time);

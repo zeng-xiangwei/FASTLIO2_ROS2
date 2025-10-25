@@ -21,10 +21,9 @@
 
 #include "interface/srv/save_maps.hpp"
 #include "pgos/commons.h"
-#include "pgos/simple_pgo.h"
+// #include "pgos/simple_pgo.h"
 #include "pgos/pgo.h"
 #include "utils/occupancy_map.h"
-
 
 struct GridMapConfig {
     float grid_2d_z_min = -0.2;

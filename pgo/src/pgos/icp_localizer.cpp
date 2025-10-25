@@ -24,7 +24,6 @@ bool ICPLocalizer::loadMap(const std::string& path) {
   } else {
     pcl::copyPointCloud(*cloud, *m_refine_tgt);
   }
-
   if (m_config.rough_map_resolution > 0) {
     m_voxel_filter.setLeafSize(m_config.rough_map_resolution, m_config.rough_map_resolution,
                                m_config.rough_map_resolution);
@@ -65,10 +64,11 @@ bool ICPLocalizer::align(M4F& guess) {
   m_rough_icp.setInputTarget(m_rough_tgt);
   m_rough_icp.setMaxCorrespondenceDistance(m_config.rough_scan_resolution * 2);
   m_rough_icp.align(*aligned_cloud, guess);
-  if (!m_rough_icp.hasConverged() ||
-      m_rough_icp.getFitnessScore(m_config.rough_score_dis_thresh) > m_config.rough_score_thresh) {
+  if (!m_rough_icp.hasConverged() || 
+    m_rough_icp.getFitnessScore(m_config.rough_score_dis_thresh) > m_config.rough_score_thresh) {
     return false;
   }
+  rough_score = m_rough_icp.getFitnessScore(m_config.rough_score_dis_thresh);
 
   m_refine_icp.setMaximumIterations(m_config.refine_max_iteration);
   m_refine_icp.setInputSource(m_refine_inp);
@@ -79,6 +79,7 @@ bool ICPLocalizer::align(M4F& guess) {
       m_refine_icp.getFitnessScore(m_config.refine_score_dis_thresh) > m_config.refine_score_thresh) {
     return false;
   }
+  refine_score = m_refine_icp.getFitnessScore(m_config.refine_score_dis_thresh);
 
   guess = m_refine_icp.getFinalTransformation();
   return true;
