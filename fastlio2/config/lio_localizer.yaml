@@ -53,6 +53,9 @@ r_carbody_lidar: [-1.00000, -0.00000, 0.00000,
                   0.00000, -1.00000, 0.00000, 
                   0.00000, 0.00000, 1.00000]
 
+# 发布的线速度、角速度是否表示在车体系下，false: 表示在世界系下，true: 表示在车体系下
+velocity_in_carbody: false
+
 localization:
   global_map_file: "/home/diana/vln/fastlio2-ros2_ws/data/map.pcd"
 

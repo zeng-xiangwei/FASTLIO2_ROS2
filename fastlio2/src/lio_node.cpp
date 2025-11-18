@@ -231,12 +231,18 @@ void LIONode::publishLiOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::Shar
   V3D trans = m_kf->x().t_wi;
   V3D vel = m_kf->x().v;
   M3D rot = m_kf->x().r_wi;
-  publishOdometry(odom_pub, frame_id, child_frame, time, trans, rot, vel);
+
+  // 速度和角速度都表示在 imu 系下
+  vel = m_kf->x().r_wi.transpose() * vel;
+  // 根据 imu 测量值得到角速度
+  V3D gyro = m_package.imus.empty() ? V3D::Zero() : m_package.imus.back().gyro;
+  gyro = gyro - m_kf->x().bg;
+  publishOdometry(odom_pub, frame_id, child_frame, time, trans, rot, vel, gyro);
 }
 
 void LIONode::publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub, std::string frame_id,
                               std::string child_frame, const double& time, const V3D& trans, const M3D& rot,
-                              const V3D& vel) {
+                              const V3D& vel, const V3D& gyro) {
   if (odom_pub->get_subscription_count() <= 0) return;
   nav_msgs::msg::Odometry odom;
   odom.header.frame_id = frame_id;
@@ -254,6 +260,10 @@ void LIONode::publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::Shared
   odom.twist.twist.linear.x = vel.x();
   odom.twist.twist.linear.y = vel.y();
   odom.twist.twist.linear.z = vel.z();
+
+  odom.twist.twist.angular.x = gyro.x();
+  odom.twist.twist.angular.y = gyro.y();
+  odom.twist.twist.angular.z = gyro.z();
   odom_pub->publish(odom);
 }
 
@@ -326,12 +336,17 @@ void LIONode::timerCB() {
   }
   auto t1 = std::chrono::high_resolution_clock::now();
   m_builder->process(m_package);
-  m_imu_pose_predictor->setLioState({m_kf->x(), m_package.cloud_end_time});
   auto t2 = std::chrono::high_resolution_clock::now();
+  V3D gyro = m_package.imus.empty() ? V3D::Zero() : m_package.imus.back().gyro;
+  gyro = gyro - m_kf->x().bg;
+  m_imu_pose_predictor->setLioState({m_kf->x(), m_package.cloud_end_time, gyro, m_kf->x().v});
+  auto t3 = std::chrono::high_resolution_clock::now();
 
   if (m_node_config.print_time_cost) {
     auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
-    RCLCPP_WARN(this->get_logger(), "Time cost: %.2f ms", time_used);
+    auto set_lio_state_time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t3 - t2).count() * 1000;
+    RCLCPP_WARN(this->get_logger(), "lio process Time cost: %.2f ms, setLioState cost %.2f ms", time_used,
+                set_lio_state_time_used);
   }
 
   if (m_builder->status() != BuilderStatus::MAPPING) return;
@@ -368,7 +383,7 @@ void LIONode::timerCB() {
   // publishVLACloud(m_package.cloud_end_time, body_cloud);
 
   auto end = std::chrono::high_resolution_clock::now();
-  auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+  auto time_used = std::chrono::duration_cast<std::chrono::duration<double>>(end - t1).count() * 1000;
   RCLCPP_WARN(this->get_logger(), "end pub, all process time: %.2f ms", time_used);
 }
 
@@ -388,10 +403,13 @@ void LIONode::imuFreqCB() {
   *m_last_imu_frec_state = state;
 
   V3D trans = state.state.t_wi;
-  V3D vel = state.state.v;
   M3D rot = state.state.r_wi;
+
+  // 速度和角速度都表示在 imu 系下
+  V3D vel = rot.transpose() * state.vel;
+  V3D gyro = state.gyro;
   publishOdometry(m_imu_frec_odom_pub, m_node_config.world_frame, m_node_config.body_frame, state.timestamp, trans, rot,
-                  vel);
+                  vel, gyro);
 }
 
 bool LIONode::ready() { return true; }

@@ -71,6 +71,9 @@ void PoseTransformNode::loadParameters() {
   config_.imu_frame = base_config["body_frame"].as<std::string>();
   config_.carbody_frame = base_config["carbody_frame"].as<std::string>();
   config_.lidar_frame = base_config["lidarbody_frame"].as<std::string>();
+  if (base_config["velocity_in_carbody"]) {
+    config_.velocity_in_carbody = base_config["velocity_in_carbody"].as<bool>();
+  }
 }
 
 // 低频的位姿数据（imu系）
@@ -80,7 +83,11 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
-  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+  V3D vel, gyro;
+  // 计算表示在世界系下的车体线速度和角速度
+  calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
+  nav_msgs::msg::Odometry standard_msg =
+      wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot, vel, gyro);
   lidar_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
@@ -102,7 +109,11 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
-  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+  V3D vel, gyro;
+  // 计算表示在世界系下的车体线速度和角速度
+  calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
+  nav_msgs::msg::Odometry standard_msg =
+      wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot, vel, gyro);
   imu_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
@@ -110,6 +121,26 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
       wrapCustomLocalizationMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
   custom_imu_frec_pose_pub_->publish(custom_msg);
 #endif
+}
+
+void PoseTransformNode::calculateCarVelocityAndGyroInWorld(const nav_msgs::msg::Odometry::SharedPtr msg,
+                                                           const Eigen::Quaterniond& rot_w_car, V3D& vel_result,
+                                                           V3D& gyro_result) {
+  V3D vel_in_imu = V3D(msg->twist.twist.linear.x, msg->twist.twist.linear.y, msg->twist.twist.linear.z);
+  V3D gyro_in_imu = V3D(msg->twist.twist.angular.x, msg->twist.twist.angular.y, msg->twist.twist.angular.z);
+  V3D gyro_in_car = config_.T_carbody_imu.rot * gyro_in_imu;
+  V3D vel_in_car = config_.T_carbody_imu.rot * (vel_in_imu + SkewSymmetric(gyro_in_imu) * config_.T_imu_carbody.trans);
+
+  V3D gyro_in_world = rot_w_car * gyro_in_car;
+  V3D vel_in_world = rot_w_car * vel_in_car;
+
+  if (config_.velocity_in_carbody) {
+    vel_result = vel_in_car;
+    gyro_result = gyro_in_car;
+  } else {
+    vel_result = vel_in_world;
+    gyro_result = gyro_in_world;
+  }
 }
 
 void PoseTransformNode::broadCastTF(std::string frame_id, std::string child_frame, const V3D& trans,
@@ -130,7 +161,8 @@ void PoseTransformNode::broadCastTF(std::string frame_id, std::string child_fram
 }
 
 nav_msgs::msg::Odometry PoseTransformNode::wrapStandardPoseMsg(const builtin_interfaces::msg::Time& time,
-                                                               const V3D& trans, const Eigen::Quaterniond& rot) {
+                                                               const V3D& trans, const Eigen::Quaterniond& rot,
+                                                               const V3D& vel, const V3D& gyro) {
   nav_msgs::msg::Odometry msg;
   msg.header.stamp = time;
   msg.header.frame_id = config_.map_frame;
@@ -141,6 +173,13 @@ nav_msgs::msg::Odometry PoseTransformNode::wrapStandardPoseMsg(const builtin_int
   msg.pose.pose.orientation.y = rot.y();
   msg.pose.pose.orientation.z = rot.z();
   msg.pose.pose.orientation.w = rot.w();
+
+  msg.twist.twist.linear.x = vel.x();
+  msg.twist.twist.linear.y = vel.y();
+  msg.twist.twist.linear.z = vel.z();
+  msg.twist.twist.angular.x = gyro.x();
+  msg.twist.twist.angular.y = gyro.y();
+  msg.twist.twist.angular.z = gyro.z();
   return msg;
 }
 

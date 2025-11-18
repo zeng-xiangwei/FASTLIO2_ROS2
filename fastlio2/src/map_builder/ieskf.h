@@ -58,6 +58,10 @@ struct StateWithTime
 {
     State state;
     double timestamp;
+    // imu 系下的角速度
+    V3D gyro;
+    // 世界系下的 imu 速度，这里单列速度是为了使用 ieskf 得到的速度，不再通过 imu 积分得到速度
+    V3D vel;
 };
 
 using loss_func = std::function<void(State &, SharedState &)>;

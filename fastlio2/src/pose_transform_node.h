@@ -26,6 +26,9 @@ class PoseTransformNode : public rclcpp::Node {
     std::string imu_frame = "body";
     std::string lidar_frame = "lidarbody";
     std::string carbody_frame = "carbody";
+
+    // 线速度、角速度是否表示在车体系下，否则表示在世界系下
+    bool velocity_in_carbody = false;
   };
 
   PoseTransformNode(const std::string& node_name);
@@ -41,8 +44,12 @@ class PoseTransformNode : public rclcpp::Node {
   void imuFrecPoseCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
 
   nav_msgs::msg::Odometry wrapStandardPoseMsg(const builtin_interfaces::msg::Time& time, const V3D& trans,
-                                              const Eigen::Quaterniond& rot);
+                                              const Eigen::Quaterniond& rot, const V3D& vel = V3D::Zero(),
+                                              const V3D& gyro = V3D::Zero());
   void broadCastTF(std::string frame_id, std::string child_frame, const V3D& trans, const Eigen::Quaterniond& rot);
+
+  void calculateCarVelocityAndGyroInWorld(const nav_msgs::msg::Odometry::SharedPtr msg,
+                                          const Eigen::Quaterniond& rot_w_car, V3D& vel, V3D& gyro);
 
  private:
   Config config_;

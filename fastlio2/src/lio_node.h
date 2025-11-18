@@ -97,7 +97,7 @@ class LIONode : public rclcpp::Node {
                          std::string child_frame, const double& time);
   void publishOdometry(rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub, std::string frame_id,
                        std::string child_frame, const double& time, const V3D& trans, const M3D& rot,
-                       const V3D& vel = V3D::Zero());
+                       const V3D& vel = V3D::Zero(), const V3D& gyro = V3D::Zero());
 
   void publishPath(rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub, std::string frame_id,
                    const double& time);
