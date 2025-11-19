@@ -74,6 +74,9 @@ void PoseTransformNode::loadParameters() {
   if (base_config["velocity_in_carbody"]) {
     config_.velocity_in_carbody = base_config["velocity_in_carbody"].as<bool>();
   }
+  if (base_config["calculate_by_average"]) {
+    config_.calculate_by_average = base_config["calculate_by_average"].as<bool>();
+  }
 }
 
 // 低频的位姿数据（imu系）
@@ -83,9 +86,27 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
+
   V3D vel, gyro;
-  // 计算表示在世界系下的车体线速度和角速度
-  calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
+
+  // 如果存在上一帧位姿，则计算速度和角速度
+  if (has_last_lidar_pose_) {
+    double dt = rclcpp::Time(msg->header.stamp).seconds() - last_lidar_frec_pose_time_;
+    calculateVelocityFromPoses(last_lidar_frec_pose_, T_w_carbody, dt, vel, gyro);
+    if (config_.velocity_in_carbody) {
+      MinPose T_carbody_w = T_w_carbody.inverse();
+      vel = T_carbody_w.rot * vel;
+      gyro = T_carbody_w.rot * gyro;
+    }
+  } else {
+    // 第一帧没有历史数据，速度设为零
+    vel.setZero();
+    gyro.setZero();
+  }
+
+  if (!config_.calculate_by_average) {
+    calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
+  }
   nav_msgs::msg::Odometry standard_msg =
       wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot, vel, gyro);
   lidar_frec_pose_pub_->publish(standard_msg);
@@ -98,22 +119,33 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
 
   std::stringstream ss;
   ss << "T_w_carbody in lidar frec: t: " << T_w_carbody.trans.transpose()
-     << ", q: " << T_w_carbody.rot.coeffs().transpose();
+     << ", q: " << T_w_carbody.rot.coeffs().transpose() << ", v: " << vel.transpose() << ", w: " << gyro.transpose();
   RCLCPP_INFO(this->get_logger(), ss.str().c_str());
+
+  // 更新历史位姿
+  last_lidar_frec_pose_ = T_w_carbody;
+  has_last_lidar_pose_ = true;
+  last_lidar_frec_pose_time_ = rclcpp::Time(msg->header.stamp).seconds();
+
+  // TODO: 如果回调函数是多线程的，需要增加互斥锁
+  lidar_frec_velocity_ = vel;
+  lidar_frec_angular_velocity_ = gyro;
 }
 
-// 高频的位姿数据（imu系）
+// 修改 imuFrecPoseCallback 函数
 void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+  // 保存当前消息作为历史消息
+  nav_msgs::msg::Odometry current_pose = *msg;
+
   V3D trans(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z);
   Eigen::Quaterniond rot(msg->pose.pose.orientation.w, msg->pose.pose.orientation.x, msg->pose.pose.orientation.y,
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
-  V3D vel, gyro;
-  // 计算表示在世界系下的车体线速度和角速度
-  calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
-  nav_msgs::msg::Odometry standard_msg =
-      wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot, vel, gyro);
+
+  // imu 的速度直接用激光频率下的速度，因为imu 频率下的速度不稳定
+  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot,
+                                                             lidar_frec_velocity_, lidar_frec_angular_velocity_);
   imu_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
@@ -141,6 +173,26 @@ void PoseTransformNode::calculateCarVelocityAndGyroInWorld(const nav_msgs::msg::
     vel_result = vel_in_world;
     gyro_result = gyro_in_world;
   }
+}
+
+// 新增函数：从两个位姿和时间差计算速度和角速度
+void PoseTransformNode::calculateVelocityFromPoses(const MinPose& pose1, const MinPose& pose2, double dt, V3D& velocity,
+                                                   V3D& angular_velocity) {
+  if (dt <= 0.0 || dt > 1.0) {
+    velocity.setZero();
+    angular_velocity.setZero();
+    return;
+  }
+
+  // 线速度计算
+  velocity = (pose2.trans - pose1.trans) / dt;
+
+  // 计算相对旋转
+  Eigen::Quaterniond diff_quat = pose2.rot.inverse() * pose1.rot.inverse();
+
+  // 转换为轴角表示并计算角速度
+  Eigen::AngleAxisd angle_axis(diff_quat);
+  angular_velocity = angle_axis.axis() * angle_axis.angle() / dt;
 }
 
 void PoseTransformNode::broadCastTF(std::string frame_id, std::string child_frame, const V3D& trans,

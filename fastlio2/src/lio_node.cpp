@@ -339,7 +339,8 @@ void LIONode::timerCB() {
   auto t2 = std::chrono::high_resolution_clock::now();
   V3D gyro = m_package.imus.empty() ? V3D::Zero() : m_package.imus.back().gyro;
   gyro = gyro - m_kf->x().bg;
-  m_imu_pose_predictor->setLioState({m_kf->x(), m_package.cloud_end_time, gyro, m_kf->x().v});
+  V3D vel_in_imu = m_kf->x().r_wi.transpose() * m_kf->x().v;
+  m_imu_pose_predictor->setLioState({m_kf->x(), m_package.cloud_end_time, gyro, vel_in_imu});
   auto t3 = std::chrono::high_resolution_clock::now();
 
   if (m_node_config.print_time_cost) {
@@ -406,7 +407,7 @@ void LIONode::imuFreqCB() {
   M3D rot = state.state.r_wi;
 
   // 速度和角速度都表示在 imu 系下
-  V3D vel = rot.transpose() * state.vel;
+  V3D vel = state.vel;
   V3D gyro = state.gyro;
   publishOdometry(m_imu_frec_odom_pub, m_node_config.world_frame, m_node_config.body_frame, state.timestamp, trans, rot,
                   vel, gyro);

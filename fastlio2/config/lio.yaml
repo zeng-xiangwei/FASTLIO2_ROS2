@@ -55,3 +55,5 @@ r_carbody_lidar: [-1.00000, -0.00000, 0.00000,
 
 # 发布的线速度、角速度是否表示在车体系下，false: 表示在世界系下，true: 表示在车体系下
 velocity_in_carbody: false
+# 是否使用前后两帧计算速度，true: 使用前后两帧计算速度，false: 使用 fastlio 优化出的速度
+calculate_by_average: false
