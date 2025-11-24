@@ -31,6 +31,11 @@ class PoseTransformNode : public rclcpp::Node {
     std::string lidar_frame = "lidarbody";
     std::string carbody_frame = "carbody";
     std::string global_frame = "global";
+
+    // 线速度、角速度是否表示在车体系下，否则表示在世界系下
+    bool velocity_in_carbody = false;
+    // 是否使用前后两帧计算速度，true: 使用前后两帧计算速度，false: 使用 fastlio 优化出的速度
+    bool calculate_by_average = false;
   };
 
   PoseTransformNode(const std::string& node_name);
@@ -46,8 +51,15 @@ class PoseTransformNode : public rclcpp::Node {
   void imuFrecPoseCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
 
   nav_msgs::msg::Odometry wrapStandardPoseMsg(const builtin_interfaces::msg::Time& time, const V3D& trans,
-                                              const Eigen::Quaterniond& rot);
+                                              const Eigen::Quaterniond& rot, const V3D& vel = V3D::Zero(),
+                                              const V3D& gyro = V3D::Zero());
   void broadCastTF(std::string frame_id, std::string child_frame, const V3D& trans, const Eigen::Quaterniond& rot);
+
+  void calculateCarVelocityAndGyroInWorld(const nav_msgs::msg::Odometry::SharedPtr msg,
+                                          const Eigen::Quaterniond& rot_w_car, V3D& vel, V3D& gyro);
+
+  void calculateVelocityFromPoses(const MinPose& pose1, const MinPose& pose2, double dt, V3D& velocity,
+                                  V3D& angular_velocity);
 
  private:
   Config config_;
@@ -67,4 +79,15 @@ class PoseTransformNode : public rclcpp::Node {
   rclcpp::Publisher<vln_msgs::msg::Localization>::SharedPtr custom_lidar_frec_pose_pub_;
   rclcpp::Publisher<vln_msgs::msg::Localization>::SharedPtr custom_imu_frec_pose_pub_;
 #endif
+
+  MinPose last_lidar_frec_pose_;
+  MinPose last_imu_frec_pose_;
+  double last_lidar_frec_pose_time_ = -1.0;
+  double last_imu_frec_pose_time_ = -1.0;
+  bool has_last_lidar_pose_ = false;
+  bool has_last_imu_pose_ = false;
+
+  // 记录激光频率下的速度，用来作为 imu 频率下的速度
+  V3D lidar_frec_velocity_;
+  V3D lidar_frec_angular_velocity_;
 };
