@@ -37,6 +37,8 @@ void ImuPosePredictor::setLioState(const StateWithTime& lio_state) {
 
     propogate(latest_imu_state_.state, dt, acc, gyro);
     latest_imu_state_.timestamp = imu_data.time;
+    latest_imu_state_.gyro = gyro - latest_imu_state_.state.bg;
+    latest_imu_state_.vel = latest_lio_state_.vel;
     *latest_imu_data_ = imu_data;
 
     predict_duration += dt;
@@ -79,6 +81,8 @@ void ImuPosePredictor::addImuData(const IMUData& imu_data) {
   V3D gyro = (imu_data.gyro + latest_imu_data_->gyro) * 0.5;
   propogate(latest_imu_state_.state, dt, acc, gyro);
   latest_imu_state_.timestamp = imu_data.time;
+  latest_imu_state_.gyro = gyro - latest_imu_state_.state.bg;
+  latest_imu_state_.vel = latest_lio_state_.vel;
   *latest_imu_data_ = imu_data;
 }
 

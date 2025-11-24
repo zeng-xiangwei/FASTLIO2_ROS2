@@ -119,3 +119,13 @@ struct MinPose {
         return MinPose{rot * other.trans + trans, rot * other.rot}; 
     }
 };
+
+
+template<typename Derived>
+inline Eigen::Matrix<typename Derived::Scalar, 3, 3> SkewSymmetric(const Eigen::MatrixBase<Derived> &v3d) {
+  Eigen::Matrix<typename Derived::Scalar, 3, 3> m;
+  m << typename Derived::Scalar(0), -v3d.z(), v3d.y(),
+      v3d.z(), typename Derived::Scalar(0), -v3d.x(),
+      -v3d.y(), v3d.x(), typename Derived::Scalar(0);
+  return m;
+}
