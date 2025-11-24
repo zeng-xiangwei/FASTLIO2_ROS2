@@ -335,7 +335,7 @@ void LIONode::timerCB() {
   if (!syncPackage()) {
     return;
   }
-  // auto t1 = std::chrono::high_resolution_clock::now();
+  auto t1 = std::chrono::high_resolution_clock::now();
   m_builder->process(m_package);
   auto t2 = std::chrono::high_resolution_clock::now();
   V3D gyro = m_package.imus.empty() ? V3D::Zero() : m_package.imus.back().gyro;

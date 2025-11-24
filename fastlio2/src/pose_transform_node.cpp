@@ -87,6 +87,8 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
 
+  // TODO: 在此接收 T^global_local 的tf，并对 T_w_carbody 进行转换
+
   V3D vel, gyro;
 
   // 如果存在上一帧位姿，则计算速度和角速度
@@ -142,6 +144,8 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
+  
+  // TODO: 在此接收 T^global_local 的tf，并对 T_w_carbody 进行转换
 
   // imu 的速度直接用激光频率下的速度，因为imu 频率下的速度不稳定
   nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot,
