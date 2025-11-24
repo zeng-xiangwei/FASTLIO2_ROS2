@@ -315,6 +315,12 @@ void PGO::GlobalMatch()
         m_r_offset = transform_global_local.block<3, 3>(0, 0).cast<double>();
         m_t_offset = transform_global_local.block<3, 1>(0, 3).cast<double>();
     }
+    else {
+        // 增加匹配失败标志
+        std::cout << "GlobalMatch failed" << std::endl;
+        return;
+    }
+
     // 打印匹配耗时
     auto end = std::chrono::steady_clock::now();
     std::cout << "GlobalMatch time: " 
@@ -358,7 +364,7 @@ void PGO::smoothAndUpdate()
         std::vector<LoopPair>().swap(m_cache_pairs);
     }
     // 打印isam2的优化耗时
-    auto start = std::chrono::steady_clock::now();
+    // auto start = std::chrono::steady_clock::now();
     // smooth and mapping
     m_isam2->update(m_graph, m_initial_values);
     m_isam2->update();
@@ -370,10 +376,10 @@ void PGO::smoothAndUpdate()
         m_isam2->update();
     }
     // 打印isam2的优化耗时，按照微妙打印
-    auto end = std::chrono::steady_clock::now();
-    std::cout << "isam2 time: " 
-        << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
-        << " us" << std::endl;
+    // auto end = std::chrono::steady_clock::now();
+    // std::cout << "isam2 time: " 
+    //     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
+    //     << " us" << std::endl;
 
     m_graph.resize(0);
     m_initial_values.clear();

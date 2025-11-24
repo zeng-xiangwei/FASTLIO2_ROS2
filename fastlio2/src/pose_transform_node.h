@@ -4,6 +4,10 @@
 #include <rclcpp/rclcpp.hpp>
 #include <tf2_ros/static_transform_broadcaster.h>
 
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2/exceptions.h>
+
 #include "map_builder/commons.h"
 #ifdef VLN_MSGS_FOUND
 #include <vln_msgs/msg/localization.hpp>
@@ -26,6 +30,7 @@ class PoseTransformNode : public rclcpp::Node {
     std::string imu_frame = "body";
     std::string lidar_frame = "lidarbody";
     std::string carbody_frame = "carbody";
+    std::string global_frame = "global";
   };
 
   PoseTransformNode(const std::string& node_name);
@@ -46,6 +51,10 @@ class PoseTransformNode : public rclcpp::Node {
 
  private:
   Config config_;
+  // 定义tf2 buffer
+  std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+  // 定义tf2 listener
+  std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
 
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr imu_frec_sub_;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr lidar_frec_sub_;

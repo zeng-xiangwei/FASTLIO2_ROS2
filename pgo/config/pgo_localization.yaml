@@ -15,7 +15,8 @@ pgo_config:
 
     global_score_tresh: 0.15
     # global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
-    global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
+    # global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
+    global_pcd_file: /home/haiboliu/project/vln/localization/map/map_no3_building/map.pcd
     # global_pcd_file: " "
     # model: mapping
     model: localization

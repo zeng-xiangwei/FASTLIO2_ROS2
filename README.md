@@ -13,15 +13,30 @@
 3. 添加重定位节点，基于由粗到细两阶段ICP进行重定位
 4. 增加一致性地图优化，基于[BLAM](https://github.com/hku-mars/BALM) (小场景地图) 和[HBA](https://github.com/hku-mars/HBA) (大场景地图)
 
-
+## ////////////////////////////////////////////////////////////////////
 #  FASTLIO2 ROS2 带后端版本
-1. 建图执行：pgo中的 mapping.launch.py
-    ## 保存地图
-    ```shell
-    ros2 service call /pgo/save_maps interface/srv/SaveMaps "{file_path: 'your_save_dir', save_patches: true}"
-    ```
-2. 定位执行：localizer_launch.py
 
+## 主要功能
+（1）增加了pgo后端优化功能
+（2）目前定位模式中，初始位姿还是需要通过rviz手动设置，或者发布initial_pose话题
+
+## 建图执行：pgo中的 mapping.launch.py
+```bash
+    ros2 launch pgo mapping.launch.py
+```
+## 保存地图
+
+```shell
+ros2 service call /pgo/save_maps interface/srv/SaveMaps "{file_path: 'your_save_dir', save_patches: true}"
+```
+
+## 定位执行：localizer_launch.py
+```bash
+    ros2 launch pgo localization.launch.py
+```
+## ////////////////////////////////////////////////////////////////////
+
+# 部署执行
 ## 环境依赖
 1. Ubuntu 22.04
 2. ROS2 Humble

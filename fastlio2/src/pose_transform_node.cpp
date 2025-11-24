@@ -13,6 +13,19 @@ void PoseTransformNode::initRos() {
   broadCastTF(config_.imu_frame, config_.carbody_frame, config_.T_imu_carbody.trans, config_.T_imu_carbody.rot);
   broadCastTF(config_.carbody_frame, config_.lidar_frame, config_.T_carbody_lidar.trans, config_.T_carbody_lidar.rot);
 
+ 
+  // tf_buffer_ = std::make_shared<tf2_ros::Buffer>(
+  //   this->get_clock(), 
+  //   tf2::Duration(10 * 1000000000LL), 
+  //   shared_from_this()
+  // );
+  // // 初始化tf2 listener
+  // tf_listener_ = std::make_shared<tf2_ros::TransformListener>(
+  //   *tf_buffer_,  
+  //   this,         
+  //   false 
+  // );
+
   imu_frec_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
       "lio_imu_frec_odom", rclcpp::QoS(10),
       std::bind(&PoseTransformNode::imuFrecPoseCallback, this, std::placeholders::_1));
@@ -71,6 +84,7 @@ void PoseTransformNode::loadParameters() {
   config_.imu_frame = base_config["body_frame"].as<std::string>();
   config_.carbody_frame = base_config["carbody_frame"].as<std::string>();
   config_.lidar_frame = base_config["lidarbody_frame"].as<std::string>();
+  config_.global_frame = base_config["global_frame"].as<std::string>();
 }
 
 // 低频的位姿数据（imu系）
@@ -81,6 +95,41 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
   nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+
+  // // 获取tf中的global frame到world frame的转换关系
+  // // 查询最新的tf变换
+  // geometry_msgs::msg::TransformStamped transformStamped;
+  // try {
+  //   transformStamped = tf_buffer_->lookupTransform(
+  //     config_.global_frame,        // 目标坐标系
+  //     standard_msg.header.frame_id,// 源坐标系
+  //     tf2::TimePointZero,  // 最近的变换
+  //     // standard_msg.header.stamp,   // 时间戳
+  //     tf2::Duration(100 * 1000000LL) 
+  //   );
+  // } catch (const tf2::TransformException& ex) {
+  //   RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+  //   return;
+  // }
+
+  // V3D trans_global;
+  // trans_global.x() = transformStamped.transform.translation.x;
+  // trans_global.y() = transformStamped.transform.translation.y;
+  // trans_global.z() = transformStamped.transform.translation.z;
+  // Eigen::Quaterniond rot_global(
+  //   transformStamped.transform.rotation.w,  // 实部 w 在前
+  //   transformStamped.transform.rotation.x,  // 虚部 x
+  //   transformStamped.transform.rotation.y,  // 虚部 y
+  //   transformStamped.transform.rotation.z   // 虚部 z
+  // );
+  // rot_global.normalize();
+ 
+  // MinPose T_w_global(trans_global, rot_global);
+  // MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
+  // standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
+  // // 将发布的frame 替换成global frame
+  // standard_msg.header.frame_id = config_.global_frame;
+  // 获取tf中的global frame到world frame的
   lidar_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
