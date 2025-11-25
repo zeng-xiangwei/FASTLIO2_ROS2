@@ -100,7 +100,7 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
-  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+  // nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
 
   // // 获取tf中的global frame到world frame的转换关系
   // // 查询最新的tf变换
