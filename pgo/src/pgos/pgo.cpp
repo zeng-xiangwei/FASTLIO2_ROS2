@@ -318,7 +318,7 @@ void PGO::GlobalMatch()
     else {
         // 增加匹配失败标志
         std::cout << "GlobalMatch failed" << std::endl;
-        return;
+        // return;
     }
 
     // 打印匹配耗时

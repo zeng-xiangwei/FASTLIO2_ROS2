@@ -14,17 +14,18 @@ void PoseTransformNode::initRos() {
   broadCastTF(config_.carbody_frame, config_.lidar_frame, config_.T_carbody_lidar.trans, config_.T_carbody_lidar.rot);
 
  
-  // tf_buffer_ = std::make_shared<tf2_ros::Buffer>(
-  //   this->get_clock(), 
-  //   tf2::Duration(10 * 1000000000LL), 
-  //   shared_from_this()
-  // );
+  tf_buffer_ = std::make_shared<tf2_ros::Buffer>(
+    this->get_clock(), 
+    tf2::Duration(10 * 1000000000LL), 
+    shared_from_this()
+  );
+  tf_buffer_->setUsingDedicatedThread(true);
   // // 初始化tf2 listener
-  // tf_listener_ = std::make_shared<tf2_ros::TransformListener>(
-  //   *tf_buffer_,  
-  //   this,         
-  //   false 
-  // );
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(
+    *tf_buffer_,  
+    this,         
+    false 
+  );
 
   imu_frec_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
       "lio_imu_frec_odom", rclcpp::QoS(10),
@@ -104,51 +105,49 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
 
   // // 获取tf中的global frame到world frame的转换关系
   // // 查询最新的tf变换
-  // geometry_msgs::msg::TransformStamped transformStamped;
-  // try {
-  //   transformStamped = tf_buffer_->lookupTransform(
-  //     config_.global_frame,        // 目标坐标系
-  //     standard_msg.header.frame_id,// 源坐标系
-  //     tf2::TimePointZero,  // 最近的变换
-  //     // standard_msg.header.stamp,   // 时间戳
-  //     tf2::Duration(100 * 1000000LL) 
-  //   );
-  // } catch (const tf2::TransformException& ex) {
-  //   RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
-  //   return;
-  // }
+  geometry_msgs::msg::TransformStamped transformStamped;
+  try {
+    transformStamped = tf_buffer_->lookupTransform(
+      config_.global_frame,        // 目标坐标系
+      msg->header.frame_id,// 源坐标系
+      tf2::TimePointZero,  // 最近的变换
+      // standard_msg.header.stamp,   // 时间戳
+      tf2::Duration(100 * 1000000LL) 
+    );
+  } catch (const tf2::TransformException& ex) {
+    RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+    return;
+  }
 
-  // V3D trans_global;
-  // trans_global.x() = transformStamped.transform.translation.x;
-  // trans_global.y() = transformStamped.transform.translation.y;
-  // trans_global.z() = transformStamped.transform.translation.z;
-  // Eigen::Quaterniond rot_global(
-  //   transformStamped.transform.rotation.w,  // 实部 w 在前
-  //   transformStamped.transform.rotation.x,  // 虚部 x
-  //   transformStamped.transform.rotation.y,  // 虚部 y
-  //   transformStamped.transform.rotation.z   // 虚部 z
-  // );
-  // rot_global.normalize();
+  V3D trans_global;
+  trans_global.x() = transformStamped.transform.translation.x;
+  trans_global.y() = transformStamped.transform.translation.y;
+  trans_global.z() = transformStamped.transform.translation.z;
+  Eigen::Quaterniond rot_global(
+    transformStamped.transform.rotation.w,  // 实部 w 在前
+    transformStamped.transform.rotation.x,  // 虚部 x
+    transformStamped.transform.rotation.y,  // 虚部 y
+    transformStamped.transform.rotation.z   // 虚部 z
+  );
+  rot_global.normalize();
  
-  // MinPose T_w_global(trans_global, rot_global);
-  // MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
+  MinPose T_w_global(trans_global, rot_global);
+  MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
   // standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
-  // // 将发布的frame 替换成global frame
+  // 将发布的frame 替换成global frame
   // standard_msg.header.frame_id = config_.global_frame;
   // 获取tf中的global frame到world frame的
-
-  // TODO: 在此接收 T^global_local 的tf，并对 T_w_carbody 进行转换
 
   V3D vel, gyro;
 
   // 如果存在上一帧位姿，则计算速度和角速度
   if (has_last_lidar_pose_) {
     double dt = rclcpp::Time(msg->header.stamp).seconds() - last_lidar_frec_pose_time_;
-    calculateVelocityFromPoses(last_lidar_frec_pose_, T_w_carbody, dt, vel, gyro);
+    calculateVelocityFromPoses(last_lidar_frec_pose_, T_global_carbody, dt, vel, gyro);
     if (config_.velocity_in_carbody) {
-      MinPose T_carbody_w = T_w_carbody.inverse();
-      vel = T_carbody_w.rot * vel;
-      gyro = T_carbody_w.rot * gyro;
+      MinPose T_carbody_g = T_global_carbody.inverse();
+      vel = T_carbody_g.rot * vel;
+      gyro = T_carbody_g.rot * gyro;
     }
   } else {
     // 第一帧没有历史数据，速度设为零
@@ -157,22 +156,23 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   }
 
   if (!config_.calculate_by_average) {
-    calculateCarVelocityAndGyroInWorld(msg, T_w_carbody.rot, vel, gyro);
+    calculateCarVelocityAndGyroInWorld(msg, T_global_carbody.rot, vel, gyro);
   }
   nav_msgs::msg::Odometry standard_msg =
-      wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot, vel, gyro);
+      wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot, vel, gyro);
+  standard_msg.header.frame_id = config_.global_frame;
   lidar_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
   vln_msgs::msg::Localization custom_msg =
-      wrapCustomLocalizationMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+      wrapCustomLocalizationMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
   custom_lidar_frec_pose_pub_->publish(custom_msg);
 #endif
 
-  std::stringstream ss;
-  ss << "T_w_carbody in lidar frec: t: " << T_w_carbody.trans.transpose()
-     << ", q: " << T_w_carbody.rot.coeffs().transpose() << ", v: " << vel.transpose() << ", w: " << gyro.transpose();
-  RCLCPP_INFO(this->get_logger(), ss.str().c_str());
+  // std::stringstream ss;
+  // ss << "T_w_carbody in lidar frec: t: " << T_w_carbody.trans.transpose()
+  //    << ", q: " << T_w_carbody.rot.coeffs().transpose() << ", v: " << vel.transpose() << ", w: " << gyro.transpose();
+  // RCLCPP_INFO(this->get_logger(), ss.str().c_str());
 
   // 更新历史位姿
   last_lidar_frec_pose_ = T_w_carbody;
@@ -197,14 +197,46 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
   
   // TODO: 在此接收 T^global_local 的tf，并对 T_w_carbody 进行转换
 
+  // // 获取tf中的global frame到world frame的转换关系
+  // // 查询最新的tf变换
+  geometry_msgs::msg::TransformStamped transformStamped;
+  try {
+    transformStamped = tf_buffer_->lookupTransform(
+      config_.global_frame,        // 目标坐标系
+      msg->header.frame_id,// 源坐标系
+      tf2::TimePointZero,  // 最近的变换
+      // standard_msg.header.stamp,   // 时间戳
+      tf2::Duration(100 * 1000000LL) 
+    );
+  } catch (const tf2::TransformException& ex) {
+    RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+    return;
+  }
+
+  V3D trans_global;
+  trans_global.x() = transformStamped.transform.translation.x;
+  trans_global.y() = transformStamped.transform.translation.y;
+  trans_global.z() = transformStamped.transform.translation.z;
+  Eigen::Quaterniond rot_global(
+    transformStamped.transform.rotation.w,  // 实部 w 在前
+    transformStamped.transform.rotation.x,  // 虚部 x
+    transformStamped.transform.rotation.y,  // 虚部 y
+    transformStamped.transform.rotation.z   // 虚部 z
+  );
+  rot_global.normalize();
+ 
+  MinPose T_w_global(trans_global, rot_global);
+  MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
+
   // imu 的速度直接用激光频率下的速度，因为imu 频率下的速度不稳定
-  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot,
+  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot,
                                                              lidar_frec_velocity_, lidar_frec_angular_velocity_);
+  standard_msg.header.frame_id = config_.global_frame;
   imu_frec_pose_pub_->publish(standard_msg);
 
 #ifdef VLN_MSGS_FOUND
   vln_msgs::msg::Localization custom_msg =
-      wrapCustomLocalizationMsg(msg->header.stamp, T_w_carbody.trans, T_w_carbody.rot);
+      wrapCustomLocalizationMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
   custom_imu_frec_pose_pub_->publish(custom_msg);
 #endif
 }
