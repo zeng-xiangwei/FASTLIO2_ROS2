@@ -81,6 +81,14 @@ bool PGO::isKeyPose(const PoseWithTime &pose)
     return false;
 }
 
+void PGO::initial() {
+    if (!global_map_load)
+    {
+        // std::cout << "Load global map from " << m_config.global_pcd_file << std::endl;
+        loadMap();
+    }
+}
+
 bool PGO::initialPose(const CloudWithPose &cloud_with_pose, 
     const Eigen::Vector3d &init_pose_t, const Eigen::Quaterniond &init_pose_r)
 {
@@ -89,11 +97,11 @@ bool PGO::initialPose(const CloudWithPose &cloud_with_pose,
         return true;
     }
 
-    if (!global_map_load)
-    {
-        // std::cout << "Load global map from " << m_config.global_pcd_file << std::endl;
-        loadMap();
-    }
+    // if (!global_map_load)
+    // {
+    //     // std::cout << "Load global map from " << m_config.global_pcd_file << std::endl;
+    //     loadMap();
+    // }
 
     m_icp_localizer->setInput(cloud_with_pose.cloud);
     M4F transform_global_local = M4F::Identity();

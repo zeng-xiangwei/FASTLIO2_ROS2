@@ -32,6 +32,8 @@ PGONode::PGONode(const std::string& node_name) : Node(node_name) {
 
   m_relocalization_pose_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "/initialpose", 1, std::bind(&PGONode::initPoseCB, this, std::placeholders::_1));
+    
+  m_pgo->initial();
 }
 
 // PGONode::~PGONode() {
@@ -215,17 +217,17 @@ void PGONode::timerCB() {
 
   if(!initial_state &&  m_pgo_config.model == "localization")
   {
+    //加载地图并发布到rviz
+    if(m_pgo->getGlobalMapLoadStatus()) {
+      std::cout << "Load global map."  << std::endl;
+      publishGlobalMap(m_pgo->getMapCloud());
+    }
+
     if(!getInitPose(init_pos, init_rot)) {
       return;
     }
     if(!m_pgo->initialPose(cp, init_pos, init_rot)) {
       return;
-    }
-
-    //加载地图并发布到rviz
-    if(m_pgo->getGlobalMapLoadStatus()) {
-      std::cout << "Load global map."  << std::endl;
-      publishGlobalMap(m_pgo->getMapCloud());
     }
 
     std::cout << "initial pose success." << std::endl;

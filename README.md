@@ -33,6 +33,8 @@ ros2 service call /pgo/save_maps interface/srv/SaveMaps "{file_path: 'your_save_
 ## 定位执行：localizer_launch.py
 ```bash
     ros2 launch pgo localization.launch.py
+    #测试的bag用的building3_2_202510151634 
+    ros2 bag play building3_2_202510151634/building3_2_202510151634_0.db3
 ```
 ## ////////////////////////////////////////////////////////////////////
 
