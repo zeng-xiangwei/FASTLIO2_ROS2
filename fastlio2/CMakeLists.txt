@@ -43,6 +43,8 @@ find_package(Sophus REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(glog REQUIRED)
 
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 set(DEPENDENCIES_COMBINE)
 if (vln_msgs_FOUND)
     message(STATUS "Found vln_msgs package")

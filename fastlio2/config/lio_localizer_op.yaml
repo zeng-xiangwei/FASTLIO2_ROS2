@@ -8,7 +8,7 @@ ros_spin_thread: 2
 # lidar_type: livox、robosense
 lidar_type: livox
 
-lidar_filter_num: 1
+lidar_filter_num: 3
 lidar_min_range: 0.5
 lidar_max_range: 30.0
 lidar_min_z: -1000.0
@@ -57,7 +57,7 @@ r_carbody_lidar: [-1.00000, -0.00000, 0.00000,
                   0.00000, 0.00000, 1.00000]
 
 localization:
-  global_map_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
+  global_map_file: "/home/diana/vln/fastlio2-ros2_ws/data/map.pcd"
 
   rough_scan_resolution: 0.5
   rough_map_resolution: 0.5
