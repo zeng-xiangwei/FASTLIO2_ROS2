@@ -30,8 +30,8 @@ def generate_launch_description():
                 parameters=[{"config_path": lio_config_path.perform(launch.LaunchContext()),
                              "saved_pose_file_path": saved_pose_file_path.perform(launch.LaunchContext())}],
                 remappings=[
-                    ('/localization/custom_lidar_frec_pose', '/localization/custom_pose'),
-                    ('/localization/lidar_frec_pose', '/localization/standard_pose'),
+                    ('/localization/custom_imu_frec_pose', '/localization/custom_pose'),
+                    ('/localization/imu_frec_pose', '/localization/standard_pose'),
                 ]
             ),
 

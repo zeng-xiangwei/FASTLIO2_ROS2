@@ -16,19 +16,29 @@ void LIONode::initRos() {
   RCLCPP_INFO(this->get_logger(), "%s Started", this->get_name());
   loadParameters();
 
+  imu_callback_group_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+  lidar_callback_group_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+  other_callback_group_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+
   rclcpp::QoS imu_qos(100);
-  imu_qos.best_effort();
-  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(m_node_config.imu_topic, imu_qos,
-                                                               std::bind(&LIONode::imuCB, this, std::placeholders::_1));
+  // imu_qos.best_effort();
+  auto imu_sub_opt = rclcpp::SubscriptionOptions();
+  imu_sub_opt.callback_group = imu_callback_group_;
+  m_imu_sub = this->create_subscription<sensor_msgs::msg::Imu>(
+      m_node_config.imu_topic, imu_qos, std::bind(&LIONode::imuCB, this, std::placeholders::_1), imu_sub_opt);
 
   rclcpp::QoS lidar_qos(5);
   // lidar_qos.best_effort();
+  auto lidar_sub_opt = rclcpp::SubscriptionOptions();
+  lidar_sub_opt.callback_group = lidar_callback_group_;
   if (m_node_config.lidar_type == kLivoxLidarType) {
     m_livox_lidar_sub = this->create_subscription<livox_ros_driver2::msg::CustomMsg>(
-        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1));
+        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::livoxLidarCB, this, std::placeholders::_1),
+        lidar_sub_opt);
   } else if (m_node_config.lidar_type == kRobosenseLidarType) {
     m_robosense_lidar_sub = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::robosenseLidarCB, this, std::placeholders::_1));
+        m_node_config.lidar_topic, lidar_qos, std::bind(&LIONode::robosenseLidarCB, this, std::placeholders::_1),
+        lidar_sub_opt);
   } else {
     RCLCPP_ERROR(this->get_logger(), "Lidar type error, please check lidar_type");
   }
@@ -130,25 +140,26 @@ void LIONode::loadParameters() {
 }
 
 void LIONode::imuCB(const sensor_msgs::msg::Imu::SharedPtr msg) {
-  std::lock_guard<std::mutex> lock(m_mutex);
-  double timestamp = Utils::getSec(msg->header);
-  if (timestamp < m_state_data.last_imu_time) {
-    RCLCPP_WARN(this->get_logger(), "IMU Message is out of order");
-    std::deque<IMUData>().swap(m_state_data.imu_buffer);
+  {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    double timestamp = Utils::getSec(msg->header);
+    if (timestamp < m_state_data.last_imu_time) {
+      RCLCPP_WARN(this->get_logger(), "IMU Message is out of order");
+      std::deque<IMUData>().swap(m_state_data.imu_buffer);
+    }
+
+    V3D acc = V3D(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z) * 9.8;
+    V3D gyro = V3D(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
+    // 考虑到 imu 与 lidar 坐标系不平行时（robosense airy），将 imu 数据转到与 lidar 平行的坐标系下，否则地图是倒着的
+    acc = m_node_config.imu_data_preprocess_rot * acc;
+    gyro = m_node_config.imu_data_preprocess_rot * gyro;
+
+    m_state_data.imu_buffer.emplace_back(acc, gyro, timestamp);
+    m_state_data.last_imu_time = timestamp;
+    m_condition.notify_all();
   }
 
-  V3D acc = V3D(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z) * 10.0;
-  V3D gyro = V3D(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
-  // 考虑到 imu 与 lidar 坐标系不平行时（robosense airy），将 imu 数据转到与 lidar 平行的坐标系下，否则地图是倒着的
-  acc = m_node_config.imu_data_preprocess_rot * acc;
-  gyro = m_node_config.imu_data_preprocess_rot * gyro;
-
-  m_state_data.imu_buffer.emplace_back(acc, gyro, timestamp);
-  m_state_data.last_imu_time = timestamp;
-
   m_imu_pose_predictor->addImuData(m_state_data.imu_buffer.back());
-  m_state_data.has_new_data = true;
-  m_condition.notify_all();
 }
 void LIONode::livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg) {
   CloudType::Ptr cloud =
@@ -316,8 +327,12 @@ void LIONode::loopThread() {
   while (true) {
     {
       std::unique_lock<std::mutex> lock(m_mutex);
-      m_condition.wait(lock, [this]() -> bool { return m_state_data.has_new_data || m_finished; });
-      m_state_data.has_new_data = false;
+      // 等待最多20ms或者直到条件满足
+      m_condition.wait_for(lock, std::chrono::milliseconds(20), 
+                          [this]() -> bool { return m_state_data.has_new_data || m_finished; });
+      if (m_state_data.has_new_data) {
+        m_state_data.has_new_data = false;
+      }
     }
 
     if (m_finished) {
