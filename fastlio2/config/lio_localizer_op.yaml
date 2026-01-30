@@ -57,7 +57,7 @@ r_carbody_lidar: [0.00000, 1.00000, 0.00000,
                   0.00000, 0.00000, 1.00000]
 
 localization:
-  global_map_file: "/home/xiangweizeng/dataBag/mid360/map/h11w/1029/map.pcd"
+  global_map_file: "/home/diana/vln/fastlio2-ros2_ws/data/map.pcd"
 
   rough_scan_resolution: 0.5
   rough_map_resolution: 0.5
