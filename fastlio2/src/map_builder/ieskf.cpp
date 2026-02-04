@@ -12,7 +12,7 @@ M3D JrInv(const V3D &inp)
     return Sophus::SO3d::leftJacobianInverse(inp).transpose();
 }
 
-void State::operator+=(const V21D &delta)
+void State::operator+=(const V24D &delta)
 {
     r_wi *= Sophus::SO3d::exp(delta.segment<3>(0)).matrix();
     t_wi += delta.segment<3>(3);
@@ -21,11 +21,12 @@ void State::operator+=(const V21D &delta)
     v += delta.segment<3>(12);
     bg += delta.segment<3>(15);
     ba += delta.segment<3>(18);
+    g += delta.segment<3>(21);
 }
 
-V21D State::operator-(const State &other) const
+V24D State::operator-(const State &other) const
 {
-    V21D delta = V21D::Zero();
+    V24D delta = V24D::Zero();
     delta.segment<3>(0) = Sophus::SO3d(other.r_wi.transpose() * r_wi).log();
     delta.segment<3>(3) = t_wi - other.t_wi;
     delta.segment<3>(6) = Sophus::SO3d(other.r_il.transpose() * r_il).log();
@@ -33,6 +34,7 @@ V21D State::operator-(const State &other) const
     delta.segment<3>(12) = v - other.v;
     delta.segment<3>(15) = bg - other.bg;
     delta.segment<3>(18) = ba - other.ba;
+    delta.segment<3>(21) = g - other.g;
     return delta;
 }
 
@@ -54,20 +56,21 @@ std::ostream &operator<<(std::ostream &os, const State &state)
 
 void IESKF::predict(const Input &inp, double dt, const M12D &Q)
 {
-    V21D delta = V21D::Zero();
+    V24D delta = V24D::Zero();
     delta.segment<3>(0) = (inp.gyro - m_x.bg) * dt;
     delta.segment<3>(3) = m_x.v * dt;
     delta.segment<3>(12) = (m_x.r_wi * (inp.acc - m_x.ba) + m_x.g) * dt;
 
     m_F.setIdentity();
-    m_F.block<3, 3>(0, 0) = Sophus::SO3d::exp(-(inp.gyro - m_x.bg) * dt).matrix();
-    m_F.block<3, 3>(0, 15) = -Jr((inp.gyro - m_x.bg) * dt) * dt;
+    m_F.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
+    m_F.block<3, 3>(0, 15) = -Eigen::Matrix3d::Identity() * dt;
     m_F.block<3, 3>(3, 12) = Eigen::Matrix3d::Identity() * dt;
     m_F.block<3, 3>(12, 0) = -m_x.r_wi * Sophus::SO3d::hat(inp.acc - m_x.ba) * dt;
     m_F.block<3, 3>(12, 18) = -m_x.r_wi * dt;
+    m_F.block<3, 3>(12, 21) = Eigen::Matrix3d::Identity() * dt;
 
     m_G.setZero();
-    m_G.block<3, 3>(0, 0) = -Jr((inp.gyro - m_x.bg) * dt) * dt;
+    m_G.block<3, 3>(0, 0) = -Eigen::Matrix3d::Identity() * dt;
     m_G.block<3, 3>(12, 3) = -m_x.r_wi * dt;
     m_G.block<3, 3>(15, 6) = Eigen::Matrix3d::Identity() * dt;
     m_G.block<3, 3>(18, 9) = Eigen::Matrix3d::Identity() * dt;
@@ -82,9 +85,12 @@ void IESKF::update()
     SharedState shared_data;
     shared_data.iter_num = 0;
     shared_data.res = 1e10;
-    V21D delta = V21D::Zero();
-    M21D H = M21D::Identity();
-    V21D b;
+    shared_data.converge = true;
+    V24D delta = V24D::Zero();
+    M24D H = M24D::Identity();
+    V24D b;
+    int converge_count = 0;
+    const float epsi = 0.001;
 
     for (size_t i = 0; i < m_max_iter; i++)
     {
@@ -94,7 +100,7 @@ void IESKF::update()
         H.setZero();
         b.setZero();
         delta = m_x - predict_x;
-        M21D J = M21D::Identity();
+        M24D J = M24D::Identity();
         J.block<3, 3>(0, 0) = JrInv(delta.segment<3>(0));
         J.block<3, 3>(6, 6) = JrInv(delta.segment<3>(6));
         H += J.transpose() * m_P.inverse() * J;
@@ -108,11 +114,29 @@ void IESKF::update()
         m_x += delta;
         shared_data.iter_num += 1;
 
+        shared_data.converge = true;
+        for (int j = 0; j < 24; j++)
+        {
+            if (std::fabs(delta(j)) > epsi) //如果dx>epsi 认为没有收敛
+            {
+                shared_data.converge = false;
+                break;
+            }
+        }
+
+        if (shared_data.converge)
+			converge_count++;
+
+        if (converge_count != 0 && i == m_max_iter - 2) //如果迭代了3次还没收敛 强制令成true，h_share_model函数中会重新寻找近邻点
+        {
+            shared_data.converge = true;
+        }
+
         if (m_stop_func(delta))
             break;
     }
 
-    M21D L = M21D::Identity();
+    M24D L = M24D::Identity();
     // L.block<3, 3>(0, 0) = JrInv(delta.segment<3>(0));
     // L.block<3, 3>(6, 6) = JrInv(delta.segment<3>(6));
     L.block<3, 3>(0, 0) = Jr(delta.segment<3>(0));

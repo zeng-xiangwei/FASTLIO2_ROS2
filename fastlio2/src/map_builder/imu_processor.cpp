@@ -45,7 +45,8 @@ bool IMUProcessor::initialize(SyncPackage& package) {
   m_kf->P().block<3, 3>(6, 6) = M3D::Identity() * 0.00001;
   m_kf->P().block<3, 3>(9, 9) = M3D::Identity() * 0.00001;
   m_kf->P().block<3, 3>(15, 15) = M3D::Identity() * 0.0001;
-  m_kf->P().block<3, 3>(18, 18) = M3D::Identity() * 0.0001;
+  m_kf->P().block<3, 3>(18, 18) = M3D::Identity() * 0.001;
+  m_kf->P().block<3, 3>(21, 21) = M3D::Identity() * 0.00001;
 
   m_last_imu = m_imu_cache.back();
   m_last_propagate_end_time = package.cloud_end_time;
