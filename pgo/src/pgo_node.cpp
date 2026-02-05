@@ -219,7 +219,7 @@ void PGONode::timerCB() {
   {
     //加载地图并发布到rviz
     if(m_pgo->getGlobalMapLoadStatus()) {
-      std::cout << "Load global map."  << std::endl;
+      // std::cout << "Load global map." << std::endl;
       publishGlobalMap(m_pgo->getMapCloud());
     }
 

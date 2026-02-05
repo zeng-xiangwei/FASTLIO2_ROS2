@@ -13,10 +13,10 @@ pgo_config:
     submap_resolution: 0.1
     min_loop_detect_duration: 5.0
 
-    global_score_tresh: 0.15
-    # global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
+    global_score_tresh: 0.001
+    global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
     # global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
-    global_pcd_file: /home/haiboliu/project/vln/localization/map/map_no3_building/map.pcd
+    # global_pcd_file: /home/haiboliu/project/vln/localization/map/map_no3_building/map.pcd
     # global_pcd_file: " "
     # model: mapping
     model: localization
