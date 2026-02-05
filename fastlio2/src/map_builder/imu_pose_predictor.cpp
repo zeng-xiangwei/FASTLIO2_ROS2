@@ -46,7 +46,7 @@ void ImuPosePredictor::setLioState(const StateWithTime& lio_state) {
 }
 
 void ImuPosePredictor::propogate(State& state, double dt, const V3D& acc_avr, const V3D& angvel_avr) {
-  V21D delta = V21D::Zero();
+  V24D delta = V24D::Zero();
   delta.segment<3>(0) = (angvel_avr - state.bg) * dt;
 
   // TODO: 位置更新用哪种？fast-livo2 中用的是 p = p + v*dt + 0.5*a*dt*dt 的方式

@@ -19,7 +19,7 @@ LidarProcessor::LidarProcessor(Config &config, std::shared_ptr<IESKF> kf) : m_co
 
     m_kf->setLossFunction([&](State &s, SharedState &d)
                           { updateLossFunc(s, d); });
-    m_kf->setStopFunction([&](const V21D &delta) -> bool
+    m_kf->setStopFunction([&](const V24D &delta) -> bool
                           { V3D rot_delta = delta.block<3, 1>(0, 0);
                             V3D t_delta = delta.block<3, 1>(3, 0);
                             return (rot_delta.norm() * 57.3 < 0.01) && (t_delta.norm() * 100 < 0.015); });
@@ -154,7 +154,7 @@ void LidarProcessor::process(SyncPackage &package)
 {
     // m_kf->setLossFunction([&](State &s, SharedState &d)
     //                       { updateLossFunc(s, d); });
-    // m_kf->setStopFunction([&](const V21D &delta) -> bool
+    // m_kf->setStopFunction([&](const V24D &delta) -> bool
     //                       { V3D rot_delta = delta.block<3, 1>(0, 0);
     //                         V3D t_delta = delta.block<3, 1>(3, 0);
     //                         return (rot_delta.norm() * 57.3 < 0.01) && (t_delta.norm() * 100 < 0.015); });
@@ -198,11 +198,18 @@ void LidarProcessor::updateLossFunc(State &state, SharedState &share_data)
         point_world.intensity = point_body.intensity;
         std::vector<float> point_sq_dist(m_config.near_search_num);
         auto &points_near = m_nearest_points[i];
-        m_ikdtree->Nearest_Search(point_world, m_config.near_search_num, points_near, point_sq_dist);
-        if (points_near.size() >= static_cast<size_t>(m_config.near_search_num) && point_sq_dist[m_config.near_search_num - 1] <= 5)
-            m_point_selected_flag[i] = true;
-        else
-            m_point_selected_flag[i] = false;
+
+        if (share_data.converge)
+        {
+            //寻找point_world的最近邻的平面点
+            m_ikdtree->Nearest_Search(point_world, m_config.near_search_num, points_near, point_sq_dist);
+            //判断是否是有效匹配点，与loam系列类似，要求特征点最近邻的地图点数量>阈值，距离<阈值  满足条件的才置为true
+            if (points_near.size() >= static_cast<size_t>(m_config.near_search_num) && point_sq_dist[m_config.near_search_num - 1] <= 5)
+                m_point_selected_flag[i] = true;
+            else
+                m_point_selected_flag[i] = false;
+        }
+
         if (!m_point_selected_flag[i])
             continue;
 

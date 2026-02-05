@@ -136,6 +136,10 @@ class LIONode : public rclcpp::Node {
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_odom_pub;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr m_imu_frec_odom_pub;
 
+  rclcpp::CallbackGroup::SharedPtr imu_callback_group_;
+  rclcpp::CallbackGroup::SharedPtr lidar_callback_group_;
+  rclcpp::CallbackGroup::SharedPtr other_callback_group_;
+
 #ifdef VLN_MSGS_FOUND
   rclcpp::Service<vln_msgs::srv::QueryCloudPoints>::SharedPtr m_get_near_points_srv;
   void getNearPointsCB(const std::shared_ptr<vln_msgs::srv::QueryCloudPoints::Request> request,

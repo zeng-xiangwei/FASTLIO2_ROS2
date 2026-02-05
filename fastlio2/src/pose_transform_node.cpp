@@ -132,7 +132,7 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   rot_global.normalize();
  
   MinPose T_w_global(trans_global, rot_global);
-  MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
+  MinPose T_global_carbody = T_w_global * T_w_carbody;
   // standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
   // 将发布的frame 替换成global frame
   // standard_msg.header.frame_id = config_.global_frame;
@@ -226,7 +226,7 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
   rot_global.normalize();
  
   MinPose T_w_global(trans_global, rot_global);
-  MinPose T_global_carbody = T_w_global.inverse() * T_w_carbody;
+  MinPose T_global_carbody = T_w_global * T_w_carbody;
 
   // imu 的速度直接用激光频率下的速度，因为imu 频率下的速度不稳定
   nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot,
