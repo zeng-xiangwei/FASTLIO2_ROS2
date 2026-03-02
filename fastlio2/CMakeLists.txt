@@ -33,6 +33,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(livox_ros_driver2 REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(interface REQUIRED)
 
 find_package(vln_msgs QUIET)
 
@@ -53,6 +54,8 @@ if (vln_msgs_FOUND)
 else()
     message(STATUS "vln_msgs package not found")
 endif()
+
+list(APPEND DEPENDENCIES_COMBINE interface)
 
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")

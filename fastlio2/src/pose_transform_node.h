@@ -9,6 +9,8 @@
 #include <tf2/exceptions.h>
 
 #include "map_builder/commons.h"
+
+#include <interface/srv/save_current_pose.hpp>
 #ifdef VLN_MSGS_FOUND
 #include <vln_msgs/msg/localization.hpp>
 #endif
@@ -90,4 +92,9 @@ class PoseTransformNode : public rclcpp::Node {
   // 记录激光频率下的速度，用来作为 imu 频率下的速度
   V3D lidar_frec_velocity_;
   V3D lidar_frec_angular_velocity_;
+
+  // 位姿保存服务
+  rclcpp::Service<interface::srv::SaveCurrentPose>::SharedPtr save_pose_service_;
+  void handleSavePoseService(const std::shared_ptr<interface::srv::SaveCurrentPose::Request> request,
+                            const std::shared_ptr<interface::srv::SaveCurrentPose::Response> response);
 };

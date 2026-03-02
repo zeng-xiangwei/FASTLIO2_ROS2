@@ -49,4 +49,7 @@ class Utils {
                                                                   int filter_num, double min_range = 0.5,
                                                                   double max_range = 20.0, int n_scans = 96);
   static builtin_interfaces::msg::Time getTime(const double& sec);
+
+  static pcl::PointCloud<pcl::PointXYZINormal>::Ptr simPCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg,
+                                                                int filter_num, double min_range, double max_range);
 };

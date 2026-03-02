@@ -93,6 +93,38 @@ pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::robosense2PCL(const sensor_msg
   return cloud;
 }
 
+pcl::PointCloud<pcl::PointXYZINormal>::Ptr Utils::simPCL(const sensor_msgs::msg::PointCloud2::SharedPtr msg,
+                                                                int filter_num, double min_range, double max_range) {
+  pcl::PointCloud<pcl::PointXYZINormal>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZINormal>);
+
+  int point_num = msg->width * msg->height;
+  if (point_num == 0) {
+    return cloud;
+  }
+
+  cloud->reserve(point_num / filter_num + 1);
+  for (int idx = 0; idx < point_num; idx += filter_num) {
+    const uint8_t* point = &msg->data[idx * msg->point_step];
+    float x = *(reinterpret_cast<const float*>(point + msg->fields[0].offset));
+    float y = *(reinterpret_cast<const float*>(point + msg->fields[1].offset));
+    float z = *(reinterpret_cast<const float*>(point + msg->fields[2].offset));
+    if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
+      continue;
+    }
+
+    if (x * x + y * y + z * z < min_range * min_range || x * x + y * y + z * z > max_range * max_range) continue;
+    pcl::PointXYZINormal p;
+    p.x = x;
+    p.y = y;
+    p.z = z;
+    p.intensity = 0;
+    p.curvature = 0;
+    cloud->push_back(p);
+  }
+
+  return cloud;
+}
+
 double Utils::getSec(std_msgs::msg::Header& header) {
   return static_cast<double>(header.stamp.sec) + static_cast<double>(header.stamp.nanosec) * 1e-9;
 }

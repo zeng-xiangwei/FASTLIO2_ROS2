@@ -20,6 +20,7 @@
   <depend>geometry_msgs</depend>
 
   <depend>vln_msgs</depend>
+  <depend>interface</depend>
   
 
   <test_depend>ament_lint_auto</test_depend>

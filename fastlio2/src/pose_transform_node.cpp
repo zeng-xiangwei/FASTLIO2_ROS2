@@ -1,5 +1,7 @@
 #include "pose_transform_node.h"
 
+#include <fstream>
+#include <iomanip>
 #include <yaml-cpp/yaml.h>
 
 PoseTransformNode::PoseTransformNode(const std::string& node_name) : Node(node_name) {}
@@ -43,6 +45,11 @@ void PoseTransformNode::initRos() {
   custom_imu_frec_pose_pub_ =
       this->create_publisher<vln_msgs::msg::Localization>("/localization/custom_imu_frec_pose", rclcpp::QoS(10));
 #endif
+
+  // 创建位姿保存服务
+  save_pose_service_ = this->create_service<interface::srv::SaveCurrentPose>(
+      "save_current_pose",
+      std::bind(&PoseTransformNode::handleSavePoseService, this, std::placeholders::_1, std::placeholders::_2));
 }
 // 读取 yaml 参数
 void PoseTransformNode::loadParameters() {
@@ -341,3 +348,54 @@ vln_msgs::msg::Localization PoseTransformNode::wrapCustomLocalizationMsg(const b
   return msg;
 }
 #endif
+
+void PoseTransformNode::handleSavePoseService(const std::shared_ptr<interface::srv::SaveCurrentPose::Request> request,
+                                              const std::shared_ptr<interface::srv::SaveCurrentPose::Response> response) {
+  // 使用tf查询 map_frame -> lidar_frame 的位姿
+  geometry_msgs::msg::TransformStamped transformStamped;
+  try {
+    transformStamped = tf_buffer_->lookupTransform(
+        config_.map_frame,    // 目标坐标系
+        config_.lidar_frame,  // 源坐标系
+        tf2::TimePointZero,   // 最近的变换
+        tf2::Duration(100 * 1000000LL));
+  } catch (const tf2::TransformException& ex) {
+    RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+    response->success = false;
+    response->message = std::string("Failed to lookup transform: ") + ex.what();
+    return;
+  }
+
+  // 获取当前时间戳
+  double timestamp = this->now().seconds();
+
+  // 提取位置
+  double x = transformStamped.transform.translation.x;
+  double y = transformStamped.transform.translation.y;
+  double z = transformStamped.transform.translation.z;
+
+  // 提取四元数 (qx, qy, qz, qw)
+  double qx = transformStamped.transform.rotation.x;
+  double qy = transformStamped.transform.rotation.y;
+  double qz = transformStamped.transform.rotation.z;
+  double qw = transformStamped.transform.rotation.w;
+
+  // 打开文件并写入位姿
+  std::ofstream out_file(request->file_path, std::ios::app);
+  if (!out_file.is_open()) {
+    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", request->file_path.c_str());
+    response->success = false;
+    response->message = "Failed to open file: " + request->file_path;
+    return;
+  }
+
+  // 写入格式: timestamp x y z qx qy qz qw
+  out_file << std::fixed << std::setprecision(6);
+  out_file << timestamp << " " << x << " " << y << " " << z << " " << qx << " " << qy << " " << qz << " " << qw
+           << std::endl;
+  out_file.close();
+
+  RCLCPP_INFO(this->get_logger(), "Pose saved to file: %s", request->file_path.c_str());
+  response->success = true;
+  response->message = "Pose saved successfully";
+}
