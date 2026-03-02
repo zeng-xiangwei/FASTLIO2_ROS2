@@ -3,7 +3,6 @@
 
 using namespace std::chrono_literals;
 
-// PGONode::PGONode(const std::string& node_name) : Node(node_name){
 PGONode::PGONode(const std::string& node_name) : Node(node_name) {
   RCLCPP_INFO(this->get_logger(), "PGO node started");
 
@@ -36,10 +35,6 @@ PGONode::PGONode(const std::string& node_name) : Node(node_name) {
   m_pgo->initial();
 }
 
-// PGONode::~PGONode() {
-  
-// }
-
 void PGONode::loadParameters() {
   this->declare_parameter("config_path", "");
   std::string config_path;
@@ -55,6 +50,15 @@ void PGONode::loadParameters() {
   m_node_config.map_frame = config["map_frame"].as<std::string>();
   m_node_config.local_frame = config["local_frame"].as<std::string>();
 
+  // 从ROS参数读取initial_pose_file和global_pcd_file（如果未设置则为空字符串）
+  this->declare_parameter("initial_pose_file", "");
+  this->declare_parameter("global_pcd_file", "");
+  std::string initial_pose_file, global_pcd_file;
+  this->get_parameter<std::string>("initial_pose_file", initial_pose_file);
+  this->get_parameter<std::string>("global_pcd_file", global_pcd_file);
+  m_pgo_config.initial_pose_file = initial_pose_file;
+  m_pgo_config.global_pcd_file = global_pcd_file;
+
   YAML::Node pgo_config = config["pgo_config"];
   m_pgo_config.key_pose_delta_deg = pgo_config["key_pose_delta_deg"].as<double>();
   m_pgo_config.key_pose_delta_trans = pgo_config["key_pose_delta_trans"].as<double>();
@@ -65,13 +69,9 @@ void PGONode::loadParameters() {
   m_pgo_config.submap_resolution = pgo_config["submap_resolution"].as<double>();
   m_pgo_config.min_loop_detect_duration = pgo_config["min_loop_detect_duration"].as<double>();
   m_pgo_config.global_score_tresh = pgo_config["global_score_tresh"].as<double>();
-  m_pgo_config.global_pcd_file = pgo_config["global_pcd_file"].as<std::string>();
   m_pgo_config.model = pgo_config["model"].as<std::string>();
   m_pgo_config.match_enable = pgo_config["match_enable"].as<bool>();
-  m_pgo_config.initial_pose_r = pgo_config["initial_pose_r"].as<Eigen::Vector3d>();
-  m_pgo_config.initial_pose_t = pgo_config["initial_pose_t"].as<Eigen::Vector3d>();
   m_pgo_config.pose_load_mode = pgo_config["pose_load_mode"].as<int>();
-  m_pgo_config.initial_pose_file = pgo_config["initial_pose_file"].as<std::string>();
   m_pgo_config.angle_thresh = pgo_config["angle_thresh"].as<double>();
   m_pgo_config.trans_thresh = pgo_config["trans_thresh"].as<double>();
   m_pgo_config.max_key_poses = pgo_config["max_key_poses"].as<int>();
@@ -249,9 +249,6 @@ void PGONode::timerCB() {
   }
   // 后端只对关键帧进行匹配
   m_pgo->Match();
-  // m_pgo->searchForLoopPairs();
-
-  // m_pgo->smoothAndUpdate();
 
   sendBroadCastTF(cur_time);
 
@@ -340,91 +337,42 @@ void PGONode::initPoseCB(const geometry_msgs::msg::PoseWithCovarianceStamped::Sh
 }
 
 bool PGONode::getInitPose(Eigen::Vector3d& init_pos, Eigen::Quaterniond& init_rot) {
-  // if (m_try_saved_pose) {
-  //   LOG(INFO) << "Try to use saved pose!";
-  //   init_pos = m_saved_pos;
-  //   init_rot = m_saved_rot;
-  //   return true;
-  // }
+  // pose_load_mode == 1: 先尝试从文件读取，失败则回退到话题
+  if (m_pgo_config.pose_load_mode == 1 && !m_pose_file_loaded) {
+    // 尝试从文件读取初始位姿
+    if (!m_pgo_config.initial_pose_file.empty()) {
+      std::ifstream pose_file(m_pgo_config.initial_pose_file);
+      if (pose_file.is_open()) {
+        double timestamp, x, y, z, qx, qy, qz, qw;
+        if (pose_file >> timestamp >> x >> y >> z >> qx >> qy >> qz >> qw) {
+          init_pos = Eigen::Vector3d(x, y, z);
+          init_rot = Eigen::Quaterniond(qw, qx, qy, qz);
+          m_pose_file_loaded = true;
+          LOG(INFO) << "Loaded initial pose from file: " << m_pgo_config.initial_pose_file;
+          LOG(INFO) << "Initial pose: " << init_pos.transpose() << " " << init_rot.coeffs().transpose();
+          pose_file.close();
+          return true;
+        }
+        pose_file.close();
+      } else {
+        RCLCPP_WARN(this->get_logger(), "Failed to open initial pose file: %s", m_pgo_config.initial_pose_file.c_str());
+      }
+    }
+    // 文件读取失败，标记已尝试过，避免重复尝试
+    m_pose_file_loaded = true;
+  }
 
+  // pose_load_mode == 0 或 文件读取失败，从话题获取
   if (m_relocalization_init_pose == nullptr) {
     return false;
   }
-  LOG(INFO) << "Get initial pose!";
+  LOG(INFO) << "Get initial pose from topic!";
   init_pos = m_relocalization_init_pose->trans;
   init_rot = Eigen::Quaterniond(m_relocalization_init_pose->rot);
   m_relocalization_init_pose = nullptr;
   return true;
 }
 
-// void PGONode::relocalization() {
-//   Eigen::Vector3d init_pos;
-//   Eigen::Quaterniond init_rot;
-
-//   {
-//     std::lock_guard<std::mutex> lock(m_mutex);
-//     if (!getInitPose(init_pos, init_rot)) {
-//       return;
-//     }
-//   }
-
-//   CloudType::Ptr lidar_data = nullptr;
-//   {
-//     std::unique_lock<std::mutex> lock(m_mutex);
-//     lidar_data = getInitLidarCloud();
-//     if (lidar_data == nullptr) {
-//       return;
-//     }
-//   }
-
-//   // 进行icp匹配
-//   M4F transform_global_local = M4F::Identity();
-//   transform_global_local.topRightCorner(3, 1) = init_pos.cast<float>();
-//   transform_global_local.topLeftCorner(3, 3) = init_rot.toRotationMatrix().cast<float>();
-//   m_icp_localizer->setInput(lidar_data);
-
-//   // 默认第一个初值是从文件中读取的
-//   // m_try_saved_pose = false;
-
-//   if (m_icp_localizer->align(transform_global_local)) {
-//     RCLCPP_WARN(this->get_logger(), "Initial pose successfully!");
-//     LOG(INFO) << "icp result: \n" << transform_global_local;
-
-//     m_relocalize_success = true;
-
-//     M4D transform_i_l = M4D::Identity();
-//     transform_i_l.topLeftCorner(3, 3) = m_builder_config.r_il;
-//     transform_i_l.topRightCorner(3, 1) = m_builder_config.t_il;
-
-//     // 由于 float 转 double 存在精度丢失，这里先转为四元数，在转为矩阵
-//     M3F mat_wl_float = transform_global_local.topLeftCorner(3, 3);
-//     Eigen::Quaternionf q_wl_float(mat_wl_float);
-//     Eigen::Quaterniond q_wl(q_wl_float);
-//     q_wl.normalize();
-//     M4D transform_w_l = M4D::Identity();
-//     transform_w_l.topLeftCorner(3, 3) = q_wl.toRotationMatrix();
-//     transform_w_l.topRightCorner(3, 1) = transform_global_local.topRightCorner(3, 1).cast<double>();
-
-//     M4D transform_w_i = transform_w_l * transform_i_l.inverse();
-//     // 更新到kf中
-//     // State& init_state = m_kf->x();
-//     // init_state.r_wi = transform_w_i.topLeftCorner(3, 3);
-//     // init_state.t_wi = transform_w_i.topRightCorner(3, 1);
-//     // LOG(INFO) << "state after relocalization: \n" << init_state;
-//     // 更新map到local的tf
-//     broadCastTF(m_tf_broadcaster, m_node_config.global_frame, m_node_config.world_frame, 
-//       m_state_data.last_lidar_time, 
-//       transform_w_i.topRightCorner(3, 1), transform_w_i.topLeftCorner(3, 3));
-
-//     // 清空数据缓存，避免重定位期间数据堆积过多
-//     // {
-//     //   std::unique_lock<std::mutex> lock(m_mutex);
-//     //   clearDataBuffer();
-//     // }
-//     return;
-//   }
-//   RCLCPP_WARN(this->get_logger(), "ICP not match, waiting for new initial pose....");
-// }
 
 void PGONode::publishGlobalMap(CloudType::Ptr cloud) {
   sensor_msgs::msg::PointCloud2 cloud_msg;

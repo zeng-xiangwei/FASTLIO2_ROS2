@@ -355,7 +355,7 @@ void PoseTransformNode::handleSavePoseService(const std::shared_ptr<interface::s
   geometry_msgs::msg::TransformStamped transformStamped;
   try {
     transformStamped = tf_buffer_->lookupTransform(
-        config_.map_frame,    // 目标坐标系
+        config_.global_frame,    // 目标坐标系
         config_.lidar_frame,  // 源坐标系
         tf2::TimePointZero,   // 最近的变换
         tf2::Duration(100 * 1000000LL));
@@ -381,7 +381,7 @@ void PoseTransformNode::handleSavePoseService(const std::shared_ptr<interface::s
   double qw = transformStamped.transform.rotation.w;
 
   // 打开文件并写入位姿
-  std::ofstream out_file(request->file_path, std::ios::app);
+  std::ofstream out_file(request->file_path, std::ios::out);
   if (!out_file.is_open()) {
     RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", request->file_path.c_str());
     response->success = false;

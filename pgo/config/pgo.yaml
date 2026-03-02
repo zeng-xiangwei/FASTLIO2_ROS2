@@ -14,19 +14,10 @@ pgo_config:
     min_loop_detect_duration: 5.0
 
     global_score_tresh: 0.15
-    # global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
-    global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
-    # global_pcd_file: " "
     model: mapping
     # model: localization
     match_enable: true
-    # eular angle in degree
-    initial_pose_r : [0.0, 0.0, 0.0]
-    initial_pose_t : [0.0, 0.0, 0.0]
-    pose_load_mode: 0 # load from yaml, 1 load from file.txt
-    # initial_pose_file: /home/haiboliu/project/vln/localization/pose.txt
-    initial_pose_file: " "
-    # used for initial local
+    pose_load_mode: 0 # 0: 仅从/initialpose话题读取, 1: 先从文件读取，失败则回退话题
     angle_thresh: 0.5
     trans_thresh: 0.5
     max_key_poses: 1000
@@ -49,4 +40,3 @@ grid_map_config:
     grid_2d_z_max: 1.0
     grid_2d_resolution: 0.02
     occupancy_weight: 10
-

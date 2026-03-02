@@ -32,41 +32,8 @@ PGO::PGO(const PgoConfig &config) : m_config(config)
     global_idx = SIZE_MAX;
     global_map_load = false;
     key_size_all = 0;
-    // 加载初始位姿，目前是通过rviz指定的，所这这里暂时不需要
-    // loadPose();
     m_icp_localizer = std::make_shared<ICPLocalizer>(m_config.icp_config);
     m_key_poses.reserve(m_config.max_key_poses);
-}
-
-
-void PGO::loadPose()
-{
-    if (m_config.pose_load_mode == 0)
-    {
-        initial_pose_r = Eigen::AngleAxisd(m_config.initial_pose_r(0), Eigen::Vector3d::UnitX())
-                        * Eigen::AngleAxisd(m_config.initial_pose_r(1), Eigen::Vector3d::UnitY())
-                        * Eigen::AngleAxisd(m_config.initial_pose_r(2), Eigen::Vector3d::UnitZ());
-        // initial_pose_r = m_config.initial_pose_r;
-        initial_pose_t = m_config.initial_pose_t;
-        
-    } else if(m_config.pose_load_mode == 1)
-    {
-        std::ifstream pose_file(m_config.initial_pose_file);
-        if (!pose_file.is_open())
-        {
-            std::cout << "Failed to open pose file: " << m_config.initial_pose_file << std::endl;
-            return;
-        }
-        V3D initial_pose_r_eular = V3D::Zero();
-        pose_file >> initial_pose_r_eular(0) >> initial_pose_r_eular(1) >> initial_pose_r_eular(2)
-                >> initial_pose_t(0) >> initial_pose_t(1) >> initial_pose_t(2);
-        initial_pose_r = Eigen::AngleAxisd(initial_pose_r_eular(0), Eigen::Vector3d::UnitX())
-                        * Eigen::AngleAxisd(initial_pose_r_eular(1), Eigen::Vector3d::UnitY())
-                        * Eigen::AngleAxisd(initial_pose_r_eular(2), Eigen::Vector3d::UnitZ());
-
-        std::cout << "initial pose: " << initial_pose_r.transpose() << " " 
-                    << initial_pose_t.transpose() << std::endl;
-    }
 }
 
 bool PGO::isKeyPose(const PoseWithTime &pose)
@@ -114,21 +81,21 @@ bool PGO::initialPose(const CloudWithPose &cloud_with_pose,
         m_t_offset = transform_global_local.block<3, 1>(0, 3).cast<double>();
     }
 
-    // todo: how to set thresh 
-    // 比较m_r_offset与initial_pose_r
-    if ((m_r_offset - initial_pose_r).norm() > m_config.angle_thresh)
+    // 比较m_r_offset与initial_pose_r的夹角（角度阈值单位为度）
+    Eigen::Quaterniond optimazed_r(m_r_offset);
+    double angle_diff_deg = optimazed_r.angularDistance(init_pose_r) * 57.324;  // 弧度转度
+    if (angle_diff_deg > m_config.angle_thresh)
     {
         std::cout << "initial localization failed."<< std::endl;
-        std::cout << "m_r_offset: " << m_r_offset.transpose() << "\n" 
-                    << initial_pose_r.transpose() << std::endl;
+        std::cout << "angle_diff_deg: " << angle_diff_deg << " deg, threshold: " << m_config.angle_thresh << " deg" << std::endl;
         return false;
     }
     // 比较m_t_offset与initial_pose_t
-    if ((m_t_offset - initial_pose_t).norm() > m_config.trans_thresh)
+    if ((m_t_offset - init_pose_t).norm() > m_config.trans_thresh)
     {
         std::cout << "initial localization failed."<< std::endl;
         std::cout << "m_t_offset: " << m_t_offset.transpose() << "\n" 
-                    << initial_pose_t.transpose() << std::endl;
+                    << init_pose_t.transpose() << std::endl;
         return false;
     }
 

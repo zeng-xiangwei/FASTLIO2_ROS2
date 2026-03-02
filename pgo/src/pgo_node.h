@@ -102,4 +102,9 @@ private:
 
     bool initial_state = false;
 
+    // 用于标记是否已经从位姿文件读取过初始位姿（避免重复读取）
+    bool m_pose_file_loaded = false;
+    // 保存从文件读取的初始位姿
+    std::shared_ptr<Pose> m_file_init_pose;
+
 };
