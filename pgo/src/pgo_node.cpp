@@ -53,13 +53,19 @@ void PGONode::loadParameters() {
   // 从ROS参数读取initial_pose_file和global_pcd_file（如果未设置则为空字符串）
   this->declare_parameter("initial_pose_file", "");
   this->declare_parameter("global_pcd_file", "");
+  this->declare_parameter("pose_load_mode", -1);
   std::string initial_pose_file, global_pcd_file;
+  int pose_load_mode;
   this->get_parameter<std::string>("initial_pose_file", initial_pose_file);
   this->get_parameter<std::string>("global_pcd_file", global_pcd_file);
+  this->get_parameter<int>("pose_load_mode", pose_load_mode);
   m_pgo_config.initial_pose_file = initial_pose_file;
   m_pgo_config.global_pcd_file = global_pcd_file;
 
   YAML::Node pgo_config = config["pgo_config"];
+  // 如果 ros 参数中设定了初始位姿读取方式，则用，否则用yaml中的配置
+  m_pgo_config.pose_load_mode = pose_load_mode >= 0 ? pose_load_mode : pgo_config["pose_load_mode"].as<int>();
+
   m_pgo_config.key_pose_delta_deg = pgo_config["key_pose_delta_deg"].as<double>();
   m_pgo_config.key_pose_delta_trans = pgo_config["key_pose_delta_trans"].as<double>();
   m_pgo_config.loop_search_radius = pgo_config["loop_search_radius"].as<double>();
@@ -71,7 +77,6 @@ void PGONode::loadParameters() {
   m_pgo_config.global_score_tresh = pgo_config["global_score_tresh"].as<double>();
   m_pgo_config.model = pgo_config["model"].as<std::string>();
   m_pgo_config.match_enable = pgo_config["match_enable"].as<bool>();
-  m_pgo_config.pose_load_mode = pgo_config["pose_load_mode"].as<int>();
   m_pgo_config.angle_thresh = pgo_config["angle_thresh"].as<double>();
   m_pgo_config.trans_thresh = pgo_config["trans_thresh"].as<double>();
   m_pgo_config.max_key_poses = pgo_config["max_key_poses"].as<int>();
