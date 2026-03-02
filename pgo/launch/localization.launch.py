@@ -12,7 +12,7 @@ def generate_launch_description():
                                 default_value='/home/diana/vln/fastlio2-ros2_ws/data/initial_pose.txt',
                                 description='Path to the initial pose file')
     pose_load_mode_arg = DeclareLaunchArgument('pose_load_mode', 
-                                default_value='1',
+                                default_value='0',
                                 description='Pose load mode: 0=from topic, 1=from file first')
     
     rviz_cfg = PathJoinSubstitution(
