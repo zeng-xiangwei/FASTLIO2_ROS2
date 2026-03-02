@@ -47,7 +47,7 @@ void PoseTransformNode::initRos() {
 #endif
 
   // 创建位姿保存服务
-  save_pose_service_ = this->create_service<interface::srv::SaveCurrentPose>(
+  save_pose_service_ = this->create_service<slam_interfaces::srv::SaveCurrentPose>(
       "save_current_pose",
       std::bind(&PoseTransformNode::handleSavePoseService, this, std::placeholders::_1, std::placeholders::_2));
 }
@@ -349,8 +349,8 @@ vln_msgs::msg::Localization PoseTransformNode::wrapCustomLocalizationMsg(const b
 }
 #endif
 
-void PoseTransformNode::handleSavePoseService(const std::shared_ptr<interface::srv::SaveCurrentPose::Request> request,
-                                              const std::shared_ptr<interface::srv::SaveCurrentPose::Response> response) {
+void PoseTransformNode::handleSavePoseService(const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Request> request,
+                                              const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response) {
   // 使用tf查询 map_frame -> lidar_frame 的位姿
   geometry_msgs::msg::TransformStamped transformStamped;
   try {

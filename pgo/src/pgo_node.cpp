@@ -26,7 +26,7 @@ PGONode::PGONode(const std::string& node_name) : Node(node_name) {
   m_sync->setAgePenalty(0.1);
   m_sync->registerCallback(std::bind(&PGONode::syncCB, this, std::placeholders::_1, std::placeholders::_2));
   m_timer = this->create_wall_timer(50ms, std::bind(&PGONode::timerCB, this));
-  m_save_map_srv = this->create_service<interface::srv::SaveMaps>(
+  m_save_map_srv = this->create_service<slam_interfaces::srv::SaveMaps>(
       "/pgo/save_maps", std::bind(&PGONode::saveMapsCB, this, std::placeholders::_1, std::placeholders::_2));
 
   m_relocalization_pose_sub = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
@@ -260,8 +260,8 @@ void PGONode::timerCB() {
   publishLoopMarkers(cur_time);
 }
 
-void PGONode::saveMapsCB(const std::shared_ptr<interface::srv::SaveMaps::Request> request,
-                std::shared_ptr<interface::srv::SaveMaps::Response> response) {
+void PGONode::saveMapsCB(const std::shared_ptr<slam_interfaces::srv::SaveMaps::Request> request,
+                std::shared_ptr<slam_interfaces::srv::SaveMaps::Response> response) {
   if (!std::filesystem::exists(request->file_path)) {
     response->success = false;
     response->message = request->file_path + " IS NOT EXISTS!";

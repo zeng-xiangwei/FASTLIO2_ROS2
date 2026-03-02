@@ -10,7 +10,7 @@
 
 #include "map_builder/commons.h"
 
-#include <interface/srv/save_current_pose.hpp>
+#include <slam_interfaces/srv/save_current_pose.hpp>
 #ifdef VLN_MSGS_FOUND
 #include <vln_msgs/msg/localization.hpp>
 #endif
@@ -94,7 +94,7 @@ class PoseTransformNode : public rclcpp::Node {
   V3D lidar_frec_angular_velocity_;
 
   // 位姿保存服务
-  rclcpp::Service<interface::srv::SaveCurrentPose>::SharedPtr save_pose_service_;
-  void handleSavePoseService(const std::shared_ptr<interface::srv::SaveCurrentPose::Request> request,
-                            const std::shared_ptr<interface::srv::SaveCurrentPose::Response> response);
+  rclcpp::Service<slam_interfaces::srv::SaveCurrentPose>::SharedPtr save_pose_service_;
+  void handleSavePoseService(const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Request> request,
+                            const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response);
 };
