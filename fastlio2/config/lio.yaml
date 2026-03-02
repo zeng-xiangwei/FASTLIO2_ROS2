@@ -2,7 +2,7 @@ imu_topic: /livox/imu
 lidar_topic: /livox/lidar
 body_frame: imubody
 world_frame: local
-global_frame: local
+global_frame: map
 print_time_cost: true
 ros_spin_thread: 3
 # lidar_type: livox、robosense

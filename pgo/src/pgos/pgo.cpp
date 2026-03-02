@@ -264,17 +264,18 @@ void PGO::searchForLoopPairs()
 void PGO::Match() {
     if (m_config.model == "localization" && m_config.match_enable)
     {
-        GlobalMatch();
+        if (GlobalMatch()) {
+            smoothAndUpdate();
+        }
     }
     else if (m_config.model == "mapping")
     {
         searchForLoopPairs();
+        smoothAndUpdate();
     }
 
-    smoothAndUpdate();
-    
 }
-void PGO::GlobalMatch()
+bool PGO::GlobalMatch()
 {
     // m_icp_localizer->setInput(cloud_with_pose.cloud);
     m_icp_localizer->setInput(m_key_poses.back().body_cloud);
@@ -285,15 +286,16 @@ void PGO::GlobalMatch()
     transform_global_local.topLeftCorner(3, 3) = m_key_poses.back().r_global.cast<float>();  
     // 打印匹配需要的耗时
     auto start = std::chrono::steady_clock::now();
-    if(m_icp_localizer->align(transform_global_local)) {
+    if(m_icp_localizer->align(transform_global_local) &&
+        m_icp_localizer->getRefineScore() < m_config.global_score_tresh) {
         // update offset by icp
         m_r_offset = transform_global_local.block<3, 3>(0, 0).cast<double>();
         m_t_offset = transform_global_local.block<3, 1>(0, 3).cast<double>();
     }
     else {
         // 增加匹配失败标志
-        std::cout << "GlobalMatch failed" << std::endl;
-        // return;
+        std::cout << "GlobalMatch failed, GlobalMatch score: "<< m_icp_localizer->getRefineScore()  << std::endl;
+        return false;
     }
 
     // 打印匹配耗时
@@ -322,6 +324,8 @@ void PGO::GlobalMatch()
     one_pair.r_offset = m_r_offset;
     one_pair.t_offset= m_t_offset;
     m_cache_pairs.push_back(one_pair);
+
+    return true;
 }
 
 void PGO::smoothAndUpdate()
@@ -379,6 +383,7 @@ void PGO::loadMap()
 {
 
     global_map_load = m_icp_localizer->loadMap(m_config.global_pcd_file);
+    std::cout << "current global map load :" << global_map_load << std::endl;
     // global_map_load = true;
     // return true;
 }

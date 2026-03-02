@@ -71,7 +71,7 @@ public:
     void Match();
 
     void loadMap();
-    void GlobalMatch();
+    bool GlobalMatch();
     
     bool getGlobalMapLoadStatus() { return global_map_load; }
 
@@ -100,7 +100,6 @@ private:
     double angle_thresh;
     double trans_thresh;
     bool have_add_global_pose = false;
-
 
     std::shared_ptr<ICPLocalizer> m_icp_localizer;
 };

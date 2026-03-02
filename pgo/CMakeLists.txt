@@ -44,6 +44,10 @@ include_directories(
 )
 
 set(SRC_LIST
+  # src/pclomp/ndt_omp_impl.hpp
+  # src/pclomp/ndt_omp.cpp
+  # src/pclomp/voxel_grid_covariance_omp_impl.hpp
+  # src/pclomp/voxel_grid_covariance_omp.cpp
   src/pgos/commons.cpp
   src/pgos/icp_localizer.cpp
   src/pgos/pgo.cpp

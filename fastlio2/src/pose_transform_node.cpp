@@ -122,7 +122,7 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
       tf2::Duration(100 * 1000000LL) 
     );
   } catch (const tf2::TransformException& ex) {
-    RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+    // RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
     return;
   }
 
@@ -216,7 +216,7 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
       tf2::Duration(100 * 1000000LL) 
     );
   } catch (const tf2::TransformException& ex) {
-    RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
+    // RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
     return;
   }
 
