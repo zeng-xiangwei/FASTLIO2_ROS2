@@ -285,7 +285,7 @@ bool PGO::GlobalMatch()
     transform_global_local.topRightCorner(3, 1) = m_key_poses.back().t_global.cast<float>();
     transform_global_local.topLeftCorner(3, 3) = m_key_poses.back().r_global.cast<float>();  
     // 打印匹配需要的耗时
-    auto start = std::chrono::steady_clock::now();
+    // auto start = std::chrono::steady_clock::now();
     if(m_icp_localizer->align(transform_global_local) &&
         m_icp_localizer->getRefineScore() < m_config.global_score_tresh) {
         // update offset by icp
@@ -299,10 +299,10 @@ bool PGO::GlobalMatch()
     }
 
     // 打印匹配耗时
-    auto end = std::chrono::steady_clock::now();
-    std::cout << "GlobalMatch time: " 
-        << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
-        << " ms" << std::endl;
+    // auto end = std::chrono::steady_clock::now();
+    // std::cout << "GlobalMatch time: " 
+    //     << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
+    //     << " ms" << std::endl;
 
     std::cout << "GlobalMatch score: " << m_icp_localizer->getRefineScore() << std::endl;
     std::cout << "GlobalMatch r_offset: " << m_r_offset << std::endl;

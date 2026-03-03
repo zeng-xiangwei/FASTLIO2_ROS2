@@ -1,8 +1,11 @@
 #pragma once
 #include "commons.h"
+#include <stdint.h>
 #include <filesystem>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/icp.h>
+#include <pcl/registration/gicp.h>
+#include <pcl/registration/registration.h>
 #include <pcl/filters/voxel_grid.h>
 
 struct ICPConfig
@@ -40,6 +43,7 @@ private:
     ICPConfig m_config;
     pcl::VoxelGrid<PointType> m_voxel_filter;
     pcl::IterativeClosestPoint<PointType, PointType> m_refine_icp;
+    // pcl::GeneralizedIterativeClosestPoint<PointType, PointType> m_refine_icp;
     pcl::IterativeClosestPoint<PointType, PointType> m_rough_icp;
     CloudType::Ptr m_refine_inp;
     CloudType::Ptr m_rough_inp;

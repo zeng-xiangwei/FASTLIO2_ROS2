@@ -18,7 +18,7 @@ bool ICPLocalizer::loadMap(const std::string& path) {
   LOG(INFO) << "load from " << path << ", points size: " << cloud->size();
   if (m_config.refine_map_resolution > 0) {
     m_voxel_filter.setLeafSize(m_config.refine_map_resolution, m_config.refine_map_resolution,
-                               m_config.refine_map_resolution);
+                              m_config.refine_map_resolution);
     m_voxel_filter.setInputCloud(cloud);
     m_voxel_filter.filter(*m_refine_tgt);
   } else {
@@ -26,7 +26,7 @@ bool ICPLocalizer::loadMap(const std::string& path) {
   }
   if (m_config.rough_map_resolution > 0) {
     m_voxel_filter.setLeafSize(m_config.rough_map_resolution, m_config.rough_map_resolution,
-                               m_config.rough_map_resolution);
+                              m_config.rough_map_resolution);
     m_voxel_filter.setInputCloud(cloud);
     m_voxel_filter.filter(*m_rough_tgt);
   } else {
@@ -37,7 +37,7 @@ bool ICPLocalizer::loadMap(const std::string& path) {
 void ICPLocalizer::setInput(const CloudType::Ptr& cloud) {
   if (m_config.refine_scan_resolution > 0) {
     m_voxel_filter.setLeafSize(m_config.refine_scan_resolution, m_config.refine_scan_resolution,
-                               m_config.refine_scan_resolution);
+                              m_config.refine_scan_resolution);
     m_voxel_filter.setInputCloud(cloud);
     m_voxel_filter.filter(*m_refine_inp);
   } else {
@@ -46,7 +46,7 @@ void ICPLocalizer::setInput(const CloudType::Ptr& cloud) {
 
   if (m_config.rough_scan_resolution > 0) {
     m_voxel_filter.setLeafSize(m_config.rough_scan_resolution, m_config.rough_scan_resolution,
-                               m_config.rough_scan_resolution);
+                              m_config.rough_scan_resolution);
     m_voxel_filter.setInputCloud(cloud);
     m_voxel_filter.filter(*m_rough_inp);
   } else {
@@ -59,6 +59,7 @@ bool ICPLocalizer::align(M4F& guess) {
   if (m_refine_tgt->size() == 0 || m_rough_tgt->size() == 0) {
     return false;
   }
+  // auto start = std::chrono::steady_clock::now();
   m_rough_icp.setMaximumIterations(m_config.rough_max_iteration);
   m_rough_icp.setInputSource(m_rough_inp);
   m_rough_icp.setInputTarget(m_rough_tgt);
@@ -69,18 +70,28 @@ bool ICPLocalizer::align(M4F& guess) {
     return false;
   }
   rough_score = m_rough_icp.getFitnessScore(m_config.rough_score_dis_thresh);
-
+  // auto end = std::chrono::steady_clock::now();
+  // std::cout << "rough match time: " 
+  //   << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
+  //   << " ms" << std::endl;
+  // start = std::chrono::steady_clock::now();
   m_refine_icp.setMaximumIterations(m_config.refine_max_iteration);
   m_refine_icp.setInputSource(m_refine_inp);
   m_refine_icp.setInputTarget(m_refine_tgt);
   m_refine_icp.setMaxCorrespondenceDistance(m_config.refine_scan_resolution * 3);
+  // m_refine_icp.setTransformationEpsilon(0.001);      // 变换收敛阈值（迭代停止条件）
+  // m_refine_icp.setEuclideanFitnessEpsilon(0.01);    // 配准误差收敛阈值
+  //
   m_refine_icp.align(*aligned_cloud, m_rough_icp.getFinalTransformation());
   if (!m_refine_icp.hasConverged() ||
       m_refine_icp.getFitnessScore(m_config.refine_score_dis_thresh) > m_config.refine_score_thresh) {
     return false;
   }
   refine_score = m_refine_icp.getFitnessScore(m_config.refine_score_dis_thresh);
-
+  // end = std::chrono::steady_clock::now();
+  // std::cout << "refine match time: " 
+  //   << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() 
+  //   << " ms" << std::endl;
   guess = m_refine_icp.getFinalTransformation();
   return true;
 }
