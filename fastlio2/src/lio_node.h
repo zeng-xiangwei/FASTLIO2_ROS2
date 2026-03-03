@@ -88,6 +88,7 @@ class LIONode : public rclcpp::Node {
   void imuCB(const sensor_msgs::msg::Imu::SharedPtr msg);
   void livoxLidarCB(const livox_ros_driver2::msg::CustomMsg::SharedPtr msg);
   void robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
+  void simLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
   bool syncPackage();
 

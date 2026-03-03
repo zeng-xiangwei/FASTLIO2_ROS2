@@ -35,6 +35,8 @@ find_package(interface REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(glog REQUIRED)
 
+find_package(slam_interfaces REQUIRED)
+
 include_directories(
   ${EIGEN3_INCLUDE_DIR}
   ${PCL_INCLUDE_DIRS}
@@ -54,7 +56,7 @@ set(SRC_LIST
   src/utils/occupancy_map.cpp)
 
 add_executable(pgo_node src/pgo_node.cpp ${SRC_LIST})
-ament_target_dependencies(pgo_node rclcpp std_msgs sensor_msgs nav_msgs message_filters pcl_conversions tf2_ros geometry_msgs visualization_msgs interface GTSAM)
+ament_target_dependencies(pgo_node rclcpp std_msgs sensor_msgs nav_msgs message_filters pcl_conversions tf2_ros geometry_msgs visualization_msgs interface slam_interfaces GTSAM)
 target_link_libraries(pgo_node 
   ${PCL_LIBRARIES} gtsam yaml-cpp glog)
 

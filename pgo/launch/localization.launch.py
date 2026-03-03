@@ -1,9 +1,20 @@
 import launch
 import launch_ros.actions
-from launch.substitutions import PathJoinSubstitution
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
+    global_pcd_file_arg = DeclareLaunchArgument('global_pcd_file', 
+                                default_value='/home/diana/vln/fastlio2-ros2_ws/data/map.pcd',
+                                description='Path to the global PCD map file')
+    initial_pose_file_arg = DeclareLaunchArgument('initial_pose_file', 
+                                default_value='/home/diana/vln/fastlio2-ros2_ws/data/initial_pose.txt',
+                                description='Path to the initial pose file')
+    pose_load_mode_arg = DeclareLaunchArgument('pose_load_mode', 
+                                default_value='0',
+                                description='Pose load mode: 0=from topic, 1=from file first')
+    
     rviz_cfg = PathJoinSubstitution(
         [FindPackageShare("pgo"), "rviz", "pgo.rviz"]
     )
@@ -21,6 +32,9 @@ def generate_launch_description():
 
     return launch.LaunchDescription(
         [
+            global_pcd_file_arg,
+            initial_pose_file_arg,
+            pose_load_mode_arg,
             launch_ros.actions.Node(
                 package="fastlio2",
                 namespace="fastlio2",
@@ -42,7 +56,10 @@ def generate_launch_description():
                 name="pgo_node",
                 output="screen",
                 # prefix=['xterm -e gdb -ex run --args'],
-                parameters=[{"config_path": pgo_config_path.perform(launch.LaunchContext())}],
+                parameters=[{"config_path": pgo_config_path.perform(launch.LaunchContext()),
+                             "global_pcd_file": LaunchConfiguration('global_pcd_file'),
+                             "initial_pose_file": LaunchConfiguration('initial_pose_file'),
+                             "pose_load_mode": LaunchConfiguration('pose_load_mode')}],
             ),
 
             launch_ros.actions.Node(

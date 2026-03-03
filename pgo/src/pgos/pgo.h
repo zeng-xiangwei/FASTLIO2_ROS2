@@ -47,7 +47,6 @@ class PGO
 public:
     PGO(const PgoConfig &config);
 
-    void loadPose();
     void initial();
     bool initialPose(const CloudWithPose &cloud_with_pose, const Eigen::Vector3d &init_pos, 
         const Eigen::Quaterniond &init_rot);

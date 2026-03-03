@@ -19,7 +19,7 @@
 #include <visualization_msgs/msg/marker_array.hpp>
 #include <yaml-cpp/yaml.h>
 
-#include "interface/srv/save_maps.hpp"
+#include "slam_interfaces/srv/save_maps.hpp"
 #include "pgos/commons.h"
 // #include "pgos/simple_pgo.h"
 #include "pgos/pgo.h"
@@ -65,10 +65,8 @@ public:
 
     void timerCB();
 
-    void saveMapsCB(const std::shared_ptr<interface::srv::SaveMaps::Request> request,
-                std::shared_ptr<interface::srv::SaveMaps::Response> response);
-    // void saveMapsCB(const interface::srv::SaveMaps::Request::SharedPtr& req,
-    //                 interface::srv::SaveMaps::Response::SharedPtr res);
+    void saveMapsCB(const std::shared_ptr<slam_interfaces::srv::SaveMaps::Request> request,
+                std::shared_ptr<slam_interfaces::srv::SaveMaps::Response> response);
 
     void initPoseCB(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
     // void initPoseCB(const nav_msgs::msg::Odometry::ConstSharedPtr& odom_msg);
@@ -88,7 +86,7 @@ private:
 
     rclcpp::TimerBase::SharedPtr m_timer;
     rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr m_loop_marker_pub;
-    rclcpp::Service<interface::srv::SaveMaps>::SharedPtr m_save_map_srv;
+    rclcpp::Service<slam_interfaces::srv::SaveMaps>::SharedPtr m_save_map_srv;
     message_filters::Subscriber<sensor_msgs::msg::PointCloud2> m_cloud_sub;
     message_filters::Subscriber<nav_msgs::msg::Odometry> m_odom_sub;
     std::shared_ptr<tf2_ros::TransformBroadcaster> m_tf_broadcaster;
@@ -101,5 +99,10 @@ private:
      rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_global_map_pub;
 
     bool initial_state = false;
+
+    // 用于标记是否已经从位姿文件读取过初始位姿（避免重复读取）
+    bool m_pose_file_loaded = false;
+    // 保存从文件读取的初始位姿
+    std::shared_ptr<Pose> m_file_init_pose;
 
 };

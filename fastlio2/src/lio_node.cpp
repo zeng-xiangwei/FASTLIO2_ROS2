@@ -205,6 +205,25 @@ void LIONode::robosenseLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr ms
   m_condition.notify_all();
 }
 
+void LIONode::simLidarCB(const sensor_msgs::msg::PointCloud2::SharedPtr msg) {
+  auto t1 = std::chrono::high_resolution_clock::now();
+  CloudType::Ptr cloud = Utils::simPCL(msg, m_builder_config.lidar_filter_num, m_builder_config.lidar_min_range,
+                                       m_builder_config.lidar_max_range);
+  auto t2 = std::chrono::high_resolution_clock::now();
+
+  double cost = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() * 1000;
+  std::lock_guard<std::mutex> lock(m_mutex);
+  double timestamp = Utils::getSec(msg->header);
+  if (timestamp < m_state_data.last_lidar_time) {
+    RCLCPP_WARN(this->get_logger(), "Lidar Message is out of order");
+    std::deque<std::pair<double, pcl::PointCloud<pcl::PointXYZINormal>::Ptr>>().swap(m_state_data.lidar_buffer);
+  }
+  m_state_data.lidar_buffer.emplace_back(timestamp, cloud);
+  m_state_data.last_lidar_time = timestamp;
+  m_state_data.has_new_data = true;
+  m_condition.notify_all();
+}
+
 bool LIONode::syncPackage() {
   std::lock_guard<std::mutex> lock(m_mutex);
   if (m_state_data.imu_buffer.empty() || m_state_data.lidar_buffer.empty()) return false;
