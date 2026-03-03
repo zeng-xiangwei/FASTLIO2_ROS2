@@ -2,15 +2,13 @@
 
 #include <nav_msgs/msg/odometry.hpp>
 #include <rclcpp/rclcpp.hpp>
-#include <tf2_ros/static_transform_broadcaster.h>
-
-#include <tf2_ros/buffer.h>
-#include <tf2_ros/transform_listener.h>
+#include <slam_interfaces/srv/save_current_pose.hpp>
 #include <tf2/exceptions.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/static_transform_broadcaster.h>
+#include <tf2_ros/transform_listener.h>
 
 #include "map_builder/commons.h"
-
-#include <slam_interfaces/srv/save_current_pose.hpp>
 #ifdef VLN_MSGS_FOUND
 #include <vln_msgs/msg/localization.hpp>
 #endif
@@ -96,5 +94,7 @@ class PoseTransformNode : public rclcpp::Node {
   // 位姿保存服务
   rclcpp::Service<slam_interfaces::srv::SaveCurrentPose>::SharedPtr save_pose_service_;
   void handleSavePoseService(const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Request> request,
-                            const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response);
+                             const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response);
+  bool saveLidarPoseToFile(const geometry_msgs::msg::TransformStamped& T_map_lidar, const std::string& file_path);
+  bool saveCarbodyPoseToFile(const geometry_msgs::msg::TransformStamped& T_map_carbody, const std::string& file_path);
 };

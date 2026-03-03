@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iomanip>
+
 #include <yaml-cpp/yaml.h>
 
 PoseTransformNode::PoseTransformNode(const std::string& node_name) : Node(node_name) {}
@@ -15,19 +16,11 @@ void PoseTransformNode::initRos() {
   broadCastTF(config_.imu_frame, config_.carbody_frame, config_.T_imu_carbody.trans, config_.T_imu_carbody.rot);
   broadCastTF(config_.carbody_frame, config_.lidar_frame, config_.T_carbody_lidar.trans, config_.T_carbody_lidar.rot);
 
- 
-  tf_buffer_ = std::make_shared<tf2_ros::Buffer>(
-    this->get_clock(), 
-    tf2::Duration(10 * 1000000000LL), 
-    shared_from_this()
-  );
+  tf_buffer_ =
+      std::make_shared<tf2_ros::Buffer>(this->get_clock(), tf2::Duration(10 * 1000000000LL), shared_from_this());
   tf_buffer_->setUsingDedicatedThread(true);
   // // 初始化tf2 listener
-  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(
-    *tf_buffer_,  
-    this,         
-    false 
-  );
+  tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_, this, false);
 
   imu_frec_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
       "lio_imu_frec_odom", rclcpp::QoS(10),
@@ -114,13 +107,11 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   // // 查询最新的tf变换
   geometry_msgs::msg::TransformStamped transformStamped;
   try {
-    transformStamped = tf_buffer_->lookupTransform(
-      config_.global_frame,        // 目标坐标系
-      msg->header.frame_id,// 源坐标系
-      tf2::TimePointZero,  // 最近的变换
-      // standard_msg.header.stamp,   // 时间戳
-      tf2::Duration(100 * 1000000LL) 
-    );
+    transformStamped = tf_buffer_->lookupTransform(config_.global_frame,  // 目标坐标系
+                                                   msg->header.frame_id,  // 源坐标系
+                                                   tf2::TimePointZero,    // 最近的变换
+                                                   // standard_msg.header.stamp,   // 时间戳
+                                                   tf2::Duration(100 * 1000000LL));
   } catch (const tf2::TransformException& ex) {
     // RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
     return;
@@ -130,14 +121,13 @@ void PoseTransformNode::lidarFrecPoseCallback(const nav_msgs::msg::Odometry::Sha
   trans_global.x() = transformStamped.transform.translation.x;
   trans_global.y() = transformStamped.transform.translation.y;
   trans_global.z() = transformStamped.transform.translation.z;
-  Eigen::Quaterniond rot_global(
-    transformStamped.transform.rotation.w,  // 实部 w 在前
-    transformStamped.transform.rotation.x,  // 虚部 x
-    transformStamped.transform.rotation.y,  // 虚部 y
-    transformStamped.transform.rotation.z   // 虚部 z
+  Eigen::Quaterniond rot_global(transformStamped.transform.rotation.w,  // 实部 w 在前
+                                transformStamped.transform.rotation.x,  // 虚部 x
+                                transformStamped.transform.rotation.y,  // 虚部 y
+                                transformStamped.transform.rotation.z   // 虚部 z
   );
   rot_global.normalize();
- 
+
   MinPose T_w_global(trans_global, rot_global);
   MinPose T_global_carbody = T_w_global * T_w_carbody;
   // standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot);
@@ -201,20 +191,18 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
                          msg->pose.pose.orientation.z);
   MinPose T_w_imu(trans, rot);
   MinPose T_w_carbody = T_w_imu * config_.T_imu_carbody;
-  
+
   // TODO: 在此接收 T^global_local 的tf，并对 T_w_carbody 进行转换
 
   // // 获取tf中的global frame到world frame的转换关系
   // // 查询最新的tf变换
   geometry_msgs::msg::TransformStamped transformStamped;
   try {
-    transformStamped = tf_buffer_->lookupTransform(
-      config_.global_frame,        // 目标坐标系
-      msg->header.frame_id,// 源坐标系
-      tf2::TimePointZero,  // 最近的变换
-      // standard_msg.header.stamp,   // 时间戳
-      tf2::Duration(100 * 1000000LL) 
-    );
+    transformStamped = tf_buffer_->lookupTransform(config_.global_frame,  // 目标坐标系
+                                                   msg->header.frame_id,  // 源坐标系
+                                                   tf2::TimePointZero,    // 最近的变换
+                                                   // standard_msg.header.stamp,   // 时间戳
+                                                   tf2::Duration(100 * 1000000LL));
   } catch (const tf2::TransformException& ex) {
     // RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
     return;
@@ -224,20 +212,20 @@ void PoseTransformNode::imuFrecPoseCallback(const nav_msgs::msg::Odometry::Share
   trans_global.x() = transformStamped.transform.translation.x;
   trans_global.y() = transformStamped.transform.translation.y;
   trans_global.z() = transformStamped.transform.translation.z;
-  Eigen::Quaterniond rot_global(
-    transformStamped.transform.rotation.w,  // 实部 w 在前
-    transformStamped.transform.rotation.x,  // 虚部 x
-    transformStamped.transform.rotation.y,  // 虚部 y
-    transformStamped.transform.rotation.z   // 虚部 z
+  Eigen::Quaterniond rot_global(transformStamped.transform.rotation.w,  // 实部 w 在前
+                                transformStamped.transform.rotation.x,  // 虚部 x
+                                transformStamped.transform.rotation.y,  // 虚部 y
+                                transformStamped.transform.rotation.z   // 虚部 z
   );
   rot_global.normalize();
- 
+
   MinPose T_w_global(trans_global, rot_global);
   MinPose T_global_carbody = T_w_global * T_w_carbody;
 
   // imu 的速度直接用激光频率下的速度，因为imu 频率下的速度不稳定
-  nav_msgs::msg::Odometry standard_msg = wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot,
-                                                             lidar_frec_velocity_, lidar_frec_angular_velocity_);
+  nav_msgs::msg::Odometry standard_msg =
+      wrapStandardPoseMsg(msg->header.stamp, T_global_carbody.trans, T_global_carbody.rot, lidar_frec_velocity_,
+                          lidar_frec_angular_velocity_);
   standard_msg.header.frame_id = config_.global_frame;
   imu_frec_pose_pub_->publish(standard_msg);
 
@@ -349,16 +337,20 @@ vln_msgs::msg::Localization PoseTransformNode::wrapCustomLocalizationMsg(const b
 }
 #endif
 
-void PoseTransformNode::handleSavePoseService(const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Request> request,
-                                              const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response) {
+void PoseTransformNode::handleSavePoseService(
+    const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Request> request,
+    const std::shared_ptr<slam_interfaces::srv::SaveCurrentPose::Response> response) {
   // 使用tf查询 map_frame -> lidar_frame 的位姿
-  geometry_msgs::msg::TransformStamped transformStamped;
+  geometry_msgs::msg::TransformStamped transformStamped_map_lidar, transformStamped_map_carbody;
   try {
-    transformStamped = tf_buffer_->lookupTransform(
-        config_.global_frame,    // 目标坐标系
-        config_.lidar_frame,  // 源坐标系
-        tf2::TimePointZero,   // 最近的变换
-        tf2::Duration(100 * 1000000LL));
+    transformStamped_map_lidar = tf_buffer_->lookupTransform(config_.global_frame,  // 目标坐标系
+                                                             config_.lidar_frame,   // 源坐标系
+                                                             tf2::TimePointZero,    // 最近的变换
+                                                             tf2::Duration(100 * 1000000LL));
+    transformStamped_map_carbody = tf_buffer_->lookupTransform(config_.global_frame,   // 目标坐标系
+                                                               config_.carbody_frame,  // 源坐标系
+                                                               tf2::TimePointZero,     // 最近的变换
+                                                               tf2::Duration(100 * 1000000LL));
   } catch (const tf2::TransformException& ex) {
     RCLCPP_WARN(this->get_logger(), "Failed to lookup transform: %s", ex.what());
     response->success = false;
@@ -366,27 +358,47 @@ void PoseTransformNode::handleSavePoseService(const std::shared_ptr<slam_interfa
     return;
   }
 
+  if (!request->localization_pose_file.empty()) {
+    if (!saveLidarPoseToFile(transformStamped_map_lidar, request->localization_pose_file)) {
+      response->success = false;
+      response->message = "Failed to save lidar pose to file: " + request->localization_pose_file;
+      return;
+    }
+  }
+
+  if (!request->virtual_objects_file.empty()) {
+    if (!saveCarbodyPoseToFile(transformStamped_map_carbody, request->virtual_objects_file)) {
+      response->success = false;
+      response->message = "Failed to save carbody pose to file: " + request->virtual_objects_file;
+      return;
+    }
+  }
+
+  response->success = true;
+  response->message = "All poses saved successfully";
+}
+
+bool PoseTransformNode::saveLidarPoseToFile(const geometry_msgs::msg::TransformStamped& T_map_lidar,
+                                            const std::string& file_path) {
   // 获取当前时间戳
-  double timestamp = this->now().seconds();
+  double timestamp = T_map_lidar.header.stamp.sec + T_map_lidar.header.stamp.nanosec * 1e-9;
 
   // 提取位置
-  double x = transformStamped.transform.translation.x;
-  double y = transformStamped.transform.translation.y;
-  double z = transformStamped.transform.translation.z;
+  double x = T_map_lidar.transform.translation.x;
+  double y = T_map_lidar.transform.translation.y;
+  double z = T_map_lidar.transform.translation.z;
 
   // 提取四元数 (qx, qy, qz, qw)
-  double qx = transformStamped.transform.rotation.x;
-  double qy = transformStamped.transform.rotation.y;
-  double qz = transformStamped.transform.rotation.z;
-  double qw = transformStamped.transform.rotation.w;
+  double qx = T_map_lidar.transform.rotation.x;
+  double qy = T_map_lidar.transform.rotation.y;
+  double qz = T_map_lidar.transform.rotation.z;
+  double qw = T_map_lidar.transform.rotation.w;
 
   // 打开文件并写入位姿
-  std::ofstream out_file(request->file_path, std::ios::out);
+  std::ofstream out_file(file_path, std::ios::out);
   if (!out_file.is_open()) {
-    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", request->file_path.c_str());
-    response->success = false;
-    response->message = "Failed to open file: " + request->file_path;
-    return;
+    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", file_path.c_str());
+    return false;
   }
 
   // 写入格式: timestamp x y z qx qy qz qw
@@ -395,7 +407,39 @@ void PoseTransformNode::handleSavePoseService(const std::shared_ptr<slam_interfa
            << std::endl;
   out_file.close();
 
-  RCLCPP_INFO(this->get_logger(), "Pose saved to file: %s", request->file_path.c_str());
-  response->success = true;
-  response->message = "Pose saved successfully";
+  RCLCPP_INFO(this->get_logger(), "Pose saved to file: %s", file_path.c_str());
+  return true;
+}
+
+bool PoseTransformNode::saveCarbodyPoseToFile(const geometry_msgs::msg::TransformStamped& T_map_carbody,
+                                              const std::string& file_path) {
+  // 获取当前时间戳
+  double timestamp = T_map_carbody.header.stamp.sec + T_map_carbody.header.stamp.nanosec * 1e-9;
+
+  // 提取位置
+  double x = T_map_carbody.transform.translation.x;
+  double y = T_map_carbody.transform.translation.y;
+  double z = T_map_carbody.transform.translation.z;
+
+  // 提取四元数 (qx, qy, qz, qw)
+  double qx = T_map_carbody.transform.rotation.x;
+  double qy = T_map_carbody.transform.rotation.y;
+  double qz = T_map_carbody.transform.rotation.z;
+  double qw = T_map_carbody.transform.rotation.w;
+
+  // 打开文件并写入位姿
+  std::ofstream out_file(file_path, std::ios::out);
+  if (!out_file.is_open()) {
+    RCLCPP_ERROR(this->get_logger(), "Failed to open file: %s", file_path.c_str());
+    return false;
+  }
+
+  // 写入格式: name x y z qx qy qz qw
+  out_file << std::fixed << std::setprecision(6);
+  out_file << "init" << " " << x << " " << y << " " << z << " " << qx << " " << qy << " " << qz << " " << qw
+           << std::endl;
+  out_file.close();
+
+  RCLCPP_INFO(this->get_logger(), "Carbody init Pose saved to file: %s", file_path.c_str());
+  return true;
 }

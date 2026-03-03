@@ -325,7 +325,7 @@ void PGONode::saveMapsCB(const std::shared_ptr<slam_interfaces::srv::SaveMaps::R
   pcl::io::savePCDFileBinary(map_path.string(), *ret);
 
   // 保存2d栅格地图
-  occupancy_map.Save(map_path.parent_path().string(), "map_2d");
+  occupancy_map.Save(map_path.parent_path().string(), "map");
 
   response->success = true;
   response->message = "SAVE SUCCESS!";

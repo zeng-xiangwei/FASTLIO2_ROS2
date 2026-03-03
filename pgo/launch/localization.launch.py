@@ -3,6 +3,7 @@ import launch_ros.actions
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch.conditions import IfCondition
 
 def generate_launch_description():
     global_pcd_file_arg = DeclareLaunchArgument('global_pcd_file', 
@@ -15,6 +16,8 @@ def generate_launch_description():
                                 default_value='0',
                                 description='Pose load mode: 0=from topic, 1=from file first')
     
+    visualize_arg = DeclareLaunchArgument('visualize', default_value='true')
+
     rviz_cfg = PathJoinSubstitution(
         [FindPackageShare("pgo"), "rviz", "pgo.rviz"]
     )
@@ -35,6 +38,8 @@ def generate_launch_description():
             global_pcd_file_arg,
             initial_pose_file_arg,
             pose_load_mode_arg,
+            visualize_arg,
+
             launch_ros.actions.Node(
                 package="fastlio2",
                 namespace="fastlio2",
@@ -69,6 +74,7 @@ def generate_launch_description():
                 name="rviz2",
                 output="screen",
                 arguments=["-d", rviz_cfg.perform(launch.LaunchContext()),'--ros-args', '--log-level', 'WARN'],
+                condition=IfCondition(LaunchConfiguration('visualize')),
             )
         ]
     )
