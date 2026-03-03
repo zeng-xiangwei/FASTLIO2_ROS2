@@ -13,7 +13,7 @@ pgo_config:
     submap_resolution: 0.1
     min_loop_detect_duration: 5.0
 
-    global_score_tresh: 0.001
+    global_score_tresh: 0.02
     global_pcd_file: /home/haiboliu/project/vln/localization/map/map.pcd
     # global_pcd_file: "/home/haiboliu/project/vln/localization/map/test_map/map.pcd"
     # global_pcd_file: /home/haiboliu/project/vln/localization/map/map_no3_building/map.pcd
@@ -43,7 +43,7 @@ pgo_config:
         refine_scan_resolution: 0.1
         refine_map_resolution: 0.1
         refine_max_iteration: 10
-        refine_score_thresh: 0.3
+        refine_score_thresh: 0.02
         refine_score_dis_thresh: 1.0
 
 grid_map_config:
