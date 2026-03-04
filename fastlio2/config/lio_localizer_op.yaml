@@ -39,7 +39,8 @@ imu_init_num: 20
 near_search_num: 5
 ieskf_max_iter: 3
 
-gravity_align: false
+# 如果不用pgo做定位，则设为false，如果用pgo做定位，则设为true
+gravity_align: true
 esti_il: false
 
 r_il: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]

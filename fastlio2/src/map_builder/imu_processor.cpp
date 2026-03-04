@@ -32,8 +32,24 @@ bool IMUProcessor::initialize(SyncPackage& package) {
   m_kf->x().t_il = m_config.t_il;
   m_kf->x().bg = gyro_mean;
   if (m_config.gravity_align) {
-    m_kf->x().r_wi = (Eigen::Quaterniond::FromTwoVectors((-acc_mean).normalized(), V3D(0.0, 0.0, -1.0)).matrix());
+    Eigen::Matrix3d gravity_rotation =
+        Eigen::Quaterniond::FromTwoVectors((-acc_mean).normalized(), V3D(0.0, 0.0, -1.0)).matrix();
+
+    // 将旋转矩阵分解为 yaw-pitch-roll，然后将 yaw 设为 0
+    // ZYX顺序，即yaw-pitch-roll
+    Eigen::Vector3d euler_angles = gravity_rotation.eulerAngles(2, 1, 0);
+    double roll = euler_angles(2);   // roll
+    double pitch = euler_angles(1);  // pitch
+
+    // 构造新的旋转矩阵，只有roll和pitch，yaw为0
+    Eigen::AngleAxisd roll_angle(roll, Eigen::Vector3d::UnitX());
+    Eigen::AngleAxisd pitch_angle(pitch, Eigen::Vector3d::UnitY());
+    Eigen::Quaterniond q_wi = pitch_angle * roll_angle;
+    m_kf->x().r_wi = q_wi.toRotationMatrix();
     m_kf->x().initGravityDir(V3D(0, 0, -1.0));
+
+    LOG(INFO) << "Initializing IMU with pitch: " << pitch << ", roll: " << roll
+              << ", quaternion q^W_I: " << q_wi.coeffs().transpose();
   } else if (m_config.gravity_align_to_global_map) {
     // 用于定位
     m_kf->x().initGravityDir(-m_kf->x().r_wi * acc_mean);
