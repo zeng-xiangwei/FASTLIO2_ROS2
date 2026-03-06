@@ -75,10 +75,23 @@ bool PGO::initialPose(const CloudWithPose &cloud_with_pose,
     transform_global_local.topRightCorner(3, 1) = init_pose_t.cast<float>();
     transform_global_local.topLeftCorner(3, 3) = init_pose_r.toRotationMatrix().cast<float>();
 
-    if(m_icp_localizer->align(transform_global_local)) {
+    M4F transform_local_body = M4F::Identity();
+    PoseWithTime cloud_pose = cloud_with_pose.pose;
+    transform_local_body.topRightCorner(3, 1) = cloud_pose.t.cast<float>();
+    transform_local_body.topLeftCorner(3, 3) = cloud_pose.r.cast<float>();
+    M4F transform_global_body = transform_global_local * transform_local_body;
+
+    if(m_icp_localizer->align(transform_global_body)) {
         // update offset by icp
-        m_r_offset = transform_global_local.block<3, 3>(0, 0).cast<double>();
-        m_t_offset = transform_global_local.block<3, 1>(0, 3).cast<double>();
+        M4F T_global_local = transform_global_body * transform_local_body.inverse();
+        m_r_offset = T_global_local.block<3, 3>(0, 0).cast<double>();
+        m_t_offset = T_global_local.block<3, 1>(0, 3).cast<double>();
+        Eigen::Quaterniond q_offset(m_r_offset);
+        LOG(INFO) << "Relocalization ICP align success, translation: " << m_t_offset.transpose();
+        LOG(INFO) << "Relocalization ICP align success, rotation: " << q_offset.coeffs().transpose();
+    } else {
+        LOG(ERROR) << "Relocalization ICP align failed";
+        return false;
     }
 
     // 比较m_r_offset与initial_pose_r的夹角（角度阈值单位为度）
