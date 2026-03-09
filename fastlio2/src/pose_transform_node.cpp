@@ -389,11 +389,18 @@ bool PoseTransformNode::saveLidarPoseToFile(const geometry_msgs::msg::TransformS
   double z = T_map_lidar.transform.translation.z;
 
   // 提取四元数 (qx, qy, qz, qw)
-  double qx = T_map_lidar.transform.rotation.x;
-  double qy = T_map_lidar.transform.rotation.y;
-  double qz = T_map_lidar.transform.rotation.z;
-  double qw = T_map_lidar.transform.rotation.w;
-
+  // 仅计算 yaw 角，因为需要与 rviz 中的 2d pose 一致，适配激光倾斜的情况
+  Eigen::Quaterniond rotation(T_map_lidar.transform.rotation.w,
+                                     T_map_lidar.transform.rotation.x,
+                                     T_map_lidar.transform.rotation.y,
+                                     T_map_lidar.transform.rotation.z);
+  Eigen::Vector3d euler_angles = rotation.toRotationMatrix().eulerAngles(2, 1, 0);
+  double yaw = euler_angles[0];
+  Eigen::Quaterniond q_yaw(Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()));
+  double qx = q_yaw.x();
+  double qy = q_yaw.y();
+  double qz = q_yaw.z();
+  double qw = q_yaw.w();
   // 打开文件并写入位姿
   std::ofstream out_file(file_path, std::ios::out);
   if (!out_file.is_open()) {
