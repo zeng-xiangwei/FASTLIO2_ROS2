@@ -63,7 +63,7 @@ bool ICPLocalizer::align(M4F& guess) {
   m_rough_icp.setMaximumIterations(m_config.rough_max_iteration);
   m_rough_icp.setInputSource(m_rough_inp);
   m_rough_icp.setInputTarget(m_rough_tgt);
-  m_rough_icp.setMaxCorrespondenceDistance(m_config.rough_scan_resolution * 2);
+  m_rough_icp.setMaxCorrespondenceDistance(m_config.rough_max_correspondence_dis);
   m_rough_icp.align(*aligned_cloud, guess);
   if (!m_rough_icp.hasConverged() || 
     m_rough_icp.getFitnessScore(m_config.rough_score_dis_thresh) > m_config.rough_score_thresh) {
@@ -78,7 +78,7 @@ bool ICPLocalizer::align(M4F& guess) {
   m_refine_icp.setMaximumIterations(m_config.refine_max_iteration);
   m_refine_icp.setInputSource(m_refine_inp);
   m_refine_icp.setInputTarget(m_refine_tgt);
-  m_refine_icp.setMaxCorrespondenceDistance(m_config.refine_scan_resolution * 3);
+  m_refine_icp.setMaxCorrespondenceDistance(m_config.refine_max_correspondence_dis);
   // m_refine_icp.setTransformationEpsilon(0.001);      // 变换收敛阈值（迭代停止条件）
   // m_refine_icp.setEuclideanFitnessEpsilon(0.01);    // 配准误差收敛阈值
   //

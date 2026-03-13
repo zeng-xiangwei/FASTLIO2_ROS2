@@ -14,12 +14,14 @@ struct ICPConfig
     double refine_map_resolution = 0.1;
     double refine_score_dis_thresh = 1.0;
     double refine_score_thresh = 0.1;
+    double refine_max_correspondence_dis = 1.0;
     int refine_max_iteration = 10;
 
     double rough_scan_resolution = 0.25;
     double rough_map_resolution = 0.25;
     double rough_score_dis_thresh = 1.0;
     double rough_score_thresh = 0.2;
+    double rough_max_correspondence_dis = 1.0;
     int rough_max_iteration = 5;
 };
 

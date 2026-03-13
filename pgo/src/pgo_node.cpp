@@ -87,12 +87,14 @@ void PGONode::loadParameters() {
   m_pgo_config.icp_config.rough_max_iteration = icp_config["rough_max_iteration"].as<int>();
   m_pgo_config.icp_config.rough_score_thresh = icp_config["rough_score_thresh"].as<double>();
   m_pgo_config.icp_config.rough_score_dis_thresh = icp_config["rough_score_dis_thresh"].as<double>();
+  m_pgo_config.icp_config.rough_max_correspondence_dis = icp_config["rough_max_correspondence_dis"].as<double>();
 
   m_pgo_config.icp_config.refine_scan_resolution = icp_config["refine_scan_resolution"].as<double>();
   m_pgo_config.icp_config.refine_map_resolution = icp_config["refine_map_resolution"].as<double>();
   m_pgo_config.icp_config.refine_max_iteration = icp_config["refine_max_iteration"].as<int>();
   m_pgo_config.icp_config.refine_score_thresh = icp_config["refine_score_thresh"].as<double>();
   m_pgo_config.icp_config.refine_score_dis_thresh = icp_config["refine_score_dis_thresh"].as<double>();
+  m_pgo_config.icp_config.refine_max_correspondence_dis = icp_config["refine_max_correspondence_dis"].as<double>();
 
   YAML::Node grid_map_config = config["grid_map_config"];
   m_grid_map_config.grid_2d_z_min = grid_map_config["grid_2d_z_min"].as<float>();
