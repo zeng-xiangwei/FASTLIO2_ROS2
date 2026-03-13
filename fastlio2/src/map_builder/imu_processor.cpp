@@ -32,24 +32,35 @@ bool IMUProcessor::initialize(SyncPackage& package) {
   m_kf->x().t_il = m_config.t_il;
   m_kf->x().bg = gyro_mean;
   if (m_config.gravity_align) {
-    Eigen::Matrix3d gravity_rotation =
-        Eigen::Quaterniond::FromTwoVectors((-acc_mean).normalized(), V3D(0.0, 0.0, -1.0)).matrix();
+    // Compute rotation
+    // ref: https://github.com/rpng/open_vins/blob/master/ov_core/src/init/InertialInitializer.cpp
 
-    // 将旋转矩阵分解为 yaw-pitch-roll，然后将 yaw 设为 0
-    // ZYX顺序，即yaw-pitch-roll
-    Eigen::Vector3d euler_angles = gravity_rotation.eulerAngles(2, 1, 0);
-    double roll = euler_angles(2);   // roll
-    double pitch = euler_angles(1);  // pitch
-
-    // 构造新的旋转矩阵，只有roll和pitch，yaw为0
-    Eigen::AngleAxisd roll_angle(roll, Eigen::Vector3d::UnitX());
-    Eigen::AngleAxisd pitch_angle(pitch, Eigen::Vector3d::UnitY());
-    Eigen::Quaterniond q_wi = pitch_angle * roll_angle;
-    m_kf->x().r_wi = q_wi.toRotationMatrix();
+    // Three axises of the ENU frame in the IMU frame.
+    Eigen::Vector3d z_axis = acc_mean.normalized();
+    Eigen::Vector3d x_axis = Eigen::Vector3d::UnitX() - z_axis * z_axis.transpose() * Eigen::Vector3d::UnitX();
+    Eigen::Vector3d y_axis;
+    if (x_axis.norm() < 0.1) {
+        LOG(INFO) << "y-axis first when gravity align";
+        y_axis = Eigen::Vector3d::UnitY() - z_axis * z_axis.transpose() * Eigen::Vector3d::UnitY();
+        // 需要保证右手系
+        x_axis = y_axis.cross(z_axis);
+        x_axis.normalize();
+    } else {
+        LOG(INFO) << "x-axis first when gravity align";
+        x_axis.normalize();
+        // 需要保证右手系
+        y_axis = z_axis.cross(x_axis);
+        y_axis.normalize();
+    }
+    Eigen::Matrix3d Riw;
+    Riw.block<3, 1>(0, 0) = x_axis;
+    Riw.block<3, 1>(0, 1) = y_axis;
+    Riw.block<3, 1>(0, 2) = z_axis;
+    LOG(INFO) << "Riw: \n" << Riw << std::endl;
+    LOG(INFO) << "Rwi: \n" << Riw.transpose() << std::endl;
+    m_kf->x().r_wi = Riw.transpose();
     m_kf->x().initGravityDir(V3D(0, 0, -1.0));
-
-    LOG(INFO) << "Initializing IMU with pitch: " << pitch << ", roll: " << roll
-              << ", quaternion q^W_I: " << q_wi.coeffs().transpose();
+    
   } else if (m_config.gravity_align_to_global_map) {
     // 用于定位
     m_kf->x().initGravityDir(-m_kf->x().r_wi * acc_mean);
