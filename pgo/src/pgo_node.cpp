@@ -265,9 +265,8 @@ void PGONode::timerCB() {
 void PGONode::saveMapsCB(const std::shared_ptr<slam_interfaces::srv::SaveMaps::Request> request,
                 std::shared_ptr<slam_interfaces::srv::SaveMaps::Response> response) {
   if (!std::filesystem::exists(request->file_path)) {
-    response->success = false;
-    response->message = request->file_path + " IS NOT EXISTS!";
-    return;
+    RCLCPP_INFO(this->get_logger(), "Create directory: %s", request->file_path.c_str());
+    std::filesystem::create_directories(request->file_path);
   }
 
   if (m_pgo->keyPoses().size() == 0) {
