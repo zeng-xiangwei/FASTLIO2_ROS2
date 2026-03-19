@@ -20,6 +20,9 @@ class OccupancyMap {
   void AddLidarFrame(CloudType::Ptr lidar_cloud, const Eigen::Vector3d& translation,
                      const Eigen::Quaterniond& rotation);
 
+  /// 获取栅格地图数据用于实时发布（不裁剪）
+  std::pair<std::vector<uint8_t>, std::shared_ptr<MapLimits>> GetOccupancyGridData() const;
+
   void Save(const std::string& dir, const std::string& prefix);
 
  private:

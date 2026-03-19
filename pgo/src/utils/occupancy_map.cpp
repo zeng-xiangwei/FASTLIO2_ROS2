@@ -169,6 +169,13 @@ void OccupancyMap::GrowLimits(const Eigen::Vector2f& point) {
   }
 }
 
+std::pair<std::vector<uint8_t>, std::shared_ptr<MapLimits>> OccupancyMap::GetOccupancyGridData() const {
+  if (!map_limits_) {
+    return {std::vector<uint8_t>(), nullptr};
+  }
+  return {occupancy_grid_data_, map_limits_};
+}
+
 void OccupancyMap::Save(const std::string& output_dir, const std::string& prefix) {
   // 导出pgm
   std::string map_filestem = output_dir.back() == '/' ? output_dir + prefix : output_dir + "/" + prefix;

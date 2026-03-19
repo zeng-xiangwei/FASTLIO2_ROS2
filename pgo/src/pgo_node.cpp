@@ -8,6 +8,14 @@ PGONode::PGONode(const std::string& node_name) : Node(node_name) {
 
   loadParameters();
 
+  // 初始化OccupancyMap
+  utils::OccupancyMap::Config occ_config;
+  occ_config.resolution = m_grid_map_config.grid_2d_resolution;
+  occ_config.min_z = m_grid_map_config.grid_2d_z_min;
+  occ_config.max_z = m_grid_map_config.grid_2d_z_max;
+  occ_config.occupancy_weight = m_grid_map_config.occupancy_weight;
+  m_occupancy_map = std::make_shared<utils::OccupancyMap>(occ_config);
+
   // m_pgo = std::make_shared<SimplePGO>(m_pgo_config);
   m_pgo = std::make_shared<PGO>(m_pgo_config);
   rclcpp::QoS qos = rclcpp::QoS(1);
@@ -17,6 +25,8 @@ PGONode::PGONode(const std::string& node_name) : Node(node_name) {
 
   m_global_map_pub =
       this->create_publisher<sensor_msgs::msg::PointCloud2>("/global_map", rclcpp::QoS(1).transient_local());
+
+  m_occupancy_grid_pub = this->create_publisher<nav_msgs::msg::OccupancyGrid>("/pgo/occupancy_grid", 10);
 
   m_tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(*this);
   m_sync = std::make_shared<message_filters::Synchronizer<
@@ -250,6 +260,23 @@ void PGONode::timerCB() {
   //   return;
   // }
 
+  // 更新OccupancyMap
+  const auto& current_pose = cp.pose;
+  auto t1 = std::chrono::high_resolution_clock::now();
+  m_occupancy_map->AddLidarFrame(cp.cloud, current_pose.t,
+      Eigen::Quaterniond(current_pose.r));
+  auto t2 = std::chrono::high_resolution_clock::now();
+  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
+  RCLCPP_INFO(this->get_logger(), "AddLidarFrame time: %ld ms", duration.count());
+
+  // 每隔5帧发布一次栅格地图
+  m_frame_count++;
+  if (m_frame_count >= kOccupancyGridPublishInterval) {
+    RCLCPP_INFO(this->get_logger(), "Publishing occupancy grid.");
+    m_frame_count = 0;
+    publishOccupancyGrid();
+  }
+
   if (!m_pgo->addKeyPose(cp)) {
     sendBroadCastTF(cur_time);
     return;
@@ -386,6 +413,78 @@ void PGONode::publishGlobalMap(CloudType::Ptr cloud) {
   cloud_msg.header.frame_id = m_node_config.map_frame;
   cloud_msg.header.stamp = this->get_clock()->now();
   m_global_map_pub->publish(cloud_msg);
+}
+
+void PGONode::publishOccupancyGrid() {
+  if (m_occupancy_grid_pub->get_subscription_count() == 0) {
+    RCLCPP_WARN(get_logger(), "no subscriber for occupancy grid");
+    return;
+  }
+
+  // 获取栅格地图数据（不裁剪）
+  auto data_pair = m_occupancy_map->GetOccupancyGridData();
+  const auto& occupancy_data = data_pair.first;
+  const auto& map_limits = data_pair.second;
+
+  if (occupancy_data.empty() || !map_limits) {
+    RCLCPP_WARN(get_logger(), "No occupancy data to publish.");
+    return;
+  }
+
+  const int width = map_limits->cell_limits().num_x_cells;
+  const int height = map_limits->cell_limits().num_y_cells;
+  const double resolution = map_limits->resolution();
+
+  // 构建OccupancyGrid消息
+  nav_msgs::msg::OccupancyGrid grid_msg;
+  grid_msg.header.frame_id = m_node_config.map_frame;
+  grid_msg.header.stamp = this->get_clock()->now();
+  grid_msg.info.resolution = resolution;
+  grid_msg.info.width = width;
+  grid_msg.info.height = height;
+
+  // 计算原点：OccupancyMap以左上角存储，OccupancyGrid以左下角为原点
+  // xmin_ymax是地图左上角的坐标
+  // origin应该是左下角坐标：x = x_min, y = y_min = y_max - height * resolution
+  grid_msg.info.origin.position.x = map_limits->xmin_ymax().x();
+  grid_msg.info.origin.position.y = map_limits->xmin_ymax().y() - height * resolution;
+  grid_msg.info.origin.position.z = 0.0;
+  grid_msg.info.origin.orientation.w = 1.0;
+
+  // 转换数据：需要将Y轴翻转（因为坐标系不同）
+  // OccupancyMap: (0,0)在左上角，Y向下增加
+  // OccupancyGrid: (0,0)在左下角，Y向上增加
+  grid_msg.data.resize(width * height);
+
+  int data_size = width * height;
+  RCLCPP_INFO(this->get_logger(), "data size: %d", data_size);
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      // 原始数据索引（Y向下增加）
+      int src_idx = y * width + x;
+      // 目标数据索引（Y向上增加，需要翻转Y）
+      int dst_idx = (height - 1 - y) * width + x;
+      
+      uint8_t value = occupancy_data[src_idx];
+      // 转换值：0-255 -> 0-100 (占用概率)
+      // kUnknown = 128 -> -1 (未知)
+      // < 128 -> 占用 (值越小越占用)
+      // > 128 -> 空闲 (值越大越空闲)
+      if (value == 128) {
+        grid_msg.data[dst_idx] = -1;  // 未知
+      } else if (value < 128) {
+        // 占用
+        int8_t occ_value = 100;
+        grid_msg.data[dst_idx] = occ_value;
+      } else {
+        // 空闲
+        int8_t free_value = 0;
+        grid_msg.data[dst_idx] = free_value;
+      }
+    }
+  }
+
+  m_occupancy_grid_pub->publish(grid_msg);
 }
 
 

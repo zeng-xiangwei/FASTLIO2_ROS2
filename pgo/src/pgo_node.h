@@ -10,6 +10,7 @@
 #include <message_filters/sync_policies/approximate_time.h>
 #include <message_filters/synchronizer.h>
 #include <nav_msgs/msg/odometry.hpp>
+#include <nav_msgs/msg/occupancy_grid.hpp>
 #include <pcl/common/io.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <rclcpp/rclcpp.hpp>
@@ -96,7 +97,8 @@ private:
     rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr m_relocalization_pose_sub;
     std::shared_ptr<Pose> m_relocalization_init_pose;
 
-     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_global_map_pub;
+    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr m_global_map_pub;
+    rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr m_occupancy_grid_pub;
 
     bool initial_state = false;
 
@@ -104,5 +106,13 @@ private:
     bool m_pose_file_loaded = false;
     // 保存从文件读取的初始位姿
     std::shared_ptr<Pose> m_file_init_pose;
+    
+    std::shared_ptr<utils::OccupancyMap> m_occupancy_map;
 
+    // 帧计数器，用于控制发布频率
+    int m_frame_count = 0;
+    static constexpr int kOccupancyGridPublishInterval = 5;
+
+    // 发布栅格地图消息
+    void publishOccupancyGrid();
 };
